@@ -10,6 +10,11 @@ namespace InventarioTIASPX.Controllers
     {
         public ActionResult Index()
         {
+            return Redirect(Url.Action("Menu", "Home"));
+        }
+
+        public ActionResult Menu()
+        {
             return View();
         }
 

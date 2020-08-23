@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    List<InventarioTIASPX.Models.Device> devices = ViewData["devices"] as List<InventarioTIASPX.Models.Device>;
+}
+
+<h2>Dispositivos</h2>
+
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="@Url.Action("NewDevice", "Devices")">Agregar dispositivo</a></li>
+</ul>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Dispositivo</th>
+            <th scope="col">Fabricante</th>
+            <th scope="col">Modelo</th>
+            <th scope="col">Serie</th>
+            <th scope="col" style="width:235px;">Acciones</th>
+        </tr>
+    </thead>
+    @if (devices.Count > 0)
+    {
+        <tbody>
+            @{
+                foreach (var item in devices)
+                {
+                    <tr>
+                        <td scope="row">@item.Type</td>
+                        <td>@item.Brand</td>
+                        <td>@item.Model</td>
+                        <td>@item.DeviceId</td>
+                        <td>
+                            @Html.ActionLink("Ver token", "Device", "Devices", new { deviceId = item.DeviceId }, new { @class = "btn btn-primary btn-sm", style = "width:105px;" })
+                            @Html.ActionLink("Eliminar", "Delete", "Devices", new { deviceId = item.DeviceId }, new { @class = "btn btn-danger btn-sm", style = "width:105px;" })
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    }
+</table>

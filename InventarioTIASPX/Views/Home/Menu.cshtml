@@ -1,0 +1,125 @@
+﻿
+@{
+    ViewBag.Title = "Menu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Operaciones de TI - Menu</h2>
+
+<div class="row" style="margin-top: 32px">
+    <!--SNACK DE ALERTAS-->
+    <div class="col-md-8 col-md-offset-2 alert alert-danger" id="error-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        Debes completar correctamente el formulario
+    </div>
+    <div class="col-md-8 col-md-offset-2 alert alert-success" id="success-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+        Los cambios se han guardado correctamente
+    </div>
+
+    <div class="row">
+        <!--Links-->
+        <div class="col-md-8">
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-heading" style="padding:16px;">
+                    <h3 style="margin-top:0px; margin-bottom:0px;"><span class="glyphicon glyphicon-tasks"></span> Equipos de computo</h3>
+                </div>
+                <div class="panel-body">
+                    <a href="">
+                        <div>
+                            <h4><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> Ver usuario</h4>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-heading" style="padding:16px;">
+                    <h3 style="margin-top:0px; margin-bottom:0px;"><span class="glyphicon glyphicon-user"></span> Usuarios</h3>
+                </div>
+                <div class="panel-body">
+                    <a href="@Url.Action("", "")">
+                        <div>
+                            <h4><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> Ver usuarios</h4>
+                        </div>
+                    </a>
+                    <a href="@Url.Action("", "")">
+                        <div>
+                            <h4><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> Buscar en diractorio activo</h4>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-heading" style="padding:16px;">
+                    <h3 style="margin-top:0px; margin-bottom:0px;"><span class="glyphicon glyphicon-print"></span> Impresoras</h3>
+                </div>
+                <div class="panel-body">
+                    <a href="@Url.Action("", "")">
+                        <div>
+                            <h4><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> Ver impresoras</h4>
+                        </div>
+                    </a>
+                    <a href="@Url.Action("", "")">
+                        <div>
+                            <h4><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> Agregar impresora</h4>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-heading" style="padding:16px;">
+                    <h3 style="margin-top:0px; margin-bottom:0px;"><span class="glyphicon glyphicon-th"></span> Coleccion de dispositivos</h3>
+                </div>
+                <div class="panel-body">
+                    <a href="@Url.Action("", "Devices")">
+                        <div>
+                            <h4><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> Ver dispositivos</h4>
+                        </div>
+                    </a>
+                    <a href="@Url.Action("NewDevice", "Devices")">
+                        <div>
+                            <h4><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> Agregar dispositivo</h4>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!--SIDE PANEL-->
+        <div class="col-md-4">
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <a href="#glosary" data-toggle="collapse">
+                    <div class="panel-heading" style="padding:16px;">
+                        <h3 style="margin-top:0px; margin-bottom:0px;"><span class="glyphicon glyphicon-question-sign"></span> Glosario <span class="caret"></span></h3>
+                    </div>
+                </a>
+                <div class="panel-body collapse" id="glosary">
+                    <ul>
+                        <li>
+                            <label>Equipos de computo</label>
+                            <p>Explora, modifica y agrega equipos de computo al catalogo</p>
+                        </li>
+
+                        <li>
+                            <label>Usuarios</label>
+                            <p>Explora, modifica y agrega usuarios de directorio activo al catalogo</p>
+                        </li>
+
+                        <li>
+                            <label>Impresoras</label>
+                            <p>Explora, modifica y agrega impresoras al catalogo</p>
+                        </li>
+
+                        <li>
+                            <label>Coleccion de dispositivos</label>
+                            <p>Explora, modifica y agrega dispositivos y perifericos al catalogo</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
