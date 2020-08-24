@@ -21,6 +21,13 @@ namespace InventarioTIASPX.Controllers
         }
 
         [HttpGet]
+        public ActionResult Device(string deviceId)
+        {
+            ViewData["device"] = RepositoryDevice.Get(deviceId);
+            return View();
+        }
+
+        [HttpGet]
         public ActionResult NewDevice(string msgType, string msgString)
         {
             ViewData["devicetypes"] = RepositoryDevice.GetAllDeviceTypes();

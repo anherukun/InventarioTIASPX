@@ -193,6 +193,7 @@
     <Content Include="Views\Home\Menu.cshtml" />
     <Content Include="Views\Devices\NewDevice.cshtml" />
     <Content Include="Views\Devices\Index.cshtml" />
+    <Content Include="Views\Devices\Device.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
