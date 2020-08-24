@@ -14,6 +14,9 @@ namespace InventarioTIASPX.Controllers
         public ActionResult Index()
         {
             ViewData["devices"] = RepositoryDevice.GetAllDevices();
+            ViewData["devicetypes"] = RepositoryDevice.GetAllDeviceTypes();
+            ViewData["deviceBrands"] = RepositoryDevice.GetAllDeviceBrands();
+            ViewData["deviceModels"] = RepositoryDevice.GetAllDeviceModels();
             return View();
         }
 
