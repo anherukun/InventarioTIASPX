@@ -20,19 +20,34 @@ namespace InventarioTIASPX.Controllers
             return View();
         }
 
-        public ActionResult NewDevice()
+        [HttpGet]
+        public ActionResult NewDevice(string msgType, string msgString)
         {
             ViewData["devicetypes"] = RepositoryDevice.GetAllDeviceTypes();
             ViewData["deviceBrands"] = RepositoryDevice.GetAllDeviceBrands();
             ViewData["deviceModels"] = RepositoryDevice.GetAllDeviceModels();
+            if (msgType != null && msgString != null)
+            {
+                msgString = Application.ApplicationManager.Base64Decode(msgString);
+                ViewData["message"] = new { msgType, msgString };
+            }
             return View();
         }
 
         [HttpPost]
         public ActionResult Add(Device device)
         {
-            RepositoryDevice.Add(device);
-            return Redirect(Url.Action("NewDevice", "Devices"));
+            try
+            {
+                RepositoryDevice.Add(device);
+                return Redirect(Url.Action("NewDevice", "Devices", new { msgType = "success", msgString = Application.ApplicationManager.Base64Encode("Se agrego el dispositivo correctamente")}));
+            }
+            catch (Exception ex)
+            {
+                return Redirect(Url.Action("NewDevice", "Devices", new { msgType = "error", msgString = Application.ApplicationManager.Base64Encode(ex.Message) }));
+                throw;
+            }
+            
         }
 
         public ActionResult Delete(string deviceId)

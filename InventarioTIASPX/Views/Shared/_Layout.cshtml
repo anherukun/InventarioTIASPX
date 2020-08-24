@@ -1,14 +1,82 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+<script type="text/javascript">
+        function playsound(select) {
+            // 0: Error     1: Success      default: none
+            var sound = document.getElementById("audio-source");
+            switch (select) {
+                case 0:
+                    sound.src = "/App_Sounds/alarm.ogg";
+                    break;
+
+                case 1:
+                    sound.src = "/App_Sounds/MENU%20A_Select.wav";
+                    break;
+
+                default:
+                    sound.src = "";
+                    break;
+            }
+            sound.play();
+        }
+
+        function retriveMessage() {
+            var msg = @Html.Raw(Json.Encode(ViewData["message"]));
+
+            switch (msg.msgType) {
+                case "error":
+                    showErrorMessage(8, msg.msgString);
+                    break;
+
+                case "success":
+                    showSuccessMessage(8, msg.msgString);
+                    break;
+                default:
+            }
+        }
+
+        function showErrorMessage(time, message) {
+            playsound(0);
+
+            document.getElementById("error-alert-snack").style.display = "block";
+            document.getElementById("error-alert-snack").innerHTML = message;
+            if (time == null) {
+                document.getElementById("error-alert-snack").style.display = "none";
+                document.getElementById("error-alert-snack").innerHTML = message;
+            } else {
+                setTimeout(() => {
+                    document.getElementById("error-alert-snack").style.display = "none";
+                    document.getElementById("error-alert-snack").innerHTML = message;
+                }, time * 1000);
+            }
+        }
+        function showSuccessMessage(time, message) {
+            playsound(1);
+
+            document.getElementById("success-alert-snack").style.display = "block";
+            document.getElementById("success-alert-snack").innerHTML = message;
+            if (time == null) {
+                document.getElementById("success-alert-snack").style.display = "none";
+                document.getElementById("success-alert-snack").innerHTML = message;
+            } else {
+                setTimeout(() => {
+                    document.getElementById("success-alert-snack").style.display = "none";
+                    document.getElementById("success-alert-snack").innerHTML = message;
+                }, time * 1000);
+            }
+        }
+</script>
 </head>
 <body>
+    <audio id="audio-source"></audio>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">

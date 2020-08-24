@@ -135,6 +135,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Application\ApplicationManager.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -152,6 +153,8 @@
     <Compile Include="Services\RepositoryDevice.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Sounds\alarm.ogg" />
+    <Content Include="App_Sounds\MENU A_Select.wav" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
