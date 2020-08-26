@@ -1,16 +1,17 @@
 ﻿
 @{
-    ViewBag.Title = "NewDevice";
+    ViewBag.Title = "EditDevice";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @{
+    InventarioTIASPX.Models.Device device = ViewData["device"] as InventarioTIASPX.Models.Device;
     List<string> deviceTypes = ViewData["deviceTypes"] as List<string>;
     List<string> deviceBrands = ViewData["deviceBrands"] as List<string>;
     List<string> deviceModels = ViewData["deviceModels"] as List<string>;
 }
 
-<h2>Agregar dispositivo</h2>
+<h2>Editar dispositivo</h2>
 
 <div class="row" style="margin-top: 32px">
     <!--SNACK DE ALERTAS-->
@@ -22,6 +23,7 @@
         <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
         Los cambios se han guardado correctamente
     </div>
+
     @if (ViewData["message"] != null)
     {
         <script type="text/javascript">
@@ -34,15 +36,9 @@
         <div class="col-md-8">
             <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
                 <div class="panel-body">
-                    @using (Html.BeginForm("Add", "Devices", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "return validateSubmition()" }))
+                    @using (Html.BeginForm("Edit", "Devices", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "return validateSubmition()" }))
                     {
                         <script type="text/javascript">
-                            function generateUUID() {
-                                var form = document.forms["form"];
-                                var guuid = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-                                    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)).toUpperCase();
-                                form["DeviceId"].value = guuid;
-                            }
                             function toggleType() {
                                 var form = document.forms["form"];
 
@@ -80,6 +76,7 @@
                                 var form = document.forms["form"];
                                 var input1 = form["DeviceId"], input2 = form["Type"], input3 = form["Brand"];
                                 if (input1.value == "" || input2.value == "" || input3.value == "") {
+                                    showErrorMessage(8, "Debes completar los campos obligatorios... Para mas informacion revisa el glosario")
                                     return false;
                                 } else {
                                     return true;
@@ -90,8 +87,7 @@
                         <!--DeviceId-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Numero de serie</label>
-                            <input class="form-control" type="text" name="DeviceId" placeholder="xxxx-xxxx-xxxxx" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" />
-                            <button type="button" class="btn btn-success" onclick="generateUUID()"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Auto-Generar</button>
+                            <input class="form-control" type="text" name="DeviceId" placeholder="xxxx-xxxx-xxxxx" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" value="@device.DeviceId" readonly />
                         </div>
                         <br />
 
@@ -106,12 +102,19 @@
                                     {
                                         if (item != null)
                                         {
-                                            <option value="@item">@item</option>
+                                            if (item == device.Brand)
+                                            {
+                                                <option value="@item" selected>@item</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item">@item</option>
+                                            }
                                         }
                                     }
                                 }
                             </select>
-                            <input class="form-control" type="text" name="Brand" id="Brand" onkeyup="this.value = this.value.toUpperCase();" style="display:none; margin-left:8px;" />
+                            <input class="form-control" type="text" name="Brand" id="Brand" onkeyup="this.value = this.value.toUpperCase();" style="display:none; margin-left:8px;" value="@device.Brand"/>
                         </div>
                         <br />
 
@@ -126,12 +129,19 @@
                                     {
                                         if (item != null)
                                         {
-                                            <option value="@item">@item</option>
+                                            if (item == device.Type)
+                                            {
+                                                <option value="@item" selected>@item</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item">@item</option>
+                                            }
                                         }
                                     }
                                 }
                             </select>
-                            <input class="form-control" type="text" name="Type" id="Type" onkeyup="this.value = this.value.toUpperCase();" style="display:none; margin-left:8px;" />
+                            <input class="form-control" type="text" name="Type" id="Type" onkeyup="this.value = this.value.toUpperCase();" style="display:none; margin-left:8px;" value="@device.Type"/>
                         </div>
                         <br />
 
@@ -146,19 +156,26 @@
                                     {
                                         if (item != null)
                                         {
-                                            <option value="@item">@item</option>
+                                            if (item == device.Model)
+                                            {
+                                                <option value="@item" selected>@item</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item">@item</option>
+                                            }
                                         }
                                     }
                                 }
                             </select>
-                            <input class="form-control" type="text" name="Model" id="Model" onkeyup="this.value = this.value.toUpperCase();" style="display:none; margin-left:8px;" />
+                            <input class="form-control" type="text" name="Model" id="Model" onkeyup="this.value = this.value.toUpperCase();" style="display:none; margin-left:8px;" value="@device.Model"/>
                         </div>
                         <br />
 
                         <!--Inventory-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Numero de inventario</label>
-                            <input class="form-control" type="text" name="Inventory" placeholder="xxxx-xxxx-xxxxx" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" />
+                            <input class="form-control" type="text" name="Inventory" placeholder="xxxx-xxxx-xxxxx" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" value="@device.Inventory" />
                         </div>
                         <br />
 

@@ -20,9 +20,12 @@
         Los cambios se han guardado correctamente
     </div>
 
-    <script type="text/javascript">
-        retriveMessage();
-    </script>
+    @if (ViewData["message"] != null)
+    {
+        <script type="text/javascript">
+            retriveMessage();
+        </script>
+    }
 
     <div class="row">
         <!--Links-->
@@ -53,6 +56,8 @@
                         <label>Inventario:</label>
                         <p style="margin-left:8px;">@device.Inventory</p>
                     </div>
+
+                    @Html.ActionLink("Editar", "EditDevice", "Devices", new { deviceId = device.DeviceId}, new { @class = "btn btn-primary"})
                 </div>
             </div>
         </div>

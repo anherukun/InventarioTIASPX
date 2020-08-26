@@ -87,7 +87,7 @@
                         <td>@item.DeviceId</td>
                         <td style="text-align:right;">
                             @Html.ActionLink("Ver mas...", "Device", "Devices", new { deviceId = item.DeviceId }, new { @class = "btn btn-default btn-sm hidden-print" })
-                            @Html.ActionLink("Modificar", "Device", "Devices", new { deviceId = item.DeviceId }, new { @class = "btn btn-default btn-sm hidden-print" })
+                            @Html.ActionLink("Modificar", "EditDevice", "Devices", new { deviceId = item.DeviceId }, new { @class = "btn btn-default btn-sm hidden-print" })
                             @Html.ActionLink("Eliminar", "Delete", "Devices", new { deviceId = item.DeviceId }, new { @class = "btn btn-danger btn-sm hidden-print" })
                         </td>
                     </tr>

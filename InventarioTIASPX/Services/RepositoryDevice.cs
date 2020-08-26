@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 
@@ -14,6 +15,15 @@ namespace InventarioTIASPX.Services
             using (var db = new InventoryTIASPXContext())
             {
                 db.Devices.Add(device);
+                db.SaveChanges();
+            }
+        }
+
+        public static void Update(Device device)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                db.Devices.AddOrUpdate(device);
                 db.SaveChanges();
             }
         }
