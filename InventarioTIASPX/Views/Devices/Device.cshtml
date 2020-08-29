@@ -10,23 +10,6 @@
 <h2>Dispositivo</h2>
 
 <div class="row" style="margin-top: 32px">
-    <!--SNACK DE ALERTAS-->
-    <div class="col-md-8 col-md-offset-2 alert alert-danger" id="error-alert-snack" role="alert" style="margin-top: 16px; display:none;">
-        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        Debes completar correctamente el formulario
-    </div>
-    <div class="col-md-8 col-md-offset-2 alert alert-success" id="success-alert-snack" role="alert" style="margin-top: 16px; display:none;">
-        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
-        Los cambios se han guardado correctamente
-    </div>
-
-    @if (ViewData["message"] != null)
-    {
-        <script type="text/javascript">
-            retriveMessage();
-        </script>
-    }
-
     <div class="row">
         <!--Links-->
         <div class="col-md-8">
@@ -98,6 +81,25 @@
                         </li>
                     </ul>
                 </div>
+            </div>
+
+            <div>
+                <!--SNACK DE ALERTAS-->
+                <div class="alert alert-danger" id="error-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    Debes completar correctamente el formulario
+                </div>
+                <div class="alert alert-success" id="success-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                    Los cambios se han guardado correctamente
+                </div>
+
+                @if (ViewData["message"] != null)
+                {
+                    <script type="text/javascript">
+                        retriveMessage();
+                    </script>
+                }
             </div>
         </div>
     </div>
