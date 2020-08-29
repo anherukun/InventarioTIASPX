@@ -26,6 +26,14 @@ namespace InventarioTIASPX.Services
             }
         }
 
+        public static List<Computer> GetAllComputers()
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Computers.ToList();
+            }
+        }
+
         public static void Delete(string computerId)
         {
             using (var db = new InventoryTIASPXContext())

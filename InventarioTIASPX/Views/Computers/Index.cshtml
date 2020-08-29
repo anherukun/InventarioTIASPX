@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ 
+    List<InventarioTIASPX.Models.Computer> computers = ViewData["computers"] as List<InventarioTIASPX.Models.Computer>;
+}
+
+<h2>Equipos de computo</h2>
+
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="@Url.Action("", "Computers")">Agregar computadora</a></li>
+</ul>
+
+<table class="table" id="devicetable">
+    <thead>
+        <tr>
+            <th scope="col">
+                Departamento
+            </th>
+
+            <th scope="col">
+                Ubicacion
+            </th>
+
+            <th scope="col">
+                Hostname
+            </th>
+
+            <th scope="col">
+                Serie
+            </th>
+
+            <th scope="col">
+                Modelo
+            </th>
+
+            <th scope="col" style="width:275px;">
+                Acciones
+            </th>
+
+        </tr>
+    </thead>
+    @if (computers.Count > 0)
+    {
+        <tbody>
+            @{
+                foreach (var item in computers)
+                {
+                    <tr>
+                        <td scope="row">@item.Department</td>
+                        <td>@item.Location</td>
+                        <td>@item.Hostname</td>
+                        <td>@item.Processor.DeviceId</td>
+                        <td>@item.Processor.Brand - @item.Processor.Model</td>
+                        <td style="text-align:right;">
+                            @Html.ActionLink("Ver mas...", "", "", null, new { @class = "btn btn-default btn-sm hidden-print" })
+                            @Html.ActionLink("Modificar", "", "", null, new { @class = "btn btn-default btn-sm hidden-print" })
+                            @Html.ActionLink("Eliminar", "", "", null, new { @class = "btn btn-danger btn-sm hidden-print" })
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    }
+</table>

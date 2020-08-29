@@ -44,6 +44,26 @@ namespace InventarioTIASPX.Services
             }
         }
 
+        public static List<Device> GetAllProcessors()
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Devices.OrderBy(x => x.Model).OrderBy(x => x.Brand).OrderBy(x => x.Type)
+                    .Where(x => x.Type == "PROCESADOR" || x.Type == "LAPTOP")
+                    .ToList();
+            }
+        }
+        public static List<Device> GetAllProcessors(bool inUse)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Devices.OrderBy(x => x.Model).OrderBy(x => x.Brand).OrderBy(x => x.Type)
+                    .Where(x => x.Type == "PROCESADOR" || x.Type == "LAPTOP")
+                    .Where(x => x.InUse == inUse)
+                    .ToList();
+            }
+        }
+
         public static List<string> GetAllDeviceTypes()
         {
             using (var db = new InventoryTIASPXContext())
