@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Web;
 
 namespace InventarioTIASPX.Services
@@ -13,7 +15,7 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-                db.Computers.Add(computer);
+                db.Computers.AddOrUpdate(computer);
                 db.SaveChanges();
             }
         }
@@ -22,7 +24,10 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-                return db.Computers.Where(x => x.ComputerId == computerId).Include(x => x.Processor).FirstOrDefault();
+                return db.Computers.Where(x => x.ComputerId == computerId)
+                    .Include(x => x.Processor)
+                    .Include(x => x.Devices)
+                    .FirstOrDefault();
             }
         }
 
@@ -30,7 +35,15 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-                return db.Computers.ToList();
+                return db.Computers.Include(x => x.Processor).ToList();
+            }
+        }
+
+        public static List<string> GetAllDepartments()
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Computers.Select(x => x.Department).OrderBy(x => x).ToList();
             }
         }
 
