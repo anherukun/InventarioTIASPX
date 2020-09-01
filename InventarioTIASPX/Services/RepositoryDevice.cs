@@ -115,6 +115,7 @@ namespace InventarioTIASPX.Services
         {
             Device device = RepositoryDevice.Get(deviceId);
             device.ParentComputerId = computerId;
+            device.InUse = true;
 
             using (var db = new InventoryTIASPXContext())
             {
@@ -122,6 +123,20 @@ namespace InventarioTIASPX.Services
                 db.SaveChanges();
 
                 db.Database.ExecuteSqlCommand($"UPDATE devices SET Computer_ComputerId = \"{computerId}\" WHERE deviceId LIKE \"{deviceId}\"");
+            }
+        }
+        public static void UnassingComputer(string deviceId)
+        {
+            Device device = RepositoryDevice.Get(deviceId);
+            device.ParentComputerId = null;
+            device.InUse = false;
+
+            using (var db = new InventoryTIASPXContext())
+            {
+                db.Devices.AddOrUpdate(device);
+                db.SaveChanges();
+
+                db.Database.ExecuteSqlCommand($"UPDATE devices SET Computer_ComputerId = \"{null}\" WHERE deviceId LIKE \"{deviceId}\"");
             }
         }
 
