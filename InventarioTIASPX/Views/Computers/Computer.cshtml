@@ -1,0 +1,181 @@
+﻿
+@{
+    ViewBag.Title = "Computer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    InventarioTIASPX.Models.Computer computer = ViewData["computer"] as InventarioTIASPX.Models.Computer;
+}
+
+<h2>Equipo de computo</h2>
+
+<div class="row" style="margin-top: 32px">
+    <div class="row">
+        <!--Links-->
+        <div class="col-md-8">
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-body">
+                    <h3 style="margin-top:0px;">Datos del equipo</h3>
+                    <div class="row" style="margin-left:16px;">
+                        <div class="col-md-4">
+                            <label>Serie del procesador</label>
+                            <p style="margin-left:8px;">@computer.Processor.DeviceId</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Modelo del procesador</label>
+                            <p style="margin-left:8px;">@computer.Processor.Model</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Marca/Fabricante</label>
+                            <p style="margin-left:8px;">@computer.Processor.Brand</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Hostname</label>
+                            <p style="margin-left:8px;">@computer.Hostname</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Arquitectura del sistema</label>
+                            <p style="margin-left:8px;">@computer.Architecture BITS</p>
+                        </div>
+                    </div>
+
+
+
+                    <h3 style="margin-top:0px;">Otros datos</h3>
+                    <div class="row" style="margin-left:16px;">
+                        <div class="col-md-4">
+                            <label>Departamento</label>
+                            <p style="margin-left:8px;">@computer.Department</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Ubicacion fisica</label>
+                            <p style="margin-left:8px;">@computer.Location</p>
+                        </div>
+                    </div>
+
+
+                    @if (computer.Devices != null)
+                    {
+                        <h3>Accesorios del equipo</h3>
+
+                        <table class="table" id="devicetable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">
+                                        Dispositivo
+                                        <br />
+                                    </th>
+
+                                    <th scope="col">
+                                        Fabricante
+                                        <br />
+                                    </th>
+
+                                    <th scope="col">
+                                        Modelo
+                                        <br />
+                                    </th>
+
+                                    <th scope="col">
+                                        Serie
+                                        <br />
+                                    </th>
+
+                                    <th scope="col">
+                                        Acciones
+                                        <br />
+                                    </th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in computer.Devices)
+                                {
+                                    if (item.Type != "PROCESADOR" && item.Type != "LAPTOP")
+                                    {
+                                        <tr>
+                                            <td scope="row">@item.Type</td>
+                                            <td>@item.Brand</td>
+                                            <td>@item.Model</td>
+                                            <td>@item.DeviceId</td>
+                                            <td style="text-align:right;">
+                                                @Html.ActionLink("Ver mas...", "Device", "Devices", new { deviceId = item.DeviceId }, new { @class = "btn btn-default btn-sm hidden-print" })
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    }
+
+                    @Html.ActionLink("Editar", "EditComputer", "Computers", new { computerId = computer.ComputerId }, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+        </div>
+
+        <!--SIDE PANEL-->
+        <div class="col-md-4">
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <a href="#glosary" data-toggle="collapse">
+                    <div class="panel-heading" style="padding:16px;">
+                        <h3 style="margin-top:0px; margin-bottom:0px;"><span class="glyphicon glyphicon-question-sign"></span> Glosario <span class="caret"></span></h3>
+                    </div>
+                </a>
+                <div class="panel-body collapse" id="glosary">
+                    <ul>
+                        <li>
+                            <label>Numero de serie</label>
+                            <p>...</p>
+                        </li>
+
+                        <li>
+                            <label>Tipo de dispositivo</label>
+                            <p>...</p>
+                        </li>
+
+                        <li>
+                            <label>Marca del dispositivo</label>
+                            <p>...</p>
+                        </li>
+
+                        <li>
+                            <label>Modelo del dispositivo</label>
+                            <p>...</p>
+                        </li>
+
+                        <li>
+                            <label>Numero de inventario</label>
+                            <p>...</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div>
+                <!--SNACK DE ALERTAS-->
+                <div class="alert alert-danger" id="error-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    Debes completar correctamente el formulario
+                </div>
+                <div class="alert alert-success" id="success-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                    Los cambios se han guardado correctamente
+                </div>
+
+                @if (ViewData["message"] != null)
+                {
+                    <script type="text/javascript">
+                        retriveMessage();
+                    </script>
+                }
+            </div>
+        </div>
+    </div>
+</div>

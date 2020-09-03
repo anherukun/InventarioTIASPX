@@ -200,6 +200,7 @@
     <Content Include="Views\Devices\EditDevice.cshtml" />
     <Content Include="Views\Computers\Index.cshtml" />
     <Content Include="Views\Computers\NewComputer.cshtml" />
+    <Content Include="Views\Computers\Computer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

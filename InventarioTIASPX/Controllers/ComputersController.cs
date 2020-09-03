@@ -22,8 +22,11 @@ namespace InventarioTIASPX.Controllers
 
         public ActionResult Computer(string computerId)
         {
-            Computer c = RepositoryComputer.Get(computerId);
-            return View();
+            if (computerId != null)
+                if ((ViewData["computer"] = RepositoryComputer.Get(computerId)) != null)
+                    return View();
+
+            return Redirect(Url.Action("", "Computers"));
         }
 
         public ActionResult NewComputer()
