@@ -79,6 +79,14 @@ namespace InventarioTIASPX.Controllers
             return Redirect(Url.Action("Index", "Devices"));
         }
 
+        [HttpGet]
+        public ActionResult UnassignComputer(string deviceId, string redirect)
+        {
+            RepositoryDevice.UnassignComputer(deviceId);
+
+            return Redirect(redirect);
+        }
+
         [HttpPost]
         public ActionResult Add(Device device)
         {

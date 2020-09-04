@@ -18,7 +18,7 @@ namespace InventarioTIASPX.Services
                 db.Computers.AddOrUpdate(computer);
                 db.SaveChanges();
 
-                RepositoryDevice.AssingComputer(computer.ComputerId, computer.ComputerId);
+                RepositoryDevice.AssignComputer(computer.ComputerId, computer.ComputerId);
             }
         }
 

@@ -47,7 +47,7 @@ namespace InventarioTIASPX.Controllers
                 RepositoryComputer.Add(computer);
                 foreach (var item in devices)
                 {
-                    RepositoryDevice.AssingComputer(item.DeviceId, computer.ComputerId);
+                    RepositoryDevice.AssignComputer(item.DeviceId, computer.ComputerId);
                 }
             }
             catch (Exception ex)

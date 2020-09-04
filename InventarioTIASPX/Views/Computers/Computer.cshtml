@@ -16,6 +16,7 @@
         <div class="col-md-8">
             <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
                 <div class="panel-body">
+                    <!--DATOS DEL EQUIPO-->
                     <h3 style="margin-top:0px;">Datos del equipo</h3>
                     <div class="row" style="margin-left:16px;">
                         <div class="col-md-4">
@@ -44,8 +45,7 @@
                         </div>
                     </div>
 
-
-
+                    <!--OTROS DATOS-->
                     <h3 style="margin-top:0px;">Otros datos</h3>
                     <div class="row" style="margin-left:16px;">
                         <div class="col-md-4">
@@ -59,7 +59,7 @@
                         </div>
                     </div>
 
-
+                    <!--ACCESORIOS DEL EQUIPO-->
                     @if (computer.Devices != null)
                     {
                         <h3>Accesorios del equipo</h3>
@@ -77,7 +77,7 @@
                                         <br />
                                     </th>
 
-                                    <th scope="col">
+                                    <th scope="col" style="width:100px">
                                         Modelo
                                         <br />
                                     </th>
@@ -87,7 +87,7 @@
                                         <br />
                                     </th>
 
-                                    <th scope="col">
+                                    <th scope="col" style="width:180px">
                                         Acciones
                                         <br />
                                     </th>
@@ -107,6 +107,7 @@
                                             <td>@item.DeviceId</td>
                                             <td style="text-align:right;">
                                                 @Html.ActionLink("Ver mas...", "Device", "Devices", new { deviceId = item.DeviceId }, new { @class = "btn btn-default btn-sm hidden-print" })
+                                                @Html.ActionLink("Remover", "UnassignComputer", "Devices", new { deviceId = item.DeviceId, redirect = Url.Action("Computer", "Computers", new { computerId = computer.ComputerId }) }, new { @class = "btn btn-danger btn-sm hidden-print" })
                                             </td>
                                         </tr>
                                     }

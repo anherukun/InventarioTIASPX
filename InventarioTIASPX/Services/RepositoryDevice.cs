@@ -111,7 +111,7 @@ namespace InventarioTIASPX.Services
             }
         }
 
-        public static void AssingComputer(string deviceId, string computerId)
+        public static void AssignComputer(string deviceId, string computerId)
         {
             Device device = RepositoryDevice.Get(deviceId);
             device.ParentComputerId = computerId;
@@ -125,7 +125,7 @@ namespace InventarioTIASPX.Services
                 db.Database.ExecuteSqlCommand($"UPDATE devices SET Computer_ComputerId = \"{computerId}\" WHERE deviceId LIKE \"{deviceId}\"");
             }
         }
-        public static void UnassingComputer(string deviceId)
+        public static void UnassignComputer(string deviceId)
         {
             Device device = RepositoryDevice.Get(deviceId);
             device.ParentComputerId = null;
@@ -136,7 +136,7 @@ namespace InventarioTIASPX.Services
                 db.Devices.AddOrUpdate(device);
                 db.SaveChanges();
 
-                db.Database.ExecuteSqlCommand($"UPDATE devices SET Computer_ComputerId = \"{null}\" WHERE deviceId LIKE \"{deviceId}\"");
+                db.Database.ExecuteSqlCommand($"UPDATE devices SET Computer_ComputerId = null WHERE deviceId LIKE \"{deviceId}\"");
             }
         }
 

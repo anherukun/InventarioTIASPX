@@ -3,7 +3,7 @@
     ViewBag.Title = "Device";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@{ 
+@{
     InventarioTIASPX.Models.Device device = ViewData["device"] as InventarioTIASPX.Models.Device;
 }
 
@@ -15,32 +15,56 @@
         <div class="col-md-8">
             <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
                 <div class="panel-body">
-                    <div>
-                        <label>Numero de serie:</label>
-                        <p style="margin-left:8px;">@device.DeviceId</p>
+                    <h3 style="margin-top:0px;">Datos del dispositivo</h3>
+                    <div class="row" style="margin-left:16px;">
+                        <div class="col-md-4">
+                            <label>Numero de serie</label>
+                            <p style="margin-left:8px;">@device.DeviceId</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Tipo de dispositivo</label>
+                            <p style="margin-left:8px;">@device.Type</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Fabricante</label>
+                            <p style="margin-left:8px;">@device.Brand</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Modelo</label>
+                            <p style="margin-left:8px;">@device.Model</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Inventario</label>
+                            <p style="margin-left:8px;">@device.Inventory</p>
+                        </div>
                     </div>
 
-                    <div>
-                        <label>Tipo de dispositivo:</label>
-                        <p style="margin-left:8px;">@device.Type</p>
-                    </div>
+                    @if (device.ParentComputer != null)
+                    {
+                        <h3 class="col-md-6" style="margin-top:0px; padding-left:0px;">Equipo de computo asignado</h3>
+                        <div class="row" style="margin-left:16px; margin-bottom:8px;">
+                            <div class="col-md-12 row">
+                                <div class="col-md-4">
+                                    <label>Nombre de equipo</label>
+                                    <p style="margin-left:8px;">@device.ParentComputer.Hostname</p>
+                                </div>
 
-                    <div>
-                        <label>Fabricante:</label>
-                        <p style="margin-left:8px;">@device.Brand</p>
-                    </div>
+                                <div class="col-md-4">
+                                    <label>Acciones</label>
+                                    <div>
+                                        @Html.ActionLink("Ver equipo", "Computer", "Computers", new { computerId = device.ParentComputer.ComputerId }, new { @class = "btn btn-default" })
+                                        @Html.ActionLink("Remover", "UnassignComputer", "Devices", new { deviceId = device.DeviceId, redirect = Url.Action("Device", "Devices", new { deviceId = device.DeviceId }) }, new { @class = "btn btn-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
 
-                    <div>
-                        <label>Modelo:</label>
-                        <p style="margin-left:8px;">@device.Model</p>
-                    </div>
-
-                    <div>
-                        <label>Inventario:</label>
-                        <p style="margin-left:8px;">@device.Inventory</p>
-                    </div>
-
-                    @Html.ActionLink("Editar", "EditDevice", "Devices", new { deviceId = device.DeviceId}, new { @class = "btn btn-primary"})
+                    @Html.ActionLink("Editar", "EditDevice", "Devices", new { deviceId = device.DeviceId }, new { @class = "btn btn-primary" })
                 </div>
             </div>
         </div>
