@@ -36,6 +36,13 @@ namespace InventarioTIASPX.Services
                 return db.Devices.Where(x => x.DeviceId == deviceId).Include(x => x.ParentComputer).FirstOrDefault();
             }
         }
+        public static Device GetWithoutInclude(string deviceId)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Devices.Where(x => x.DeviceId == deviceId).FirstOrDefault();
+            }
+        }
 
         public static List<Device> GetAllDevices()
         {

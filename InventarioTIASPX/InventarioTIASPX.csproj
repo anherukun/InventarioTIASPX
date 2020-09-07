@@ -206,6 +206,7 @@
     <Content Include="Views\Computers\Index.cshtml" />
     <Content Include="Views\Computers\NewComputer.cshtml" />
     <Content Include="Views\Computers\Computer.cshtml" />
+    <Content Include="Views\Computers\EditComputer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

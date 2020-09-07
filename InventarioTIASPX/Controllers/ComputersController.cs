@@ -38,13 +38,53 @@ namespace InventarioTIASPX.Controllers
             return Redirect(Url.Action("", "Computers"));
         }
 
-        public ActionResult NewComputer()
+        public ActionResult NewComputer(string msgType, string msgString)
         {
+            if (msgType != null && msgString != null)
+            {
+                msgString = Application.ApplicationManager.Base64Decode(msgString);
+                ViewData["message"] = new { msgType, msgString };
+            }
+
             ViewData["processors"] = RepositoryDevice.GetAllProcessors(false);
             ViewData["departments"] = RepositoryComputer.GetAllDepartments();
             ViewData["users"] = RepositoryUser.GetAllUsers();
             ViewData["accesories"] = RepositoryDevice.GetAllAccesories(false);
+
             return View();
+        }
+
+        public ActionResult EditComputer(string computerId, string msgType, string msgString)
+        {
+            if (computerId != null)
+            {
+                if (msgType != null && msgString != null)
+                {
+                    msgString = Application.ApplicationManager.Base64Decode(msgString);
+                    ViewData["message"] = new { msgType, msgString };
+                }
+
+                ViewData["computer"] = RepositoryComputer.Get(computerId);
+                if ((ViewData["computer"] as Computer).Devices != null)
+                {
+                    List<Device> computerAccesories = new List<Device>();
+
+                    foreach (var item in (ViewData["computer"] as Computer).Devices)
+                        computerAccesories.Add(RepositoryDevice.GetWithoutInclude(item.DeviceId));
+
+                    ViewData["computerAccesories"] = computerAccesories;
+                }
+                
+                ViewData["processor"] = RepositoryDevice.Get(computerId);
+                ViewData["departments"] = RepositoryComputer.GetAllDepartments();
+                ViewData["users"] = RepositoryUser.GetAllUsers();
+                ViewData["availableAccesories"] = RepositoryDevice.GetAllAccesories(true);
+                ViewData["accesories"] = RepositoryDevice.GetAllAccesories(false);
+
+                return View();
+            }
+            else
+                return Redirect(Url.Action("", "Computers"));
         }
 
         [HttpPost]

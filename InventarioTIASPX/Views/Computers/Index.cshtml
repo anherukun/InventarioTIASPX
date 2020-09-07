@@ -56,9 +56,9 @@
                         <td>@item.Processor.DeviceId</td>
                         <td>@item.Processor.Brand - @item.Processor.Model</td>
                         <td style="text-align:right;">
-                            @Html.ActionLink("Ver mas...", "Computer", "Computers", new { computerId = item.ComputerId}, new { @class = "btn btn-default btn-sm hidden-print" })
-                            @Html.ActionLink("Modificar", "", "", null, new { @class = "btn btn-default btn-sm hidden-print" })
-                            @Html.ActionLink("Eliminar", "Delete", "Computers", new { computerId = item.ComputerId}, new { @class = "btn btn-danger btn-sm hidden-print" })
+                            @Html.ActionLink("Ver mas...", "Computer", "Computers", new { computerId = item.ComputerId }, new { @class = "btn btn-default btn-sm hidden-print" })
+                            @Html.ActionLink("Modificar", "EditComputer", "Computers", new { computerId = item.ComputerId }, new { @class = "btn btn-default btn-sm hidden-print" })
+                            @Html.ActionLink("Eliminar", "Delete", "Computers", new { computerId = item.ComputerId }, new { @class = "btn btn-danger btn-sm hidden-print" })
                         </td>
                     </tr>
                 }
