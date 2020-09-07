@@ -50,6 +50,7 @@ namespace InventarioTIASPX.Controllers
             }
         }
 
+        [HttpGet]
         public FileResult DownloadFromComputersFiles(string fileId)
         {
             FileObject file = new RepositoryComputerFiles().Get(fileId);
