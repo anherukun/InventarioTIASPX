@@ -20,11 +20,20 @@ namespace InventarioTIASPX.Controllers
             return View();
         }
 
-        public ActionResult Computer(string computerId)
+        [HttpGet]
+        public ActionResult Computer(string computerId, string msgType, string msgString)
         {
+            if (msgType != null && msgString != null)
+            {
+                msgString = Application.ApplicationManager.Base64Decode(msgString);
+                ViewData["message"] = new { msgType, msgString };
+            }
             if (computerId != null)
                 if ((ViewData["computer"] = RepositoryComputer.Get(computerId)) != null)
+                {
+                    ViewData["files"] = new RepositoryComputerFiles().GetAll(computerId);
                     return View();
+                }
 
             return Redirect(Url.Action("", "Computers"));
         }
@@ -38,6 +47,7 @@ namespace InventarioTIASPX.Controllers
             return View();
         }
 
+        [HttpPost]
         public ActionResult Add(Computer computer, string jsonDevices)
         {
             List<Device> devices = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Device>>(jsonDevices);
@@ -56,6 +66,12 @@ namespace InventarioTIASPX.Controllers
                 throw;
             }
             return Redirect(Url.Action("NewComputer", "Computers"));
+        }
+
+        public ActionResult Delete(string computerId)
+        {
+            RepositoryComputer.Delete(computerId);
+            return Redirect(Url.Action("", "Computers"));
         }
     }
 }

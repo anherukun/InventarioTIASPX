@@ -45,12 +45,17 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-                return db.Computers.Select(x => x.Department).OrderBy(x => x).ToList();
+                return db.Computers.Select(x => x.Department).Distinct().OrderBy(x => x).ToList();
             }
         }
 
         public static void Delete(string computerId)
         {
+            Computer computer = RepositoryComputer.Get(computerId);
+            if (computer.Devices != null)
+                foreach (var item in computer.Devices)
+                    RepositoryDevice.UnassignComputer(item.DeviceId);
+
             using (var db = new InventoryTIASPXContext())
             {
                 db.Entry(Get(computerId)).State = EntityState.Deleted;

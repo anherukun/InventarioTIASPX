@@ -27,5 +27,6 @@ namespace InventarioTIASPX.Models
         public DbSet<Device> Devices { get; set; }
         public DbSet<Computer> Computers { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<FileObject> ComputersFiles { get; set; }
     }
 }

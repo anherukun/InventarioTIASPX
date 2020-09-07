@@ -56,8 +56,8 @@
                                 <div class="col-md-4">
                                     <label>Acciones</label>
                                     <div>
-                                        @Html.ActionLink("Ver equipo", "Computer", "Computers", new { computerId = device.ParentComputer.ComputerId }, new { @class = "btn btn-default" })
-                                        @Html.ActionLink("Remover", "UnassignComputer", "Devices", new { deviceId = device.DeviceId, redirect = Url.Action("Device", "Devices", new { deviceId = device.DeviceId }) }, new { @class = "btn btn-danger" })
+                                        @Html.ActionLink("Ver equipo", "Computer", "Computers", new { computerId = device.ParentComputer.ComputerId }, new { @class = "btn btn-sm btn-default" })
+                                        @Html.ActionLink("Remover", "UnassignComputer", "Devices", new { deviceId = device.DeviceId, redirect = Url.Action("Device", "Devices", new { deviceId = device.DeviceId }) }, new { @class = "btn btn-sm btn-danger" })
                                     </div>
                                 </div>
                             </div>

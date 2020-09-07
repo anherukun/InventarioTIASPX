@@ -6,6 +6,7 @@
 
 @{
     InventarioTIASPX.Models.Computer computer = ViewData["computer"] as InventarioTIASPX.Models.Computer;
+    List<InventarioTIASPX.Models.FileObject> files = ViewData["files"] as List<InventarioTIASPX.Models.FileObject>;
 }
 
 <h2>Equipo de computo</h2>
@@ -119,6 +120,79 @@
                     @Html.ActionLink("Editar", "EditComputer", "Computers", new { computerId = computer.ComputerId }, new { @class = "btn btn-primary" })
                 </div>
             </div>
+
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-body">
+                    <!--ARCHIVOS-->
+                    <h3 style="margin-top:0px">Datos adjuntos</h3>
+
+                    <table class="table" id="devicetable">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Nombre de archivo
+                                    <br />
+                                </th>
+
+                                <th scope="col">
+                                    Tamaño
+                                    <br />
+                                </th>
+
+                                <th scope="col" style="width:100px">
+                                    Cargado
+                                    <br />
+                                </th>
+
+                                <th scope="col" style="width:180px">
+                                    Acciones
+                                    <br />
+                                </th>
+
+                            </tr>
+                        </thead>
+                        @if (files != null)
+                        {
+                            <tbody>
+                                @foreach (var item in files)
+                                {
+                                    <tr>
+                                        <td scope="row">@item.Name</td>
+                                        <td>@(item.Size / 1024) KB</td>
+                                        <td>@(new DateTime(item.UploadedTicks).ToString())</td>
+                                        <td style="text-align:right;">
+                                            @Html.ActionLink("Descargar", "DownloadFromComputersFiles", "Files", new { fileId = item.FileId }, new { @class = "btn btn-default btn-sm hidden-print" })
+                                            @Html.ActionLink("Eliminar", "DeleteFromComputersFiles", "Files", new { fileId = item.FileId, redirect = Url.Action("Computer", "Computers", new { computerId = computer.ComputerId }) }, new { @class = "btn btn-danger btn-sm hidden-print" })
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                    </table>
+
+                    @using (Html.BeginForm("UploadComputerFile", "Files", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "", enctype = "multipart/form-data" }))
+                    {
+                        <div class="form-group" style="display:none;">
+                            <label>ParenId</label>
+                            <input class="form-control" name="parentId" value="@computer.ComputerId" readonly />
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            <label>Redirect</label>
+                            <input class="form-control" name="redirect" value="@Url.Action("Computer", "Computers", new { computerId = computer.ComputerId})" readonly />
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            <label>Route</label>
+                            <input class="form-control" name="path" value="Computer" readonly />
+                            <input class="form-control" name="controller" value="Computers" readonly />
+                        </div>
+                        <div class="form-group col-md-12" style="text-align:end; padding-right:0px">
+                            <label>Subir archivo - Max. 4MB(4096 KB)</label>
+                            <input class="form-control form-group-sm" id="id" type="file" name="file" value="" />
+                            <input class="btn btn-success" type="submit" value="Cargar" />
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
 
         <!--SIDE PANEL-->
@@ -132,28 +206,18 @@
                 <div class="panel-body collapse" id="glosary">
                     <ul>
                         <li>
-                            <label>Numero de serie</label>
-                            <p>...</p>
+                            <label>Datos del equipo</label>
+                            <p>Muestra la informacion registrada del equipo</p>
                         </li>
 
                         <li>
-                            <label>Tipo de dispositivo</label>
-                            <p>...</p>
+                            <label>Accessorios del equipo</label>
+                            <p>Muestra los dispositivos que pertenecen al equipo de computo, exceptuando las catogorias de: Laptop y Procesador</p>
                         </li>
 
                         <li>
-                            <label>Marca del dispositivo</label>
-                            <p>...</p>
-                        </li>
-
-                        <li>
-                            <label>Modelo del dispositivo</label>
-                            <p>...</p>
-                        </li>
-
-                        <li>
-                            <label>Numero de inventario</label>
-                            <p>...</p>
+                            <label>Datos adjuntos</label>
+                            <p>Permite adjuntar documentos o archivos relacionados al equipo de computo y/o sus dependientes, tales como Responsivas, Manuales, Fotografias, Etc. <br />El tamaño por archivo debe ser estrictamente menor o igual a 4MB (4096KB)</p>
                         </li>
                     </ul>
                 </div>
