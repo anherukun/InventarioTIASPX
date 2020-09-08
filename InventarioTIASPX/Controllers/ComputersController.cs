@@ -17,6 +17,8 @@ namespace InventarioTIASPX.Controllers
         public ActionResult Index()
         {
             ViewData["computers"] = RepositoryComputer.GetAllComputers();
+            ViewData["departments"] = RepositoryComputer.GetAllDepartments();
+
             return View();
         }
 

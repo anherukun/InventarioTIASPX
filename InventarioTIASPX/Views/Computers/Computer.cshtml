@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Computadora";
+    ViewBag.Title = "Equipo de computo";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,9 +9,13 @@
     List<InventarioTIASPX.Models.FileObject> files = ViewData["files"] as List<InventarioTIASPX.Models.FileObject>;
 }
 
-<h2>Equipo de computo</h2>
+<h2>@ViewBag.Title</h2>
 
-<div class="row" style="margin-top: 32px">
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="@Url.Action("", "Computers")">Regresar</a></li>
+</ul>
+
+<div class="row" style="margin-top: 0px">
     <div class="row">
         <!--Links-->
         <div class="col-md-8">

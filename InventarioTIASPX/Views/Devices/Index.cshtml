@@ -11,9 +11,10 @@
     List<string> devicemodels = ViewData["deviceModels"] as List<string>;
 }
 
-<h2>Dispositivos</h2>
+<h2>@ViewBag.Title</h2>
 
 <ul class="nav nav-pills">
+    <li role="presentation"><a href="@Url.Action("", "")">Ir al menu</a></li>
     <li role="presentation"><a href="@Url.Action("NewDevice", "Devices")">Agregar dispositivo</a></li>
 </ul>
 
@@ -62,7 +63,7 @@
             <th scope="col">
                 Serie
                 <br />
-                <input class="form-control" type="text" id="filter-4" />
+                <input class="form-control" placeholder="Filtrar..." type="text" id="filter-4" onkeyup="this.value = this.value.toUpperCase();" />
             </th>
 
             <th scope="col" style="width:275px;">

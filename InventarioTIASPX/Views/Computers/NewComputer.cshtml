@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Nueva computadora";
+    ViewBag.Title = "Nuevo equipo";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -17,7 +17,7 @@
     var selectedAccesories = new Array();
 </script>
 
-<h2>Nueva computadora</h2>
+<h2>@ViewBag.Title</h2>
 
 <ul class="nav nav-pills">
     <li role="presentation"><a href="@Url.Action("", "Computers")">Regresar</a></li>
