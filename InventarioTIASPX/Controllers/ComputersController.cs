@@ -95,17 +95,19 @@ namespace InventarioTIASPX.Controllers
             try
             {
                 RepositoryComputer.Add(computer);
-                foreach (var item in devices)
-                {
-                    RepositoryDevice.AssignComputer(item.DeviceId, computer.ComputerId);
-                }
+
+                if (devices != null)
+                    foreach (var item in devices)
+                    {
+                        RepositoryDevice.AssignComputer(item.DeviceId, computer.ComputerId);
+                    }
+
+                return Redirect(Url.Action("NewComputer", "Computers", new { msgType = "success", msgString = Application.ApplicationManager.Base64Encode("La computadora fue registrada correctamente") }));
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                throw;
+                return Redirect(Url.Action("NewComputer", "Computers", new { msgType = "error", msgString = Application.ApplicationManager.Base64Encode(ex.Message) } ));
             }
-            return Redirect(Url.Action("NewComputer", "Computers"));
         }
 
         public ActionResult Delete(string computerId)

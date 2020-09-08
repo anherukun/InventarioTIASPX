@@ -19,7 +19,11 @@
 
 <h2>Nueva computadora</h2>
 
-<div class="row" style="margin-top: 32px">
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="@Url.Action("", "Computers")">Regresar</a></li>
+</ul>
+
+<div class="row" style="margin-top: 0px">
     <div class="row">
         <!--Links-->
         <div class="col-md-8">
@@ -73,10 +77,22 @@
                                     form["selectedDevice"].selectedIndex = "";
                                 }
                             }
+                            function removeAccesory(deviceId) {
+                                var form = document.forms["form"];
+
+                                if (deviceId != null) {
+                                    if (selectedAccesories.find(x => x.DeviceId === deviceId)) {
+                                        selectedAccesories.splice(selectedAccesories.indexOf(selectedAccesories.find(x => x.DeviceId === deviceId)), 1);
+                                        document.getElementById("row-" + deviceId).style.display = "none";
+
+                                        form["jsonDevices"].value = JSON.stringify(selectedAccesories);
+                                    }
+                                }
+                            }
                             function validateSubmition() {
                                 var form = document.forms["form"];
-                                var input1 = form["DeviceId"], input2 = form["Type"], input3 = form["Brand"];
-                                if (input1.value == "" || input2.value == "" || input3.value == "") {
+                                var input1 = form["ComputerId"], input2 = form["Hostname"], input3 = form["Department"], input4 = form["Location"], input5 = form["Architecture"];
+                                if (input1.value == "" || input2.value == "" || input3.value == "" || input4.value == "" || input5.value == "") {
                                     showErrorMessage(8, "Debes completar los campos obligatorios... Para mas informacion revisa el glosario");
                                     return false;
                                 } else {
@@ -90,16 +106,16 @@
                             <label style="width:160px;">Serie del procesador</label>
 
                             <!--
-            <input class="form-control" type="text" list="computerlist" name="ComputerId"/>
-            <datalist id="computerlist">
-                @{
-                    //foreach (var item in processors)
-                    //{
-                    //    <option value="@item.DeviceId">@item.DeviceId</option>
-                    //}
-                }
-            </datalist>
-                -->
+                            <input class="form-control" type="text" list="computerlist" name="ComputerId"/>
+                            <datalist id="computerlist">
+                                @{
+                                    //foreach (var item in processors)
+                                    //{
+                                    //    <option value="@item.DeviceId">@item.DeviceId</option>
+                                    //}
+                                }
+                            </datalist>
+                                -->
 
                             <select class="form-control" name="ComputerId" onchange="toggleComputer()" style="width:225px;">
                                 <option value="">SELECCIONA DISPOSITIVO...</option>
@@ -128,7 +144,6 @@
                                 <p id="computerType">...</p>
                             </div>
                         </div>
-
                         <br />
 
                         <!--Hostname-->
@@ -196,7 +211,7 @@
                             <label style="width:160px;">Accesorios</label>
                             <select class="form-control" name="selectedDevice" style="width:225px;" onchange="addAccesory(this.value)">
                                 <option value="">SELECCIONAR ACCESORIO...</option>
-                                @{ 
+                                @{
                                     foreach (var item in accesories)
                                     {
                                         <option value="@item.DeviceId">@item.Type / @item.Brand / @item.Model / @item.DeviceId</option>
@@ -243,7 +258,7 @@
                                                 <td>@item.Model</td>
                                                 <td>@item.DeviceId</td>
                                                 <td style="text-align:right;">
-                                                    <button type="button" class="btn btn-danger" onclick="">Quitar</button>
+                                                    <button type="button" class="btn btn-danger" onclick="removeAccesory('@item.DeviceId')">Quitar</button>
                                                 </td>
                                             </tr>
                                         }
@@ -251,7 +266,7 @@
                                 </tbody>
                             }
                         </table>
-                        <input class="form-control" type="text" name="jsonDevices" readonly style="display:none;"/>
+                        <input class="form-control" type="text" name="jsonDevices" readonly style="display:none;" />
                         <br />
 
                         <div class="form-group" style="margin-top: 16px;">

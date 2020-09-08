@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Equipos de computo";
+    ViewBag.Title = "Catalogo de equipos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -8,7 +8,7 @@
     List<InventarioTIASPX.Models.Computer> computers = ViewData["computers"] as List<InventarioTIASPX.Models.Computer>;
 }
 
-<h2>Equipos de computo</h2>
+<h2>@ViewBag.Title</h2>
 
 <ul class="nav nav-pills">
     <li role="presentation"><a href="@Url.Action("NewComputer", "Computers")">Agregar computadora</a></li>
