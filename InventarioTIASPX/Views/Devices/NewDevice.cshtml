@@ -10,9 +10,13 @@
     List<string> deviceModels = ViewData["deviceModels"] as List<string>;
 }
 
-<h2>Agregar dispositivo</h2>
+<h2>@ViewBag.Title</h2>
 
-<div class="row" style="margin-top: 32px">
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="@Url.Action("", "Devices")">Regresar</a></li>
+</ul>
+
+<div class="row">
     <div class="row">
         <!--Links-->
         <div class="col-md-8">

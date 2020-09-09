@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "Eliminar dispositivo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    InventarioTIASPX.Models.Device device = ViewData["device"] as InventarioTIASPX.Models.Device;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="@Url.Action("", "Devices")">Regresar</a></li>
+</ul>
+
+<div class="panel-body">
+    <p>
+        Estas apunto de eliminar el dispsitivo. Al hacer esto se eliminaran todas las relaciones con esta entidad<br />
+        <b>PARA CONFIRMAR ESTA ACCION ESCRIBE LO SIGUENTE EN EL CAMPO: @device.DeviceId</b>
+    </p>
+
+    @using (Html.BeginForm("Delete", "Devices", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "return validateSubmition()" }))
+    {
+        <script type="text/javascript">
+            function validateSubmition() {
+                var device = @Html.Raw(Json.Encode(device));
+                var form = document.forms["form"];
+                var input1 = form["deviceId"];
+
+                if (input1.value == device.DeviceId) {
+                    return true;
+                } else {
+                    showErrorMessage(5, "El valor es incorrecto")
+                    return false;
+                }
+            }
+        </script>
+
+        <!--DeviceId-->
+        <div class="form-group">
+            <label>Confirmacion</label>
+            <input class="form-control" type="text" name="deviceId" />
+        </div>
+
+        <div class="form-group" style="margin-left:16px;">
+            <a class="btn btn-default" href="@Url.Action("Device", "Devices", new { deviceId = device.DeviceId })">Cancelar</a>
+            <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> ELIMINAR</button>
+        </div>
+
+        <div class="form-group" style="margin-left:16px;">
+            <div>
+                <!--SNACK DE ALERTAS-->
+                <div class="alert alert-danger" id="error-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    Debes completar correctamente el formulario
+                </div>
+                <div class="alert alert-success" id="success-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                    Los cambios se han guardado correctamente
+                </div>
+
+                @if (ViewData["message"] != null)
+                {
+                    <script type="text/javascript">
+                        retriveMessage();
+                    </script>
+                }
+            </div>
+        </div>
+    }
+</div>

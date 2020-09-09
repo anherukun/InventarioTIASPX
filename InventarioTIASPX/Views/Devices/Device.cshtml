@@ -7,9 +7,13 @@
     InventarioTIASPX.Models.Device device = ViewData["device"] as InventarioTIASPX.Models.Device;
 }
 
-<h2>Dispositivo</h2>
+<h2>@ViewBag.Title</h2>
 
-<div class="row" style="margin-top: 32px">
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="@Url.Action("", "Devices")">Regresar</a></li>
+</ul>
+
+<div class="row">
     <div class="row">
         <!--Links-->
         <div class="col-md-8">

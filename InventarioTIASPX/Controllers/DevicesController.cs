@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 
 namespace InventarioTIASPX.Controllers
 {
@@ -73,10 +74,26 @@ namespace InventarioTIASPX.Controllers
         }
 
         [HttpGet]
+        public ActionResult DeleteDevice(string deviceId)
+        {
+            if (deviceId != null)
+            {
+                if ((ViewData["device"] = RepositoryDevice.GetWithoutInclude(deviceId)) != null)
+                {
+                    return View();
+                }
+                return Redirect(Url.Action("", "Devices"));
+            }
+            else
+                return Redirect(Url.Action("", "Devices"));
+        }
+
+        [HttpPost]
         public ActionResult Delete(string deviceId)
         {
             RepositoryDevice.Delete(deviceId);
-            return Redirect(Url.Action("Index", "Devices"));
+
+            return Redirect(Url.Action("", "Devices"));
         }
 
         [HttpGet]
