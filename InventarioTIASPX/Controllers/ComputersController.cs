@@ -34,6 +34,7 @@ namespace InventarioTIASPX.Controllers
                 if ((ViewData["computer"] = RepositoryComputer.Get(computerId)) != null)
                 {
                     ViewData["files"] = new RepositoryComputerFiles().GetAll(computerId);
+                    ViewData["notes"] = new RepositoryComputerNotes().GetAll(computerId);
                     return View();
                 }
 

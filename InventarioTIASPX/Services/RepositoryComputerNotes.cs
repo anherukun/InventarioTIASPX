@@ -17,7 +17,7 @@ namespace InventarioTIASPX.Services
                 db.ComputerNotes.Add(note);
                 db.SaveChanges();
 
-                db.Database.ExecuteSqlCommand($"UPDATE notes SET Computer_ComputerId = \"{note.ParentObjectId}\" WHERE fileId LIKE \"{note.NoteId}\"");
+                db.Database.ExecuteSqlCommand($"UPDATE notes SET Computer_ComputerId = \"{note.ParentObjectId}\" WHERE noteId LIKE \"{note.NoteId}\"");
             }
         }
 
@@ -41,7 +41,7 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-                return db.ComputerNotes.Where(x => x.ParentObjectId == parentId).ToList();
+                return db.ComputerNotes.Where(x => x.ParentObjectId == parentId).OrderByDescending(x => x.Ticks).ToList();
             }
         }
 
