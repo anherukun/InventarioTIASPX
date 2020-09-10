@@ -234,7 +234,7 @@
                                         <td>@(new DateTime(item.UploadedTicks).ToString())</td>
                                         <td style="text-align:right;">
                                             @Html.ActionLink("Descargar", "DownloadFromComputersFiles", "Files", new { fileId = item.FileId }, new { @class = "btn btn-default btn-sm hidden-print" })
-                                            @Html.ActionLink("Eliminar", "DeleteFromComputersFiles", "Files", new { fileId = item.FileId, redirect = Url.Action("Computer", "Computers", new { computerId = computer.ComputerId }) }, new { @class = "btn btn-danger btn-sm hidden-print" })
+                                            @Html.ActionLink("Eliminar", "DeleteFromComputer", "Files", new { fileId = item.FileId, computerId = computer.ComputerId }, new { @class = "btn btn-danger btn-sm hidden-print" })
                                         </td>
                                     </tr>
                                 }

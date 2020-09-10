@@ -22,11 +22,34 @@ namespace InventarioTIASPX.Services
                 db.Database.ExecuteSqlCommand($"UPDATE fileobjects SET Computer_ComputerId = \"{fileObject.ParentObjectId}\" WHERE fileId LIKE \"{fileObject.FileId}\"");
             }
         }
-        public override FileObject Get(string fileId)
+        public override FileObject Get(string fileId, bool includeData)
         {
             using (var db = new InventoryTIASPXContext())
             {
-                return db.ComputersFiles.Where(x => x.FileId == fileId).FirstOrDefault();
+                if (includeData)
+                    return db.ComputersFiles.Where(x => x.FileId == fileId).FirstOrDefault();
+                else
+                {
+                    var o = db.ComputersFiles.Where(x => x.FileId == fileId).Select(x => new
+                    {
+                        FileId = x.FileId,
+                        Name = x.Name,
+                        Mime = x.Mime,
+                        Size = x.Size,
+                        UploadedTicks = x.UploadedTicks,
+                        ParentObjectId = x.ParentObjectId
+                    }).FirstOrDefault();
+
+                    return new FileObject()
+                    {
+                        FileId = o.FileId,
+                        Name = o.Name,
+                        Mime = o.Mime,
+                        Size = o.Size,
+                        UploadedTicks = o.UploadedTicks,
+                        ParentObjectId = o.ParentObjectId
+                    };
+                }
             }
         }
 
@@ -121,7 +144,7 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-                db.Entry(Get(fileId)).State = EntityState.Deleted;
+                db.Entry(Get(fileId, true)).State = EntityState.Deleted;
                 db.SaveChanges();
             }
         }

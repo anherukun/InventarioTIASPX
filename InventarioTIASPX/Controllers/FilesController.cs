@@ -53,7 +53,7 @@ namespace InventarioTIASPX.Controllers
         [HttpGet]
         public FileResult DownloadFromComputersFiles(string fileId)
         {
-            FileObject file = new RepositoryComputerFiles().Get(fileId);
+            FileObject file = new RepositoryComputerFiles().Get(fileId, true);
 
             if (file != null)
                 return File(file.Data, file.Mime, file.Name);
@@ -61,8 +61,20 @@ namespace InventarioTIASPX.Controllers
                 return null;
         }
 
-        [HttpGet]
-        public ActionResult DeleteFromComputersFiles(string fileId, string redirect)
+        public ActionResult DeleteFromComputer(string fileId, string computerId)
+        {
+            if (fileId != null)
+            {
+                ViewData["file"] = new RepositoryComputerFiles().Get(fileId, false);
+                ViewData["computer"] = RepositoryComputer.Get(computerId);
+                return View();
+            }
+            else
+                return Redirect(Url.Action("", "Computers"));
+        }
+
+        [HttpPost]
+        public ActionResult Delete(string fileId, string redirect)
         {
             new RepositoryComputerFiles().Delete(fileId);
 

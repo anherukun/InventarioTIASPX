@@ -212,10 +212,10 @@
     <Content Include="Views\Computers\Computer.cshtml" />
     <Content Include="Views\Computers\EditComputer.cshtml" />
     <Content Include="Views\Devices\DeleteDevice.cshtml" />
+    <Content Include="Views\Files\DeleteFromComputer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Files\" />
     <Folder Include="Views\Notes\" />
   </ItemGroup>
   <ItemGroup>
