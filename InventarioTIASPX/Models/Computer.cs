@@ -18,6 +18,7 @@ namespace InventarioTIASPX.Models
         public string UserId { get; set; }
         public List<Device> Devices { get; set; }
         public List<FileObject> Files { get; set; }
+        public List<Note> Notes { get; set; }
         [ForeignKey("UserId")]public User User { get; set; }
         [ForeignKey("ComputerId")] public Device Processor { get; set; }
     }
