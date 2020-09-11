@@ -16,7 +16,7 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-                db.ComputersFiles.Add(fileObject);
+                db.Files.Add(fileObject);
                 db.SaveChanges();
 
                 db.Database.ExecuteSqlCommand($"UPDATE fileobjects SET Computer_ComputerId = \"{fileObject.ParentObjectId}\" WHERE fileId LIKE \"{fileObject.FileId}\"");
@@ -27,10 +27,10 @@ namespace InventarioTIASPX.Services
             using (var db = new InventoryTIASPXContext())
             {
                 if (includeData)
-                    return db.ComputersFiles.Where(x => x.FileId == fileId).FirstOrDefault();
+                    return db.Files.Where(x => x.FileId == fileId).FirstOrDefault();
                 else
                 {
-                    var o = db.ComputersFiles.Where(x => x.FileId == fileId).Select(x => new
+                    var o = db.Files.Where(x => x.FileId == fileId).Select(x => new
                     {
                         FileId = x.FileId,
                         Name = x.Name,
@@ -59,7 +59,7 @@ namespace InventarioTIASPX.Services
             {
                 List<FileObject> list = new List<FileObject>();
 
-                var o = db.ComputersFiles.Select(x => new {
+                var o = db.Files.Select(x => new {
                     FileId = x.FileId,
                     Name = x.Name,
                     Mime = x.Mime,
@@ -90,7 +90,7 @@ namespace InventarioTIASPX.Services
             {
                 List<FileObject> list = new List<FileObject>();
 
-                var o = db.ComputersFiles.Where(x => x.ParentObjectId == parentId).Select(x => new {
+                var o = db.Files.Where(x => x.ParentObjectId == parentId).Select(x => new {
                     FileId = x.FileId,
                     Name = x.Name,
                     Mime = x.Mime,

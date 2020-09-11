@@ -6,6 +6,9 @@ using System.Web;
 
 namespace InventarioTIASPX.Models
 {
+    /// <summary>
+    /// Contexto de la base de datos
+    /// </summary>
     public class InventoryTIASPXContext : DbContext
     {
 #if DEBUG
@@ -27,7 +30,7 @@ namespace InventarioTIASPX.Models
         public DbSet<Device> Devices { get; set; }
         public DbSet<Computer> Computers { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<FileObject> ComputersFiles { get; set; }
-        public DbSet<Note> ComputerNotes { get; set; }
+        public DbSet<FileObject> Files { get; set; }
+        public DbSet<Note> Notes { get; set; }
     }
 }
