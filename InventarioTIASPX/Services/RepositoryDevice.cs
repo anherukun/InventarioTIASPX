@@ -67,6 +67,20 @@ namespace InventarioTIASPX.Services
                     .ToList();
             }
         }
+        public static List<Device> GetAllAccesories()
+        {
+            List<Device> devices = new List<Device>();
+            List<string> types = RepositoryDevice.GetAllDeviceTypes();
+            types.Remove("PROCESADOR");
+            types.Remove("LAPTOP");
+
+            foreach (var item in types)
+            {
+                devices.AddRange(GetAllByType(item));
+            }
+
+            return devices;
+        }
         public static List<Device> GetAllAccesories(bool inUse)
         {
             List<Device> devices = new List<Device>();
@@ -80,6 +94,16 @@ namespace InventarioTIASPX.Services
             }
 
             return devices;
+        }
+        public static List<Device> GetAllByType(string type)
+        {
+            List<Device> result = new List<Device>();
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Devices.Where(x => x.Type == type)
+                    .OrderBy(x => x.Brand)
+                    .ToList();
+            }
         }
         public static List<Device> GetAllByType(bool inUse, string type)
         {

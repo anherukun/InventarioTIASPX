@@ -214,7 +214,10 @@
                                 @{
                                     foreach (var item in accesories)
                                     {
-                                        <option value="@item.DeviceId">@item.Type / @item.Brand / @item.Model / @item.DeviceId</option>
+                                        if (!item.InUse)
+                                        {
+                                            <option value="@item.DeviceId">@item.Type / @item.Brand / @item.Model / @item.DeviceId</option>
+                                        }
                                     }
                                 }
                             </select>
