@@ -26,7 +26,7 @@ namespace InventarioTIASPX.Controllers
         {
             if (deviceId != null)
             {
-                ViewData["device"] = RepositoryDevice.Get(deviceId);
+                ViewData["device"] = RepositoryDevice.Get(deviceId, true);
                 if (msgType != null && msgString != null)
                 {
                     msgString = Application.ApplicationManager.Base64Decode(msgString);
@@ -58,7 +58,7 @@ namespace InventarioTIASPX.Controllers
         {
             if (deviceId != null)
             {
-                ViewData["device"] = RepositoryDevice.Get(deviceId);
+                ViewData["device"] = RepositoryDevice.Get(deviceId, true);
                 ViewData["devicetypes"] = RepositoryDevice.GetAllDeviceTypes();
                 ViewData["deviceBrands"] = RepositoryDevice.GetAllDeviceBrands();
                 ViewData["deviceModels"] = RepositoryDevice.GetAllDeviceModels();
@@ -78,7 +78,7 @@ namespace InventarioTIASPX.Controllers
         {
             if (deviceId != null)
             {
-                if ((ViewData["device"] = RepositoryDevice.GetWithoutInclude(deviceId)) != null)
+                if ((ViewData["device"] = RepositoryDevice.Get(deviceId, false)) != null)
                 {
                     return View();
                 }

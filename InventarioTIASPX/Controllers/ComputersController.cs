@@ -73,12 +73,12 @@ namespace InventarioTIASPX.Controllers
                     List<Device> computerAccesories = new List<Device>();
 
                     foreach (var item in (ViewData["computer"] as Computer).Devices)
-                        computerAccesories.Add(RepositoryDevice.GetWithoutInclude(item.DeviceId));
+                        computerAccesories.Add(RepositoryDevice.Get(item.DeviceId, false));
 
                     ViewData["computerAccesories"] = computerAccesories;
                 }
                 
-                ViewData["processor"] = RepositoryDevice.Get(computerId);
+                ViewData["processor"] = RepositoryDevice.Get(computerId, true);
                 ViewData["departments"] = RepositoryComputer.GetAllDepartments();
                 ViewData["users"] = RepositoryUser.GetAllUsers();
                 ViewData["availableAccesories"] = RepositoryDevice.GetAllAccesories(true);

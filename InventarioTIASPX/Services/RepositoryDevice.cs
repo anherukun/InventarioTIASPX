@@ -29,18 +29,14 @@ namespace InventarioTIASPX.Services
             }
         }
 
-        public static Device Get(string deviceId)
+        public static Device Get(string deviceId, bool useInclude)
         {
             using (var db = new InventoryTIASPXContext())
             {
-                return db.Devices.Where(x => x.DeviceId == deviceId).Include(x => x.ParentComputer).FirstOrDefault();
-            }
-        }
-        public static Device GetWithoutInclude(string deviceId)
-        {
-            using (var db = new InventoryTIASPXContext())
-            {
-                return db.Devices.Where(x => x.DeviceId == deviceId).FirstOrDefault();
+                if (useInclude)
+                    return db.Devices.Where(x => x.DeviceId == deviceId).Include(x => x.ParentComputer).FirstOrDefault();
+                else
+                    return db.Devices.Where(x => x.DeviceId == deviceId).FirstOrDefault();
             }
         }
 
@@ -120,7 +116,7 @@ namespace InventarioTIASPX.Services
 
         public static void AssignComputer(string deviceId, string computerId)
         {
-            Device device = RepositoryDevice.Get(deviceId);
+            Device device = RepositoryDevice.Get(deviceId, true);
             device.ParentComputerId = computerId;
             device.InUse = true;
 
@@ -134,7 +130,7 @@ namespace InventarioTIASPX.Services
         }
         public static void UnassignComputer(string deviceId)
         {
-            Device device = RepositoryDevice.Get(deviceId);
+            Device device = RepositoryDevice.Get(deviceId, true);
             device.ParentComputerId = null;
             device.InUse = false;
 
@@ -151,7 +147,7 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-                db.Entry(Get(deviceId)).State = EntityState.Deleted;
+                db.Entry(Get(deviceId, true)).State = EntityState.Deleted;
                 db.SaveChanges();
             }
         }
