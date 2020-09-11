@@ -61,6 +61,7 @@ namespace InventarioTIASPX.Controllers
         {
             if (computerId != null)
             {
+                // DETECCION DEL MENSAJE
                 if (msgType != null && msgString != null)
                 {
                     msgString = Application.ApplicationManager.Base64Decode(msgString);
@@ -68,6 +69,7 @@ namespace InventarioTIASPX.Controllers
                 }
 
                 ViewData["computer"] = RepositoryComputer.Get(computerId);
+                // DETENCCION DE ACCESORIOS RELACIONADOS
                 if ((ViewData["computer"] as Computer).Devices != null)
                 {
                     List<Device> computerAccesories = new List<Device>();
