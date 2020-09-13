@@ -62,5 +62,13 @@ namespace InventarioTIASPX.Services
                 db.SaveChanges();
             }
         }
+
+        public static bool Exist(string computerId)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Computers.Any(x => x.ComputerId == computerId);
+            }
+        }
     }
 }

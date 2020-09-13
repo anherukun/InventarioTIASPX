@@ -26,7 +26,14 @@ namespace InventarioTIASPX.Controllers
         {
             if (deviceId != null)
             {
-                ViewData["device"] = RepositoryDevice.Get(deviceId, true);
+                Device device = RepositoryDevice.Get(deviceId, true);
+                ViewData["device"] = device;
+                
+                if (device.ParentComputerId != null && RepositoryComputer.Exist(device.ParentComputerId))
+                {
+                    ViewData["computer"] = RepositoryComputer.Get(device.ParentComputerId);
+                }
+
                 if (msgType != null && msgString != null)
                 {
                     msgString = Application.ApplicationManager.Base64Decode(msgString);

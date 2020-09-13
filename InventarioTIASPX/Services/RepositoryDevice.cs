@@ -20,6 +20,22 @@ namespace InventarioTIASPX.Services
             }
         }
 
+        public static void AddRange(List<Device> devices)
+        {
+            try
+            {
+                using (var db = new InventoryTIASPXContext())
+                {
+                    db.Devices.AddRange(devices);
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException.InnerException;
+            }
+        }
+
         public static void Update(Device device)
         {
             using (var db = new InventoryTIASPXContext())
@@ -33,9 +49,9 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-                if (useInclude)
-                    return db.Devices.Where(x => x.DeviceId == deviceId).Include(x => x.ParentComputer).FirstOrDefault();
-                else
+               // if (useInclude)
+               //     return db.Devices.Where(x => x.DeviceId == deviceId).Include(x => x.ParentComputer).FirstOrDefault();
+               // else
                     return db.Devices.Where(x => x.DeviceId == deviceId).FirstOrDefault();
             }
         }

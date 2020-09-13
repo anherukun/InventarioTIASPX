@@ -16,6 +16,6 @@ namespace InventarioTIASPX.Models
         public string Inventory { get; set; }
         public bool InUse { get; set; }
         public string ParentComputerId { get; set; }
-        [ForeignKey("ParentComputerId")] public Computer ParentComputer { get; set; }
+        // [ForeignKey("ParentComputerId")] public Computer ParentComputer { get; set; }
     }
 }

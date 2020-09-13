@@ -68,10 +68,11 @@ namespace InventarioTIASPX.Controllers
                     ViewData["message"] = new { msgType, msgString };
                 }
 
-                ViewData["computer"] = RepositoryComputer.Get(computerId);
                 // DETENCCION DE ACCESORIOS RELACIONADOS
-                if ((ViewData["computer"] as Computer).Devices != null)
+                if (RepositoryComputer.Exist(computerId))
                 {
+                    ViewData["computer"] = RepositoryComputer.Get(computerId);
+                    
                     List<Device> computerAccesories = new List<Device>();
 
                     foreach (var item in (ViewData["computer"] as Computer).Devices)

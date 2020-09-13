@@ -1,11 +1,7 @@
 ﻿
 @{
-    ViewBag.Title = "Dispositivo";
+    ViewBag.Title = "Importar datos";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
-@{
-    InventarioTIASPX.Models.Device device = ViewData["device"] as InventarioTIASPX.Models.Device;
-    InventarioTIASPX.Models.Computer computer = ViewData["computer"] as InventarioTIASPX.Models.Computer;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -20,56 +16,56 @@
         <div class="col-md-8">
             <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
                 <div class="panel-body">
-                    <h3 style="margin-top:0px;">Datos del dispositivo</h3>
-                    <div class="row" style="margin-left:16px;">
-                        <div class="col-md-4">
-                            <label>Numero de serie</label>
-                            <p style="margin-left:8px;">@device.DeviceId</p>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label>Tipo de dispositivo</label>
-                            <p style="margin-left:8px;">@device.Type</p>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label>Fabricante</label>
-                            <p style="margin-left:8px;">@device.Brand</p>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label>Modelo</label>
-                            <p style="margin-left:8px;">@device.Model</p>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label>Inventario</label>
-                            <p style="margin-left:8px;">@device.Inventory</p>
-                        </div>
-                    </div>
-
-                    @if (computer != null)
+                    @using (Html.BeginForm("ImportFromCSV", "Tools", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "return validateSubmition()", enctype = "multipart/form-data" }))
                     {
-                        <h3 class="col-md-6" style="margin-top:0px; padding-left:0px;">Equipo de computo asignado</h3>
-                        <div class="row" style="margin-left:16px; margin-bottom:8px;">
-                            <div class="col-md-12 row">
-                                <div class="col-md-4">
-                                    <label>Nombre de equipo</label>
-                                    <p style="margin-left:8px;">@computer.Hostname</p>
-                                </div>
+                        <script type="text/javascript">
+                            function validateSubmition() {
+                                var form = document.forms["form"];
+                                var input1 = form["fileDevices"], input2 = form["fileComputers"], input3 = form["fileAccesories"], input4 = form["charType"];
+                                if (input1.value != "" || input2.value != "" || input3.value != "") {
+                                    return true;
+                                } else {
+                                    showErrorMessage(8, "No señeccionaste ningun archivo para importar... Para mas informacion revisa el glosario");
+                                    return false;
+                                }
+                            }
+                        </script>
 
-                                <div class="col-md-4">
-                                    <label>Acciones</label>
-                                    <div>
-                                        @Html.ActionLink("Ver equipo", "Computer", "Computers", new { computerId = device.ParentComputerId }, new { @class = "btn btn-sm btn-default" })
-                                        @Html.ActionLink("Remover", "UnassignComputer", "Devices", new { deviceId = device.DeviceId, redirect = Url.Action("Device", "Devices", new { deviceId = device.DeviceId }) }, new { @class = "btn btn-sm btn-danger" })
-                                    </div>
-                                </div>
-                            </div>
+                        <!--DeviceCollection-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:210px;">Coleccion dispositivos</label>
+                            <input class="form-control" id="id" type="file" name="fileDevices" accept=".csv" value="" />
+                        </div>
+                        <br />
+
+                        <!--ComputersColecction-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:210px;">Coleccion equipos de computo</label>
+                            <input class="form-control" id="id" type="file" name="fileComputers" accept=".csv" value="" />
+                        </div>
+                        <br />
+
+                        <!--AccesoryColecction-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:210px;">Asignacion de Accesorios</label>
+                            <input class="form-control" id="id" type="file" name="fileAccesories" accept=".csv" value="" />
+                        </div>
+                        <br />
+
+                        <!--CharType-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:210px;">Simbolo delimitador</label>
+                            <select class="form-control" name="charSplit" onchange="toggleType()" style="width:225px;">
+                                <option value="," selected>Comma (,)</option>
+                                <option value=";">Semmicolon (;)</option>
+                            </select>
+                        </div>
+                        <br />
+
+                        <div class="form-group" style="margin-top: 16px;">
+                            <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Importar</button>
                         </div>
                     }
-
-                    @Html.ActionLink("Editar", "EditDevice", "Devices", new { deviceId = device.DeviceId }, new { @class = "btn btn-primary" })
                 </div>
             </div>
         </div>
