@@ -23,6 +23,7 @@
                                 var form = document.forms["form"];
                                 var input1 = form["fileDevices"], input2 = form["fileComputers"], input3 = form["fileAccesories"], input4 = form["charType"];
                                 if (input1.value != "" || input2.value != "" || input3.value != "") {
+                                    form["btn-submit"].disabled = true;
                                     return true;
                                 } else {
                                     showErrorMessage(8, "No señeccionaste ningun archivo para importar... Para mas informacion revisa el glosario");
@@ -63,7 +64,7 @@
                         <br />
 
                         <div class="form-group" style="margin-top: 16px;">
-                            <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Importar</button>
+                            <button type="submit" class="btn btn-success" id="btn-submit"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Importar</button>
                         </div>
                     }
                 </div>

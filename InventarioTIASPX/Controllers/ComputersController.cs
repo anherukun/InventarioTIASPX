@@ -52,7 +52,7 @@ namespace InventarioTIASPX.Controllers
             ViewData["processors"] = RepositoryDevice.GetAllProcessors(false);
             ViewData["departments"] = RepositoryComputer.GetAllDepartments();
             ViewData["users"] = RepositoryUser.GetAllUsers();
-            ViewData["accesories"] = RepositoryDevice.GetAllAccesories();
+            ViewData["accesories"] = RepositoryDevice.GetAllAccesories(false);
 
             return View();
         }

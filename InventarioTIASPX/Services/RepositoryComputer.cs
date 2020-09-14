@@ -22,6 +22,28 @@ namespace InventarioTIASPX.Services
             }
         }
 
+        public static void AddRange(List<Computer> computers)
+        {
+            try
+            {
+                using (var db = new InventoryTIASPXContext())
+                {
+                    db.Computers.AddRange(computers);
+                    db.SaveChangesAsync();
+
+                    foreach (var item in computers)
+                    {
+                        RepositoryDevice.AssignComputer(item.ComputerId, item.ComputerId);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex.InnerException.InnerException;
+            }
+        }
+
         public static Computer Get(string computerId)
         {
             using (var db = new InventoryTIASPXContext())
@@ -37,7 +59,7 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-                return db.Computers.Include(x => x.Processor).ToList();
+                return db.Computers.Include(x => x.Processor).OrderBy(x => x.Department).ToList();
             }
         }
 

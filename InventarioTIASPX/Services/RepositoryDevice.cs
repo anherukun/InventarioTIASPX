@@ -27,7 +27,7 @@ namespace InventarioTIASPX.Services
                 using (var db = new InventoryTIASPXContext())
                 {
                     db.Devices.AddRange(devices);
-                    db.SaveChanges();
+                    db.SaveChangesAsync();
                 }
             }
             catch (Exception ex)
@@ -49,10 +49,7 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-               // if (useInclude)
-               //     return db.Devices.Where(x => x.DeviceId == deviceId).Include(x => x.ParentComputer).FirstOrDefault();
-               // else
-                    return db.Devices.Where(x => x.DeviceId == deviceId).FirstOrDefault();
+                return db.Devices.Where(x => x.DeviceId == deviceId).FirstOrDefault();
             }
         }
 
@@ -189,6 +186,14 @@ namespace InventarioTIASPX.Services
             {
                 db.Entry(Get(deviceId, true)).State = EntityState.Deleted;
                 db.SaveChanges();
+            }
+        }
+
+        public static bool Exist(string deviceId)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Devices.Any(x => x.DeviceId == deviceId);
             }
         }
     }
