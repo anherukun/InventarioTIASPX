@@ -32,6 +32,8 @@ namespace InventarioTIASPX.Controllers
         [HttpPost]
         public ActionResult Add(User user)
         {
+            user.UserGUID = Application.ApplicationManager.GenerateGUID;
+
             if (!user.Email.Contains("@PEMEX.COM"))
                 user.Email = $"{user.Email}@PEMEX.COM";
 

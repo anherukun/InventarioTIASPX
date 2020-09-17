@@ -1,9 +1,11 @@
-﻿using InventarioTIASPX.Models;
+﻿using InventarioTIASPX.Controllers;
+using InventarioTIASPX.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace InventarioTIASPX.Services
@@ -19,6 +21,22 @@ namespace InventarioTIASPX.Services
             }
         }
 
+        public static void AddRange(List<User> users)
+        {
+            try
+            {
+                using (var db = new InventoryTIASPXContext())
+                {
+                    db.Users.AddRange(users);
+                    db.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static void Update(User user)
         {
             using (var db = new InventoryTIASPXContext())
@@ -28,7 +46,7 @@ namespace InventarioTIASPX.Services
             }
         }
 
-        public static User Get(string userId)
+        public static User Get(long userId)
         {
             using (var db = new InventoryTIASPXContext())
             {
@@ -44,7 +62,7 @@ namespace InventarioTIASPX.Services
             }
         }
 
-        public static void Delete(string userId)
+        public static void Delete(long userId)
         {
             using (var db = new InventoryTIASPXContext())
             {
@@ -53,7 +71,7 @@ namespace InventarioTIASPX.Services
             }
         }
 
-        public static bool Exist(string userId)
+        public static bool Exist(long userId)
         {
             using (var db = new InventoryTIASPXContext())
             {

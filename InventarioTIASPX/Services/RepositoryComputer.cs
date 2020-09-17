@@ -40,7 +40,7 @@ namespace InventarioTIASPX.Services
             catch (Exception ex)
             {
 
-                throw ex.InnerException.InnerException;
+                throw ex.InnerException;
             }
         }
 

@@ -15,11 +15,11 @@ namespace InventarioTIASPX.Models
         [Required] public string Department { get; set; }
         [Required] public string Location { get; set; }
         [Required] public int Architecture { get; set; }
-        public string UserId { get; set; }
+        public string UserGUID { get; set; }
         public List<Device> Devices { get; set; }
         public List<FileObject> Files { get; set; }
         public List<Note> Notes { get; set; }
-        [ForeignKey("UserId")]public User User { get; set; }
+        [ForeignKey("UserGUID")]public User User { get; set; }
         [ForeignKey("ComputerId")] public Device Processor { get; set; }
     }
 }

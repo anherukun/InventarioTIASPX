@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -8,7 +9,8 @@ namespace InventarioTIASPX.Models
 {
     public class User
     {
-        [Key] public string UserId { get; set; }
+        [Key] public string UserGUID { get; set; }
+        [Required] public long UserId { get; set; }
         [Required] public string Name { get; set; }
         public string Email { get; set; }
         public int EmployeId { get; set; }

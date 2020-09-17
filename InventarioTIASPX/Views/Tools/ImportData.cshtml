@@ -21,8 +21,8 @@
                         <script type="text/javascript">
                             function validateSubmition() {
                                 var form = document.forms["form"];
-                                var input1 = form["fileDevices"], input2 = form["fileComputers"], input3 = form["fileAccesories"], input4 = form["charType"];
-                                if (input1.value != "" || input2.value != "" || input3.value != "") {
+                                var input1 = form["fileDevices"], input2 = form["fileComputers"], input3 = form["fileAccesories"], input4 = form["fileUsers"];
+                                if (input1.value != "" || input2.value != "" || input3.value != "" || input4.value != "") {
                                     form["btn-submit"].disabled = true;
                                     return true;
                                 } else {
@@ -36,6 +36,13 @@
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:210px;">Coleccion dispositivos</label>
                             <input class="form-control" id="id" type="file" name="fileDevices" accept=".csv" value="" />
+                        </div>
+                        <br />
+
+                        <!--UserCollection-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:210px;">Coleccion Usuarios</label>
+                            <input class="form-control" id="id" type="file" name="fileUsers" accept=".csv" value="" />
                         </div>
                         <br />
 

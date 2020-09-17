@@ -32,7 +32,7 @@ namespace InventarioTIASPX.Controllers
         }
 
         [HttpPost]
-        public ActionResult ImportFromCSV(HttpPostedFileBase fileDevices, HttpPostedFileBase fileComputers, HttpPostedFileBase fileAccesories, char charSplit)
+        public ActionResult ImportFromCSV(HttpPostedFileBase fileDevices, HttpPostedFileBase fileUsers, HttpPostedFileBase fileComputers, HttpPostedFileBase fileAccesories, char charSplit)
         {
             DateTime a = DateTime.Now;
             try
@@ -78,8 +78,49 @@ namespace InventarioTIASPX.Controllers
 
                         reader.Dispose();
                     }
-                    // BinaryReader reader = new BinaryReader(fileDevices.InputStream);
-                    
+                }
+
+                if (fileUsers != null)
+                {
+                    using (var reader = new BinaryReader(fileUsers.InputStream))
+                    {
+                        byte[] data = reader.ReadBytes(fileUsers.ContentLength);
+
+                        // 0: USUARIO | 1: NOMBRE DE CUENTA | 2: EMAIL | 3: FICHA | 4: NOMBRE DE EMPLEADO | 5: MIGRADO (1 : 0)
+                        List<User> users = new List<User>();
+                        // CONVIERTE LOS BYTES EN STRING
+                        string stringData = System.Text.Encoding.UTF8.GetString(data).ToString();
+                        // SEPARA LAS LINEAS EN UNA LISTA DE STRINGS
+                        List<string> rows = stringData.Split('\n').ToList();
+                        // QUITA LOS ENCABEZADOS DE LA TABLA
+                        rows.RemoveAt(0);
+                        // RECORRE CADA LINEA Y CREA UN USER NUEVO AGREGANDOLO A LA LISTA DE DEVICES
+                        foreach (var item in rows)
+                        {
+                            if (item.Split(charSplit)[0].Trim().Length > 0 && item.Split(charSplit)[1].Trim().Length > 0 && item.Split(charSplit)[3].Trim().Length > 0)
+                            {
+                                User u = new Models.User()
+                                {
+                                    UserGUID = Application.ApplicationManager.GenerateGUID,
+                                    UserId = long.Parse(item.Split(charSplit)[0].Trim()),
+                                    Name = item.Split(charSplit)[1].Trim().ToUpper(),
+                                    EmployeId = int.Parse(item.Split(charSplit)[3].Trim()),
+                                    Employe = item.Split(charSplit)[4].Trim().ToUpper()
+                                };
+                                
+                                u.Email = item.Split(charSplit)[2].Trim().Length > 0 ? item.Split(charSplit)[2].Trim().ToUpper() : null;
+                                u.Migrated = item.Split(charSplit)[5].Trim() == "1" ? true : false;
+
+                                users.Add(u);
+                            }
+                        }
+
+                        // SI HAY POR LO MENOS UN DISPOSITIVO NUEVO, SE ENVIA AL REPOSITORIO Y SE GUARDA EN LA BASE DE DATOS
+                        if (users.Count > 0)
+                            RepositoryUser.AddRange(users);
+
+                        reader.Dispose();
+                    }
                 }
 
                 if (fileComputers != null)
@@ -88,7 +129,7 @@ namespace InventarioTIASPX.Controllers
                     {
                         byte[] data = reader.ReadBytes(fileComputers.ContentLength);
 
-                        // 0: SERIE PROCESADOR | 1: HOSTNAME | 2: DEPARTAMENTO | 3: UBICACION FISICA | 4: ARQUITECTURA
+                        // 0: SERIE PROCESADOR | 1: HOSTNAME | 2: DEPARTAMENTO | 3: UBICACION FISICA | 4: ARQUITECTURA | 5: USUARIO
                         List<Computer> computers = new List<Computer>();
                         // CONVIERTE LOS BYTES EN STRING
                         string stringData = System.Text.Encoding.UTF8.GetString(data).ToString();
@@ -109,8 +150,12 @@ namespace InventarioTIASPX.Controllers
                                         Hostname = item.Split(charSplit)[1].Trim().ToUpper(),
                                         Department = item.Split(charSplit)[2].Trim().ToUpper(),
                                         Location = item.Split(charSplit)[3].Trim().ToUpper(),
-                                        Architecture = int.Parse(item.Split(charSplit)[4].Trim()),
+                                        Architecture = int.Parse(item.Split(charSplit)[4].Trim())
                                     };
+                                    if (item.Split(charSplit)[5].Trim().Length > 0)
+                                        if (RepositoryUser.Exist(long.Parse(item.Split(charSplit)[5].Trim())))
+                                            c.UserGUID = RepositoryUser.Get(long.Parse(item.Split(charSplit)[5].Trim())).UserGUID;
+
                                     computers.Add(c);
                                 }
                             }
@@ -122,8 +167,6 @@ namespace InventarioTIASPX.Controllers
 
                         reader.Dispose();
                     }
-                    // BinaryReader reader = new BinaryReader(fileDevices.InputStream);
-
                 }
 
                 if (fileAccesories != null)
