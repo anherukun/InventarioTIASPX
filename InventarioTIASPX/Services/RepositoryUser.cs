@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 
@@ -14,6 +15,15 @@ namespace InventarioTIASPX.Services
             using (var db = new InventoryTIASPXContext())
             {
                 db.Users.Add(user);
+                db.SaveChanges();
+            }
+        }
+
+        public static void Update(User user)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                db.Users.AddOrUpdate(user);
                 db.SaveChanges();
             }
         }
@@ -40,6 +50,14 @@ namespace InventarioTIASPX.Services
             {
                 db.Entry(Get(userId)).State = EntityState.Deleted;
                 db.SaveChanges();
+            }
+        }
+
+        public static bool Exist(string userId)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Users.Any(x => x.UserId == userId);
             }
         }
     }

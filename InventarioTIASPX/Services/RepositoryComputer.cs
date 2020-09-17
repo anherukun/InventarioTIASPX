@@ -51,6 +51,7 @@ namespace InventarioTIASPX.Services
                 return db.Computers.Where(x => x.ComputerId == computerId)
                     .Include(x => x.Processor)
                     .Include(x => x.Devices)
+                    .Include(x => x.User)
                     .FirstOrDefault();
             }
         }

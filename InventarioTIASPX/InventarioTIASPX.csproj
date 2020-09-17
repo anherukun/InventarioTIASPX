@@ -145,6 +145,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NotesController.cs" />
     <Compile Include="Controllers\ToolsController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -155,6 +156,7 @@
     <Compile Include="Models\InventoryTIASPXContext.cs" />
     <Compile Include="Models\Note.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserMemberOf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Abstracts\RepositoryFiles.cs" />
     <Compile Include="Services\Abstracts\RepositoryNotes.cs" />
@@ -163,6 +165,7 @@
     <Compile Include="Services\RepositoryComputerNotes.cs" />
     <Compile Include="Services\RepositoryDevice.cs" />
     <Compile Include="Services\RepositoryUser.cs" />
+    <Compile Include="Services\RepositoryUserMemberOf.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Sounds\alarm.ogg" />
@@ -215,6 +218,8 @@
     <Content Include="Views\Devices\DeleteDevice.cshtml" />
     <Content Include="Views\Files\DeleteFromComputer.cshtml" />
     <Content Include="Views\Tools\ImportData.cshtml" />
+    <Content Include="Views\Users\NewUser.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

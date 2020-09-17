@@ -122,6 +122,31 @@
                         </table>
                     }
 
+                    <!--DATOS DEL USUARIO-->
+                    @if (computer.User != null)
+                    {
+                        <h3 style="margin-top:0px;">Usuario asignado</h3>
+                        <div class="row" style="margin-left:16px; margin-bottom:20px;">
+                            <div class="col-md-3">
+                                <label>Usuario de AD</label>
+                                <p style="margin-left:8px;">@computer.UserId</p>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label>Titular de la cuenta</label>
+                                <p style="margin-left:8px;">@computer.User.Employe</p>
+                            </div>
+
+                            @if (computer.User.Email != null)
+                            {
+                                <div class="col-md-4">
+                                    <label>Correo electronico</label>
+                                    <p style="margin-left:8px;">@computer.User.Email</p>
+                                </div>
+                            }
+                        </div>
+                    }
+
                     @Html.ActionLink("Editar", "EditComputer", "Computers", new { computerId = computer.ComputerId }, new { @class = "btn btn-primary" })
                 </div>
             </div>

@@ -32,5 +32,6 @@ namespace InventarioTIASPX.Models
         public DbSet<User> Users { get; set; }
         public DbSet<FileObject> Files { get; set; }
         public DbSet<Note> Notes { get; set; }
+        public DbSet<UserMemberOf> UserMemberOfs { get; set; }
     }
 }

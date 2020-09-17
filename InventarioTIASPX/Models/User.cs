@@ -13,5 +13,7 @@ namespace InventarioTIASPX.Models
         public string Email { get; set; }
         public int EmployeId { get; set; }
         public string Employe { get; set; }
+        public bool Migrated { get; set; }
+        public List<UserMemberOf> MemberOfs { get; set; }
     }
 }
