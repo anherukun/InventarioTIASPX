@@ -7,15 +7,23 @@
 <h2>@ViewBag.Title</h2>
 
 <ul class="nav nav-pills">
-    <li role="presentation"><a href="@Url.Action("", "Devices")">Regresar</a></li>
+    <li role="presentation"><a href="@Url.Action("", "")">Regresar</a></li>
 </ul>
 
 <div class="row">
     <div class="row">
         <!--Links-->
-        <div class="col-md-8">
+        <div class="col-md-7">
             <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
                 <div class="panel-body">
+                    <p style="text-align:justify; margin:0px">
+                        Con esta herramienta podras cargar lotes de datos sin necesidad de utilizar el formulatio tradicional.
+                    </p>
+                    <p style="text-align:justify; margin:0px; margin-bottom:20px">
+                        Los archivos de importacion compatibles son hojas de datos separados por commas <b>(.*csv)</b>,
+                        para saber mas de la disposicion correcta de los datos revisa el glosario.
+                    </p>
+
                     @using (Html.BeginForm("ImportFromCSV", "Tools", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "return validateSubmition()", enctype = "multipart/form-data" }))
                     {
                         <script type="text/javascript">
@@ -26,49 +34,60 @@
                                     form["btn-submit"].disabled = true;
                                     return true;
                                 } else {
-                                    showErrorMessage(8, "No señeccionaste ningun archivo para importar... Para mas informacion revisa el glosario");
+                                    showErrorMessage(8, "No seleccionaste ningun archivo para importar... Para mas informacion revisa el glosario");
                                     return false;
                                 }
                             }
                         </script>
 
-                        <!--DeviceCollection-->
-                        <div class="form-group" style="margin-bottom:10px;">
-                            <label style="width:210px;">Coleccion dispositivos</label>
-                            <input class="form-control" id="id" type="file" name="fileDevices" accept=".csv" value="" />
-                        </div>
-                        <br />
+                        <h3 style="margin-top:0px;">1. Colecciones principales</h3>
+                        <div style="margin-left:16px; margin-bottom:20px;">
+                            <!--DeviceCollection-->
+                            <div class="form-group" style="margin-bottom:10px;">
+                                <label style="width:210px;">1.1 Coleccion dispositivos</label>
+                                <input class="form-control" id="id" type="file" name="fileDevices" accept=".csv" value="" />
+                            </div>
+                            <br />
 
-                        <!--UserCollection-->
-                        <div class="form-group" style="margin-bottom:10px;">
-                            <label style="width:210px;">Coleccion Usuarios</label>
-                            <input class="form-control" id="id" type="file" name="fileUsers" accept=".csv" value="" />
+                            <!--UserCollection-->
+                            <div class="form-group" style="margin-bottom:10px;">
+                                <label style="width:210px;">1.2 Coleccion usuarios</label>
+                                <input class="form-control" id="id" type="file" name="fileUsers" accept=".csv" value="" />
+                            </div>
+                            <br />
                         </div>
-                        <br />
 
-                        <!--ComputersColecction-->
-                        <div class="form-group" style="margin-bottom:10px;">
-                            <label style="width:210px;">Coleccion equipos de computo</label>
-                            <input class="form-control" id="id" type="file" name="fileComputers" accept=".csv" value="" />
-                        </div>
-                        <br />
+                        <h3 style="margin-top:0px;">2. Colecciones secundarias</h3>
+                        <div style="margin-left:16px; margin-bottom:20px;">
+                            <!--ComputersColecction-->
+                            <div class="form-group" style="margin-bottom:10px;">
+                                <label style="width:210px;">2.1 Coleccion equipos de computo</label>
+                                <input class="form-control" id="id" type="file" name="fileComputers" accept=".csv" value="" />
+                            </div>
+                            <br />
 
-                        <!--AccesoryColecction-->
-                        <div class="form-group" style="margin-bottom:10px;">
-                            <label style="width:210px;">Asignacion de Accesorios</label>
-                            <input class="form-control" id="id" type="file" name="fileAccesories" accept=".csv" value="" />
+                            <h4>Equipos de computo: Dependencias</h4>
+                            <!--AccesoryColecction-->
+                            <div class="form-group" style="margin-bottom:10px;">
+                                <label style="width:210px;">2.1.1 Asignacion de accesorios</label>
+                                <input class="form-control" id="id" type="file" name="fileAccesories" accept=".csv" value="" />
+                            </div>
+                            <br />
                         </div>
-                        <br />
 
-                        <!--CharType-->
-                        <div class="form-group" style="margin-bottom:10px;">
-                            <label style="width:210px;">Simbolo delimitador</label>
-                            <select class="form-control" name="charSplit" onchange="toggleType()" style="width:225px;">
-                                <option value="," selected>Comma (,)</option>
-                                <option value=";">Semmicolon (;)</option>
-                            </select>
+                        <h3 style="margin-top0px;">3. Opciones de importacion</h3>
+                        <div style="margin-left:16px;">
+                            <!--CharType-->
+                            <div class="form-group" style="margin-bottom:10px;">
+                                <label style="width:210px;">3.1 Simbolo delimitador</label>
+                                <select class="form-control" name="charSplit" onchange="toggleType()" style="width:225px;">
+                                    <option value="," selected>Comma (,)</option>
+                                    <option value=";">Semmicolon (;)</option>
+                                </select>
+                            </div>
+                            <br />
                         </div>
-                        <br />
+
 
                         <div class="form-group" style="margin-top: 16px;">
                             <button type="submit" class="btn btn-success" id="btn-submit"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Importar</button>
@@ -79,7 +98,7 @@
         </div>
 
         <!--SIDE PANEL-->
-        <div class="col-md-4">
+        <div class="col-md-5">
             <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
                 <a href="#glosary" data-toggle="collapse">
                     <div class="panel-heading" style="padding:16px;">
@@ -89,28 +108,123 @@
                 <div class="panel-body collapse" id="glosary">
                     <ul>
                         <li>
-                            <label>Numero de serie</label>
-                            <p>...</p>
+                            <label>Dispositivos</label>
+                            <p>
+                                Estas son las siguientes propiedades que conforman una entidad del tipo Dispositivo:
+                            </p>
+                            <ul>
+                                <li>
+                                    <label>Serie</label>
+                                    <p>Numero de serie indicado por el fabricante, en caso de no contar con dicho dato, colocar un identificador global unico (GUID).</p>
+                                </li>
+                                <li>
+                                    <label>Inventario</label>
+                                    <p>Numero de inventario de la empresa en caso de que aplique</p>
+                                </li>
+                                <li>
+                                    <label>Tipo</label>
+                                    <p>Tipo de dispositivo: Procesador, Laptop, Monitor, Teclado, Mouse, Bocinas</p>
+                                </li>
+                                <li>
+                                    <label>Marca</label>
+                                    <p>Nombre del fabricante que diseña el dispositivo</p>
+                                </li>
+                                <li>
+                                    <label>Modelo</label>
+                                    <p>Identificador comercial del dispositivo</p>
+                                </li>
+                            </ul>
                         </li>
 
                         <li>
-                            <label>Tipo de dispositivo</label>
-                            <p>...</p>
+                            <label>Usuarios</label>
+                            <p>
+                                Estas son las siguientes propiedades que conforman una entidad del tipo Usuario:
+                            </p>
+                            <ul>
+                                <li>
+                                    <label>Usuario</label>
+                                    <p>Nombre de usuario (Ficha o Pseudoficha) tal y como esta registrada en directorio activo</p>
+                                </li>
+                                <li>
+                                    <label>Nombre de cuenta</label>
+                                    <p>Nombre descriptivo de la cuenta, tal como aparece en directorio activo, libreta de direcciones o en el inicio de Windows</p>
+                                </li>
+                                <li>
+                                    <label>Email</label>
+                                    <p>Correo electronico vinculado a la cuenta</p>
+                                </li>
+                                <li>
+                                    <label>Ficha</label>
+                                    <p>Identificador del trabajador propietario de la cuenta</p>
+                                </li>
+                                <li>
+                                    <label>Trabajador</label>
+                                    <p>Nombre del trabajador propietario de la cuenta</p>
+                                </li>
+                                <li>
+                                    <label>Migrado</label>
+                                    <p>Propiedad de la cuenta para indicar si el correo electronico se encuentra migrado a O365 (1: SI, 0: NO)</p>
+                                </li>
+                            </ul>
                         </li>
 
                         <li>
-                            <label>Marca del dispositivo</label>
-                            <p>...</p>
+                            <label>Equipos de computo</label>
+                            <p>
+                                Estas son las siguientes propiedades que conforman una entidad del tipo Computadora:
+                            </p>
+                            <ul>
+                                <li>
+                                    <label>Serie</label>
+                                    <p>Numero de serie del procesador o laptop</p>
+                                </li>
+                                <li>
+                                    <label>Hostname</label>
+                                    <p>Nombre del dispositivo en red</p>
+                                </li>
+                                <li>
+                                    <label>Departamento</label>
+                                    <p>Departamento al que pertenece el equipo de computo</p>
+                                </li>
+                                <li>
+                                    <label>Ubicacion</label>
+                                    <p>Descripcion preciso del lugar donde se ubica el equipo (Edificio, oficina)</p>
+                                </li>
+                                <li>
+                                    <label>Arquitectura</label>
+                                    <p>Arquitectura del sistema operativo</p>
+                                </li>
+                                <li>
+                                    <label>Usuario</label>
+                                    <p>Nombre de usuario (Ficha 0 Pseudoficha) que utiliza el equipo de computo, Actuara como propietario del equipo de computo</p>
+                                </li>
+                            </ul>
                         </li>
 
                         <li>
-                            <label>Modelo del dispositivo</label>
-                            <p>...</p>
+                            <label>Asignacion de accesorios</label>
+                            <p>
+                                Estas son las siguientes propiedades que complementan la entidad de Dispositivo:
+                            </p>
+                            <ul>
+                                <li>
+                                    <label>Serie procesador</label>
+                                    <p>Numero de serie del procesador o laptop</p>
+                                </li>
+                                <li>
+                                    <label>Serie dispositivo</label>
+                                    <p>Numero de serie del accesorio</p>
+                                </li>
+                            </ul>
                         </li>
 
                         <li>
-                            <label>Numero de inventario</label>
-                            <p>...</p>
+                            <label>Simbolo delimitador</label>
+                            <p>Caracter que separa los datos en el archivo *.csv</p>
+                            <p>
+                                MS Excel crea estos archivos utilizando <b>Comma (,)</b> o <b>SemmiColon (;)</b> dependiendo la version que se este ejecutando
+                            </p>
                         </li>
                     </ul>
                 </div>
