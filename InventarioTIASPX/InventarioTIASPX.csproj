@@ -220,6 +220,7 @@
     <Content Include="Views\Tools\ImportData.cshtml" />
     <Content Include="Views\Users\NewUser.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Users\User.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

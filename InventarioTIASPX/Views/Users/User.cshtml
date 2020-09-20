@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ 
+    InventarioTIASPX.Models.User user = ViewData["user"] as InventarioTIASPX.Models.User;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="@Url.Action("", "Users")" >Regresar</a></li>
+</ul>
+
+<div class="row">
+    <div class="row">
+        <!--Links-->
+        <div class="col-md-8">
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-body">
+                    <h3 style="margin-top:0px;">Datos de la cuenta</h3>
+                    <div class="row" style="margin-left:16px;">
+                        <div class="col-md-3">
+                            <label>Usuario de AD</label>
+                            <p style="margin-left:8px;">PEMEX\@user.UserId</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Nombre de la cuenta</label>
+                            <p style="margin-left:8px;">@user.Name</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Migracion</label>
+
+                            @if (user.Migrated)
+                            {
+                                <p style="margin-left:8px;">CUENTA MIGRADA A O365</p>
+                            }
+                            else
+                            {
+                                <p style="margin-left:8px;">CUENTA NO MIGRADA A O365</p>
+                            }
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Correo electronico</label>
+                            <p style="margin-left:8px;">@user.Email</p>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top:0px;">Titular de la cuenta</h3>
+                    <div class="row" style="margin-left:16px;">
+                        <div class="col-md-2">
+                            <label>Ficha</label>
+                            <p style="margin-left:8px;">@user.EmployeId</p>
+                        </div>
+
+                        <div>
+                            <label>Trabajador</label>
+                            <p style="margin-left:8px;">@user.Employe</p>
+                        </div>
+                    </div>
+
+                    @Html.ActionLink("Editar", "EditUser", "Users", new { userId = user.UserId }, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+        </div>
+
+        <!--SIDE PANEL-->
+        <div class="col-md-4">
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <a href="#glosary" data-toggle="collapse">
+                    <div class="panel-heading" style="padding:16px;">
+                        <h3 style="margin-top:0px; margin-bottom:0px;"><span class="glyphicon glyphicon-question-sign"></span> Glosario <span class="caret"></span></h3>
+                    </div>
+                </a>
+                <div class="panel-body collapse" id="glosary">
+                    <ul>
+                        <li>
+                            <label>Numero de serie</label>
+                            <p>...</p>
+                        </li>
+
+                        <li>
+                            <label>Tipo de dispositivo</label>
+                            <p>...</p>
+                        </li>
+
+                        <li>
+                            <label>Marca del dispositivo</label>
+                            <p>...</p>
+                        </li>
+
+                        <li>
+                            <label>Modelo del dispositivo</label>
+                            <p>...</p>
+                        </li>
+
+                        <li>
+                            <label>Numero de inventario</label>
+                            <p>...</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div>
+                <!--SNACK DE ALERTAS-->
+                <div class="alert alert-danger" id="error-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    Debes completar correctamente el formulario
+                </div>
+                <div class="alert alert-success" id="success-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                    Los cambios se han guardado correctamente
+                </div>
+
+                @if (ViewData["message"] != null)
+                {
+                    <script type="text/javascript">
+                        retriveMessage();
+                    </script>
+                }
+            </div>
+        </div>
+    </div>
+</div>

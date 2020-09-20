@@ -54,9 +54,9 @@
                         <td>@item.Email</td>
                         <td>@item.Employe</td>
                         <td style="text-align:right;">
-                            @Html.ActionLink("Ver mas...", "User", "Users", new { deviceId = item.UserId }, new { @class = "btn btn-default btn-sm hidden-print" })
-                            @Html.ActionLink("Modificar", "EditUser", "Users", new { deviceId = item.UserId }, new { @class = "btn btn-default btn-sm hidden-print" })
-                            @Html.ActionLink("Eliminar", "DeleteUser", "Users", new { deviceId = item.UserId }, new { @class = "btn btn-danger btn-sm hidden-print" })
+                            @Html.ActionLink("Ver mas...", "User", "Users", new { userId = item.UserId }, new { @class = "btn btn-default btn-sm hidden-print" })
+                            @Html.ActionLink("Modificar", "EditUser", "Users", new { userId = item.UserId }, new { @class = "btn btn-default btn-sm hidden-print" })
+                            @Html.ActionLink("Eliminar", "DeleteUser", "Users", new { userId = item.UserId }, new { @class = "btn btn-danger btn-sm hidden-print" })
                         </td>
                     </tr>
                 }
