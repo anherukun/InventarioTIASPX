@@ -14,12 +14,15 @@ namespace InventarioTIASPX.Services
     {
         public override void Add(FileObject fileObject)
         {
+            string computerId = fileObject.ParentObjectId;
+            fileObject.ParentObjectId = $"COMP_{computerId}";
+
             using (var db = new InventoryTIASPXContext())
             {
                 db.Files.Add(fileObject);
                 db.SaveChanges();
 
-                db.Database.ExecuteSqlCommand($"UPDATE fileobjects SET Computer_ComputerId = \"{fileObject.ParentObjectId}\" WHERE fileId LIKE \"{fileObject.FileId}\"");
+                db.Database.ExecuteSqlCommand($"UPDATE fileobjects SET Computer_ComputerId = \"{computerId}\" WHERE fileId LIKE \"{fileObject.FileId}\"");
             }
         }
         public override FileObject Get(string fileId, bool includeData)
@@ -86,11 +89,12 @@ namespace InventarioTIASPX.Services
         }
         public override List<FileObject> GetAll(string parentId)
         {
+            string parentObjectId = $"COMP_{parentId}";
             using (var db = new InventoryTIASPXContext())
             {
                 List<FileObject> list = new List<FileObject>();
 
-                var o = db.Files.Where(x => x.ParentObjectId == parentId).Select(x => new {
+                var o = db.Files.Where(x => x.ParentObjectId == parentObjectId).Select(x => new {
                     FileId = x.FileId,
                     Name = x.Name,
                     Mime = x.Mime,
