@@ -13,10 +13,10 @@ namespace InventarioTIASPX.Controllers
     public class FilesController : Controller
     {
         // GET: Files
-        public ActionResult Index()
-        {
-            return View();
-        }
+        // public ActionResult Index()
+        // {
+        //     return View();
+        // }
 
         [HttpPost]
         public ActionResult UploadComputerFile(HttpPostedFileBase file, string parentId, string path, string controller)
@@ -91,9 +91,9 @@ namespace InventarioTIASPX.Controllers
         }
 
         [HttpGet]
-        public FileResult DownloadFromComputersFiles(string fileId)
+        public FileResult DownloadFile(string fileId)
         {
-            FileObject file = new RepositoryComputerFiles().Get(fileId, true);
+            FileObject file = new RepositoryGenericFiles().Get(fileId, true);
 
             if (file != null)
                 return File(file.Data, file.Mime, file.Name);
@@ -111,6 +111,18 @@ namespace InventarioTIASPX.Controllers
             }
             else
                 return Redirect(Url.Action("", "Computers"));
+        }
+
+        public ActionResult DeleteFromUser(string fileId, long userId)
+        {
+            if (fileId != null)
+            {
+                ViewData["file"] = new RepositoryComputerFiles().Get(fileId, false);
+                ViewData["user"] = RepositoryUser.Get(userId);
+                return View();
+            }
+            else
+                return Redirect(Url.Action("", "Users"));
         }
 
         [HttpPost]

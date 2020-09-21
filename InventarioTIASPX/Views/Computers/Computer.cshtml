@@ -258,7 +258,7 @@
                                         <td>@(item.Size / 1024) KB</td>
                                         <td>@(new DateTime(item.UploadedTicks).ToString())</td>
                                         <td style="text-align:right;">
-                                            @Html.ActionLink("Descargar", "DownloadFromComputersFiles", "Files", new { fileId = item.FileId }, new { @class = "btn btn-default btn-sm hidden-print" })
+                                            @Html.ActionLink("Descargar", "DownloadFile", "Files", new { fileId = item.FileId }, new { @class = "btn btn-default btn-sm hidden-print" })
                                             @Html.ActionLink("Eliminar", "DeleteFromComputer", "Files", new { fileId = item.FileId, computerId = computer.ComputerId }, new { @class = "btn btn-danger btn-sm hidden-print" })
                                         </td>
                                     </tr>

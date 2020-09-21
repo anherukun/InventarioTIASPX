@@ -164,6 +164,7 @@
     <Compile Include="Services\RepositoryComputerFiles.cs" />
     <Compile Include="Services\RepositoryComputerNotes.cs" />
     <Compile Include="Services\RepositoryDevice.cs" />
+    <Compile Include="Services\RepositoryGenericFiles.cs" />
     <Compile Include="Services\RepositoryGenericNotes.cs" />
     <Compile Include="Services\RepositoryUser.cs" />
     <Compile Include="Services\RepositoryUserFiles.cs" />
@@ -224,6 +225,7 @@
     <Content Include="Views\Users\NewUser.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Users\User.cshtml" />
+    <Content Include="Views\Files\DeleteFromUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
