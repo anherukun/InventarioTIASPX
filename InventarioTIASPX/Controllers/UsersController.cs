@@ -25,10 +25,18 @@ namespace InventarioTIASPX.Controllers
             if (userId != null)
                 if (RepositoryUser.Exist(userId.Value))
                 {
-                    ViewData["user"] = RepositoryUser.Get(userId.Value);
+                    if (msgType != null && msgString != null)
+                    {
+                        msgString = Application.ApplicationManager.Base64Decode(msgString);
+                        ViewData["message"] = new { msgType, msgString };
+                    }
+
+                    User u = RepositoryUser.Get(userId.Value);
+                    ViewData["user"] = u;
+                    ViewData["notes"] = new RepositoryUserNotes().GetAll(u.UserGUID);
+                    ViewData["files"] = new RepositoryUserFiles().GetAll(u.UserGUID);
 
                     return View();
-
                 }
 
             return Redirect(Url.Action("", "Users"));

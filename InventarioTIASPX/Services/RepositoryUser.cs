@@ -46,6 +46,13 @@ namespace InventarioTIASPX.Services
             }
         }
 
+        public static User Get(string userGUID)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Users.Where(x => x.UserGUID == userGUID).FirstOrDefault();
+            }
+        }
         public static User Get(long userId)
         {
             using (var db = new InventoryTIASPXContext())

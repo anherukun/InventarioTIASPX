@@ -185,7 +185,7 @@
                                         <td scope="row">@item.Body</td>
                                         <td>@(new DateTime(item.Ticks).ToString())</td>
                                         <td style="text-align:right;">
-                                            @Html.ActionLink("Eliminar", "DeleteFromComputersNotes", "Notes", new { noteId = item.NoteId, redirect = Url.Action("Computer", "Computers", new { computerId = computer.ComputerId }) }, new { @class = "btn btn-danger btn-sm hidden-print" })
+                                            @Html.ActionLink("Eliminar", "DeleteNote", "Notes", new { noteId = item.NoteId, redirect = Url.Action("Computer", "Computers", new { computerId = computer.ComputerId }) }, new { @class = "btn btn-danger btn-sm hidden-print" })
                                         </td>
                                     </tr>
                                 }
@@ -210,7 +210,7 @@
                         </div>
                         <div class="form-group form-group-sm col-md-12" style="text-align:right; padding-right:0px">
                             <label style="vertical-align:top; margin-right:8px;">Nueva nota</label>
-                            <textarea class="form-control" name="body" placeholder="Redactar la nota aqui..." onkeyup="this.value = this.value.toUpperCase();" style="min-width:300px; min-height:50px; max-height:200px;"></textarea>
+                            <textarea class="form-control" name="body" placeholder="Redactar la nota aqui..." onkeyup="this.value = this.value.toUpperCase();" style="min-width:300px; min-height:50px; max-height:200px;" required></textarea>
                             <br />
                             <input style="margin-top:8px;" class="btn btn-sm btn-success" type="submit" value="Cargar" />
                         </div>

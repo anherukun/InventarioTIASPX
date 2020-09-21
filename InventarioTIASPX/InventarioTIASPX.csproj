@@ -164,8 +164,11 @@
     <Compile Include="Services\RepositoryComputerFiles.cs" />
     <Compile Include="Services\RepositoryComputerNotes.cs" />
     <Compile Include="Services\RepositoryDevice.cs" />
+    <Compile Include="Services\RepositoryGenericNotes.cs" />
     <Compile Include="Services\RepositoryUser.cs" />
+    <Compile Include="Services\RepositoryUserFiles.cs" />
     <Compile Include="Services\RepositoryUserMemberOf.cs" />
+    <Compile Include="Services\RepositoryUserNotes.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Sounds\alarm.ogg" />

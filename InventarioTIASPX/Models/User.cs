@@ -17,5 +17,7 @@ namespace InventarioTIASPX.Models
         public string Employe { get; set; }
         public bool Migrated { get; set; }
         public List<UserMemberOf> MemberOfs { get; set; }
+        public List<Note> Notes { get; set; }
+        public List<FileObject> Files { get; set; }
     }
 }

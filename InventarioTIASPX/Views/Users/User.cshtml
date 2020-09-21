@@ -6,6 +6,8 @@
 
 @{ 
     InventarioTIASPX.Models.User user = ViewData["user"] as InventarioTIASPX.Models.User;
+    List<InventarioTIASPX.Models.FileObject> files = ViewData["files"] as List<InventarioTIASPX.Models.FileObject>;
+    List<InventarioTIASPX.Models.Note> notes = ViewData["notes"] as List<InventarioTIASPX.Models.Note>;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -65,6 +67,146 @@
                     </div>
 
                     @Html.ActionLink("Editar", "EditUser", "Users", new { userId = user.UserId }, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-body">
+                    <!--NOTAS-->
+                    <h3 style="margin-top:0px">Notas y observaciones</h3>
+
+                    <table class="table" id="devicetable">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Nota
+                                    <br />
+                                </th>
+
+                                <th scope="col" style="width:120px;">
+                                    Fecha
+                                    <br />
+                                </th>
+
+                                <th scope="col" style="width:70px;">
+                                    Acciones
+                                    <br />
+                                </th>
+
+                            </tr>
+                        </thead>
+                        @if (notes != null)
+                        {
+                            <tbody>
+                                @foreach (var item in notes)
+                                {
+                                    <tr>
+                                        <td scope="row">@item.Body</td>
+                                        <td>@(new DateTime(item.Ticks).ToString())</td>
+                                        <td style="text-align:right;">
+                                            @Html.ActionLink("Eliminar", "DeleteNote", "Notes", new { noteId = item.NoteId, redirect = Url.Action("User", "Users", new { userId = user.UserId }) }, new { @class = "btn btn-danger btn-sm hidden-print" })
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                    </table>
+
+                    @using (Html.BeginForm("AddUserNote", "Notes", FormMethod.Post, new { @class = "form-inline", id = "form-notes", onsubmit = "", enctype = "multipart/form-data" }))
+                    {
+                        <div class="form-group" style="display:none;">
+                            <label>ParentId</label>
+                            <input class="form-control" name="parentId" value="@user.UserGUID" readonly />
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            <label>Redirect</label>
+                            <input class="form-control" name="redirect" value="@Url.Action("User", "Users", new { userId = user.UserId})" readonly />
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            <label>Route</label>
+                            <input class="form-control" name="path" value="User" readonly />
+                            <input class="form-control" name="controller" value="Users" readonly />
+                        </div>
+                        <div class="form-group form-group-sm col-md-12" style="text-align:right; padding-right:0px">
+                            <label style="vertical-align:top; margin-right:8px;">Nueva nota</label>
+                            <textarea class="form-control" name="body" placeholder="Redactar la nota aqui..." onkeyup="this.value = this.value.toUpperCase();" style="min-width:300px; min-height:50px; max-height:200px;" required></textarea>
+                            <br />
+                            <input style="margin-top:8px;" class="btn btn-sm btn-success" type="submit" value="Cargar" />
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-body">
+                    <!--ARCHIVOS-->
+                    <h3 style="margin-top:0px">Datos adjuntos</h3>
+
+                    <table class="table" id="devicetable">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Nombre de archivo
+                                    <br />
+                                </th>
+
+                                <th scope="col">
+                                    Tamaño
+                                    <br />
+                                </th>
+
+                                <th scope="col" style="width:100px">
+                                    Cargado
+                                    <br />
+                                </th>
+
+                                <th scope="col" style="width:180px">
+                                    Acciones
+                                    <br />
+                                </th>
+
+                            </tr>
+                        </thead>
+                        @if (files != null)
+                        {
+                            <tbody>
+                                @foreach (var item in files)
+                                {
+                                    <tr>
+                                        <td scope="row">@item.Name</td>
+                                        <td>@(item.Size / 1024) KB</td>
+                                        <td>@(new DateTime(item.UploadedTicks).ToString())</td>
+                                        <td style="text-align:right;">
+                                            @Html.ActionLink("Descargar", "DownloadFile", "Files", new { fileId = item.FileId }, new { @class = "btn btn-default btn-sm hidden-print" })
+                                            @Html.ActionLink("Eliminar", "DeleteFile", "Files", new { fileId = item.FileId, userId = user.UserId }, new { @class = "btn btn-danger btn-sm hidden-print" })
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                    </table>
+
+                    @using (Html.BeginForm("UploadUserFile", "Files", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "", enctype = "multipart/form-data" }))
+                    {
+                        <div class="form-group" style="display:none;">
+                            <label>ParenId</label>
+                            <input class="form-control" name="parentId" value="@user.UserGUID" readonly />
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            <label>Redirect</label>
+                            <input class="form-control" name="redirect" value="@Url.Action("User", "Users", new { userId = user.UserId})" readonly />
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            <label>Route</label>
+                            <input class="form-control" name="path" value="user" readonly />
+                            <input class="form-control" name="controller" value="Users" readonly />
+                        </div>
+                        <div class="form-group form-group-sm col-md-12" style="text-align:end; padding-right:0px">
+                            <label style="margin-right:8px;">Subir archivo - Max. 4MB(4096 KB)</label>
+                            <input class="form-control" id="id" type="file" name="file" required value="" />
+                            <input class="btn btn-sm btn-success" type="submit" value="Cargar" />
+                        </div>
+                    }
                 </div>
             </div>
         </div>

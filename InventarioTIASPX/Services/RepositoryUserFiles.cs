@@ -3,28 +3,36 @@ using InventarioTIASPX.Services.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.IO;
 using System.Linq;
 using System.Web;
 
 namespace InventarioTIASPX.Services
 {
-    public class RepositoryComputerFiles : RepositoryFiles
+    public class RepositoryUserFiles : RepositoryFiles
     {
         public override void Add(FileObject fileObject)
         {
-            string computerId = fileObject.ParentObjectId;
-            fileObject.ParentObjectId = $"COMP_{computerId}";
+            string userGuid = fileObject.ParentObjectId;
+            fileObject.ParentObjectId = $"USR_{userGuid}";
 
             using (var db = new InventoryTIASPXContext())
             {
                 db.Files.Add(fileObject);
                 db.SaveChanges();
 
-                db.Database.ExecuteSqlCommand($"UPDATE fileobjects SET Computer_ComputerId = \"{computerId}\" WHERE fileId LIKE \"{fileObject.FileId}\"");
+                db.Database.ExecuteSqlCommand($"UPDATE fileobjects SET User_UserGUID = \"{userGuid}\" WHERE fileId LIKE \"{fileObject.FileId}\"");
             }
         }
+
+        public override void Delete(string fileId)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                db.Entry(Get(fileId, true)).State = EntityState.Deleted;
+                db.SaveChanges();
+            }
+        }
+
         public override FileObject Get(string fileId, bool includeData)
         {
             using (var db = new InventoryTIASPXContext())
@@ -62,7 +70,7 @@ namespace InventarioTIASPX.Services
             {
                 List<FileObject> list = new List<FileObject>();
 
-                var o = db.Files.Select(x => new {
+                var o = db.Files.Where(x => x.ParentObjectId.Contains("USR")).Select(x => new {
                     FileId = x.FileId,
                     Name = x.Name,
                     Mime = x.Mime,
@@ -87,9 +95,10 @@ namespace InventarioTIASPX.Services
                 return list;
             }
         }
+
         public override List<FileObject> GetAll(string parentId)
         {
-            string parentObjectId = $"COMP_{parentId}";
+            string parentObjectId = $"USR_{parentId}";
             using (var db = new InventoryTIASPXContext())
             {
                 List<FileObject> list = new List<FileObject>();
@@ -105,7 +114,8 @@ namespace InventarioTIASPX.Services
 
                 foreach (var item in o)
                 {
-                    list.Add(new FileObject {
+                    list.Add(new FileObject
+                    {
                         FileId = item.FileId,
                         Name = item.Name,
                         Mime = item.Mime,
@@ -117,40 +127,6 @@ namespace InventarioTIASPX.Services
 
                 return list;
             }
-        }
-
-        // public override void AssignParent(string fileId, string parentId)
-        // {
-        //     FileObject file = new RepositoryComputerFiles().Get(fileId);
-        //     file.ParentObjectId = parentId;
-        //     using (var db = new InventoryTIASPXContext())
-        //     {
-        //         db.ComputersFiles.AddOrUpdate(file);
-        //         db.SaveChanges();
-        // 
-        //         db.Database.ExecuteSqlCommand($"UPDATE fileobjects SET Computer_ComputerId = \"{parentId}\" WHERE fileId LIKE \"{fileId}\"");
-        //     }
-        // }
-        // public override void UnassignParent(string fileId)
-        // {
-        //     FileObject file = new RepositoryComputerFiles().Get(fileId);
-        //     file.ParentObjectId = null;
-        //     using (var db = new InventoryTIASPXContext())
-        //     {
-        //         db.ComputersFiles.AddOrUpdate(file);
-        //         db.SaveChanges();
-        // 
-        //         db.Database.ExecuteSqlCommand($"UPDATE fileobjects SET Computer_ComputerId = null WHERE fileId LIKE \"{fileId}\"");
-        //     }
-        // }
-
-        public override void Delete(string fileId)
-        {
-                using (var db = new InventoryTIASPXContext())
-                {
-                    db.Entry(Get(fileId, true)).State = EntityState.Deleted;
-                    db.SaveChanges();
-                }
         }
     }
 }

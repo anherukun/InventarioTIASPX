@@ -50,6 +50,46 @@ namespace InventarioTIASPX.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult UploadUserFile(HttpPostedFileBase file, string parentId, string path, string controller)
+        {
+            try
+            {
+                User u = RepositoryUser.Get(parentId);
+                if (u != null)
+                    if (file != null)
+                    {
+                        FileObject fileObject = new FileObject()
+                        {
+                            FileId = Application.ApplicationManager.GenerateGUID,
+                            ParentObjectId = parentId,
+                            UploadedTicks = DateTime.Now.Ticks,
+                            Mime = file.ContentType,
+                            Name = file.FileName,
+                            Size = file.ContentLength
+                        };
+
+                        fileObject.Data = new BinaryReader(file.InputStream).ReadBytes(file.ContentLength);
+
+                        new RepositoryUserFiles().Add(fileObject);
+                        return Redirect(Url.Action(path, controller, new { userId = u.UserId, msgType = "success", msgString = Application.ApplicationManager.Base64Encode("El archivo se cargo correctamente") }));
+                    }
+                    else
+                    {
+                        throw new Exception("Primero debes seleccionar un archivo");
+                    }
+                else
+                {
+                    throw new Exception("El usuario especificado no existe");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return Redirect(Url.Action("", controller, new { userId = parentId, msgType = "error", msgString = Application.ApplicationManager.Base64Encode(ex.Message) }));
+            }
+        }
+
         [HttpGet]
         public FileResult DownloadFromComputersFiles(string fileId)
         {
