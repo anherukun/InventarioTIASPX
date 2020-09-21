@@ -2,6 +2,7 @@
 using InventarioTIASPX.Services.Abstracts;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -16,7 +17,11 @@ namespace InventarioTIASPX.Services
 
         public override void Delete(string fileId)
         {
-            throw new NotImplementedException();
+            using (var db = new InventoryTIASPXContext())
+            {
+                db.Entry(Get(fileId, true)).State = EntityState.Deleted;
+                db.SaveChanges();
+            }
         }
 
         public override FileObject Get(string fileId, bool includeData)

@@ -128,7 +128,7 @@ namespace InventarioTIASPX.Controllers
         [HttpPost]
         public ActionResult Delete(string fileId, string redirect)
         {
-            new RepositoryComputerFiles().Delete(fileId);
+            new RepositoryGenericFiles().Delete(fileId);
 
             return Redirect(redirect);
         }
