@@ -8,6 +8,9 @@
     List<InventarioTIASPX.Models.Device> accesories = ViewData["accesories"] as List<InventarioTIASPX.Models.Device>;
     List<InventarioTIASPX.Models.User> users = ViewData["users"] as List<InventarioTIASPX.Models.User>;
     List<string> departments = ViewData["departments"] as List<string>;
+
+    InventarioTIASPX.Models.Device processor = ViewData["processor"] as InventarioTIASPX.Models.Device;
+    InventarioTIASPX.Models.Computer computer = ViewData["computer"] as InventarioTIASPX.Models.Computer;
 }
 
 <script type="text/javascript">
@@ -102,45 +105,23 @@
                         <!--ComputerId-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Serie del procesador</label>
-
-                            <!--
-                            <input class="form-control" type="text" list="computerlist" name="ComputerId"/>
-                            <datalist id="computerlist">
-                                @{
-                                    //foreach (var item in processors)
-                                    //{
-                                    //    <option value="@item.DeviceId">@item.DeviceId</option>
-                                    //}
-                                }
-                            </datalist>
-                                -->
-
-                            <input class="form-control" type="text" name="ComputerId" value="" readonly/>
-                            <select class="form-control" name="ComputerId" onchange="toggleComputer()" style="width:225px;">
-                                <option value="">SELECCIONA DISPOSITIVO...</option>
-                                @{
-                                    foreach (var item in processors)
-                                    {
-                                        <option value="@item.DeviceId">@item.DeviceId</option>
-                                    }
-                                }
-                            </select>
+                            <input class="form-control" type="text" name="ComputerId" value="@processor.DeviceId" readonly/>
                         </div>
 
                         <div class="row">
                             <div class="col-md-4">
                                 <label>Fabricante: </label>
-                                <p id="computerBrand">...</p>
+                                <p id="computerBrand">@processor.Brand</p>
                             </div>
 
                             <div class="col-md-4">
                                 <label>Modelo: </label>
-                                <p id="computerModel">...</p>
+                                <p id="computerModel">@processor.Model</p>
                             </div>
 
                             <div class="col-md-4">
                                 <label>Tipo: </label>
-                                <p id="computerType">...</p>
+                                <p id="computerType">@processor.Type</p>
                             </div>
                         </div>
                         <br />
@@ -148,7 +129,7 @@
                         <!--Hostname-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Nombre de equipo</label>
-                            <input class="form-control" type="text" name="Hostname" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" />
+                            <input class="form-control" type="text" name="Hostname" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" value="@computer.Hostname" />
                         </div>
                         <br />
 
@@ -163,19 +144,26 @@
                                     {
                                         if (item != null)
                                         {
-                                            <option value="@item">@item</option>
+                                            if (item == computer.Department)
+                                            {
+                                                <option value="@item" selected>@item</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item">@item</option>
+                                            }
                                         }
                                     }
                                 }
                             </select>
-                            <input class="form-control" type="text" name="Department" onkeyup="this.value = this.value.toUpperCase();" style="width:225px; display:none;" />
+                            <input class="form-control" type="text" name="Department" onkeyup="this.value = this.value.toUpperCase();" style="width:225px; display:none;" value="@computer.Department" />
                         </div>
                         <br />
 
                         <!--Location-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Ubicacion fisica</label>
-                            <input class="form-control" type="text" name="Location" id="Type" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" />
+                            <input class="form-control" type="text" name="Location" id="Type" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" value="@computer.Location" />
                         </div>
                         <br />
 
@@ -184,8 +172,16 @@
                             <label style="width:160px;">Arquitectura del sistema</label>
                             <select class="form-control" name="Architecture" onchange="" style="width:225px;">
                                 <option value="">SELECCIONAR ARQUITECTURA...</option>
-                                <option value="32">32 BITS</option>
-                                <option value="64">64 BITS</option>
+                                @if (computer.Architecture == 32)
+                                {
+                                    <option value="32" selected>32 BITS</option>
+                                    <option value="64">64 BITS</option>
+                                }
+                                else
+                                {
+                                    <option value="32">32 BITS</option>
+                                    <option value="64" selected>64 BITS</option>
+                                }
                             </select>
                         </div>
                         <br />

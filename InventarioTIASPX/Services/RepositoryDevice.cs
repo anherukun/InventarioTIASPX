@@ -80,6 +80,10 @@ namespace InventarioTIASPX.Services
                     .ToList();
             }
         }
+        /// <summary>
+        /// Obtiene todos los accesorioes sin importar si estan en uso o no en una <see cref="List{T}"/>
+        /// </summary>
+        /// <returns></returns>
         public static List<Device> GetAllAccesories()
         {
             List<Device> devices = new List<Device>();

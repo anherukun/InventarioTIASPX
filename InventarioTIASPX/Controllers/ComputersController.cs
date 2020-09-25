@@ -68,26 +68,28 @@ namespace InventarioTIASPX.Controllers
                     ViewData["message"] = new { msgType, msgString };
                 }
 
-                // DETENCCION DE ACCESORIOS RELACIONADOS
+                // DETECCION DE ACCESORIOS RELACIONADOS
                 if (RepositoryComputer.Exist(computerId))
                 {
                     ViewData["computer"] = RepositoryComputer.Get(computerId);
-                    
+
                     List<Device> computerAccesories = new List<Device>();
 
                     foreach (var item in (ViewData["computer"] as Computer).Devices)
                         computerAccesories.Add(RepositoryDevice.Get(item.DeviceId, false));
 
                     ViewData["computerAccesories"] = computerAccesories;
-                }
-                
-                ViewData["processor"] = RepositoryDevice.Get(computerId, true);
-                ViewData["departments"] = RepositoryComputer.GetAllDepartments();
-                ViewData["users"] = RepositoryUser.GetAllUsers();
-                ViewData["availableAccesories"] = RepositoryDevice.GetAllAccesories(true);
-                ViewData["accesories"] = RepositoryDevice.GetAllAccesories(false);
 
-                return View();
+                    ViewData["processor"] = RepositoryDevice.Get(computerId, true);
+                    ViewData["departments"] = RepositoryComputer.GetAllDepartments();
+                    ViewData["users"] = RepositoryUser.GetAllUsers();
+                    ViewData["accesories"] = RepositoryDevice.GetAllAccesories();
+
+                    return View();
+                }
+                else
+                    return Redirect(Url.Action("", "Computers"));
+
             }
             else
                 return Redirect(Url.Action("", "Computers"));
