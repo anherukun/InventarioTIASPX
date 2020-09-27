@@ -30,7 +30,7 @@
         <div class="col-md-8">
             <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
                 <div class="panel-body">
-                    @using (Html.BeginForm("Add", "Computers", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "return validateSubmition()" }))
+                    @using (Html.BeginForm("Edit", "Computers", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "return validateSubmition()" }))
                     {
                         <script type="text/javascript">
                             function generateUUID() {
@@ -105,7 +105,7 @@
                         <!--ComputerId-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Serie del procesador</label>
-                            <input class="form-control" type="text" name="ComputerId" value="@processor.DeviceId" readonly/>
+                            <input class="form-control" type="text" name="ComputerId" value="@processor.DeviceId" readonly style="width:225px"/>
                         </div>
 
                         <div class="row">
@@ -129,14 +129,14 @@
                         <!--Hostname-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Nombre de equipo</label>
-                            <input class="form-control" type="text" name="Hostname" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" value="@computer.Hostname" />
+                            <input class="form-control" type="text" name="Hostname" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" required value="@computer.Hostname" />
                         </div>
                         <br />
 
                         <!--Department-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Departamento</label>
-                            <select class="form-control" name="SelectedDepartment" onchange="toggleDepartment()" style="width:225px;">
+                            <select class="form-control" name="SelectedDepartment" onchange="toggleDepartment()" required style="width:225px;">
                                 <option value="">SELECCIONAR DEPARTAMENTO...</option>
                                 <option value="-1">(AGREGAR NUEVO...)</option>
                                 @{
@@ -163,14 +163,14 @@
                         <!--Location-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Ubicacion fisica</label>
-                            <input class="form-control" type="text" name="Location" id="Type" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" value="@computer.Location" />
+                            <input class="form-control" type="text" name="Location" id="Type" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" required value="@computer.Location" />
                         </div>
                         <br />
 
                         <!--Architecture-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Arquitectura del sistema</label>
-                            <select class="form-control" name="Architecture" onchange="" style="width:225px;">
+                            <select class="form-control" name="Architecture" onchange="" required style="width:225px;">
                                 <option value="">SELECCIONAR ARQUITECTURA...</option>
                                 @if (computer.Architecture == 32)
                                 {

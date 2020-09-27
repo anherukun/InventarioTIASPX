@@ -1,6 +1,7 @@
 ﻿using InventarioTIASPX.Models;
 using InventarioTIASPX.Services;
 using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -116,6 +117,14 @@ namespace InventarioTIASPX.Controllers
             {
                 return Redirect(Url.Action("NewComputer", "Computers", new { msgType = "error", msgString = Application.ApplicationManager.Base64Encode(ex.Message) } ));
             }
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Computer computer, string jsonDevices)
+        {
+            List<Device> fromEditDevices = JsonConvert.DeserializeObject<List<Device>>(jsonDevices);
+
+            return (Redirect(Url.Action("Comupter", "Computers", new { computerId = computer.ComputerId, msgType = "success", msgString = Application.ApplicationManager.Base64Encode("Los cambios se guardaron correctamente") })))
         }
 
         public ActionResult Delete(string computerId)
