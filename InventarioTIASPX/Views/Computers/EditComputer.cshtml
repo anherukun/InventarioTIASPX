@@ -105,7 +105,7 @@
                         <!--ComputerId-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Serie del procesador</label>
-                            <input class="form-control" type="text" name="ComputerId" value="@processor.DeviceId" readonly style="width:225px"/>
+                            <input class="form-control" type="text" name="ComputerId" value="@processor.DeviceId" readonly style="width:225px" />
                         </div>
 
                         <div class="row">
@@ -213,6 +213,10 @@
                                         {
                                             <option value="@item.DeviceId">@item.Type / @item.Brand / @item.Model / @item.DeviceId</option>
                                         }
+                                        else
+                                        {
+                                            <option value="@item.DeviceId" hidden>@item.Type / @item.Brand / @item.Model / @item.DeviceId</option>
+                                        }
                                     }
                                 }
                             </select>
@@ -250,15 +254,30 @@
                                     @{
                                         foreach (var item in accesories)
                                         {
-                                            <tr id="row-@item.DeviceId" style="display:none;">
-                                                <td scope="row">@item.Type</td>
-                                                <td>@item.Brand</td>
-                                                <td>@item.Model</td>
-                                                <td>@item.DeviceId</td>
-                                                <td style="text-align:right;">
-                                                    <button type="button" class="btn btn-danger" onclick="removeAccesory('@item.DeviceId')">Quitar</button>
-                                                </td>
-                                            </tr>
+                                            if (item.InUse && item.ParentComputerId == computer.ComputerId)
+                                            {
+                                                <tr id="row-@item.DeviceId">
+                                                    <td scope="row">@item.Type</td>
+                                                    <td>@item.Brand</td>
+                                                    <td>@item.Model</td>
+                                                    <td>@item.DeviceId</td>
+                                                    <td style="text-align:right;">
+                                                        <button type="button" class="btn btn-danger" onclick="removeAccesory('@item.DeviceId')">Quitar</button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                            else if (!item.InUse)
+                                            {
+                                                <tr id="row-@item.DeviceId" style="display:none;">
+                                                    <td scope="row">@item.Type</td>
+                                                    <td>@item.Brand</td>
+                                                    <td>@item.Model</td>
+                                                    <td>@item.DeviceId</td>
+                                                    <td style="text-align:right;">
+                                                        <button type="button" class="btn btn-danger" onclick="removeAccesory('@item.DeviceId')">Quitar</button>
+                                                    </td>
+                                                </tr>
+                                            }
                                         }
                                     }
                                 </tbody>

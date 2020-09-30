@@ -124,7 +124,7 @@ namespace InventarioTIASPX.Controllers
         {
             List<Device> fromEditDevices = JsonConvert.DeserializeObject<List<Device>>(jsonDevices);
 
-            return (Redirect(Url.Action("Comupter", "Computers", new { computerId = computer.ComputerId, msgType = "success", msgString = Application.ApplicationManager.Base64Encode("Los cambios se guardaron correctamente") })))
+            return (Redirect(Url.Action("Comupter", "Computers", new { computerId = computer.ComputerId, msgType = "success", msgString = Application.ApplicationManager.Base64Encode("Los cambios se guardaron correctamente") })));
         }
 
         public ActionResult Delete(string computerId)
