@@ -122,9 +122,36 @@ namespace InventarioTIASPX.Controllers
         [HttpPost]
         public ActionResult Edit(Computer computer, string jsonDevices)
         {
-            List<Device> fromEditDevices = JsonConvert.DeserializeObject<List<Device>>(jsonDevices);
+            try
+            {
+                // SE OBTIENE UNA ENTIDAD ORIGINAL DEL REGISTRO QUE SE VA A MODIFICAR
+                Computer originalEntity = RepositoryComputer.Get(computer.ComputerId);
 
-            return (Redirect(Url.Action("Comupter", "Computers", new { computerId = computer.ComputerId, msgType = "success", msgString = Application.ApplicationManager.Base64Encode("Los cambios se guardaron correctamente") })));
+                // SE PREPARAN LAS LISTAS DE DISPOSITIVOS QUE VIENEN DEL FORMULARIO Y DEL REGISTRO ORIGINAL
+                List<Device> fromEditAccesories = JsonConvert.DeserializeObject<List<Device>>(jsonDevices);
+                List<Device> fromPrevAccesories = RepositoryComputer.Get(originalEntity.ComputerId).Devices;
+
+                originalEntity.Hostname = computer.Hostname;
+                originalEntity.Department = computer.Department;
+                originalEntity.Location = computer.Location;
+                originalEntity.Architecture = computer.Architecture;
+                originalEntity.UserGUID = computer.UserGUID;
+
+                // REMUEVE TODOS LOS ACCESORIOS
+                foreach (var item in fromPrevAccesories)
+                    RepositoryDevice.UnassignComputer(item.DeviceId);
+
+                // SI HAY ACCESORIOS QUE SE HAYAN REGISTRADO EN EL FORMULARIO DE MODIFICACION, SE ASIGNARAN O REASIGNARAN LOS ACCESORIOS CORRESPONDIENTES
+                if (fromEditAccesories != null)
+                    foreach (var item in fromEditAccesories)
+                        RepositoryDevice.AssignComputer(item.DeviceId, computer.ComputerId);
+
+                return (Redirect(Url.Action("Comupter", "Computers", new { computerId = computer.ComputerId, msgType = "success", msgString = Application.ApplicationManager.Base64Encode("Los cambios se guardaron correctamente") })));
+            }
+            catch (Exception ex)
+            {
+                return (Redirect(Url.Action("EditComupter", "Computers", new { computerId = computer.ComputerId, msgType = "error", msgString = Application.ApplicationManager.Base64Encode(ex.Message) })));
+            }
         }
 
         public ActionResult Delete(string computerId)

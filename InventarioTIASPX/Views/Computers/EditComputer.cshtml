@@ -70,11 +70,17 @@
 
                                 if (deviceId != "") {
                                     if (!selectedAccesories.find(x => x.DeviceId === deviceId)) {
+                                        // SE AGREGA UN ELEMENTO EN EL ARREGLO
                                         selectedAccesories.push(accesories.find(x => x.DeviceId === deviceId));
+                                        // SE VUELVE A ESCRIBIR EL JSONOBJECT
                                         form["jsonDevices"].value = JSON.stringify(selectedAccesories);
                                     }
 
+                                    // SE MUESTRA EL ACCESORIO EN LA TABLA
                                     document.getElementById("row-" + deviceId).style.display = "";
+                                    // SE OCULTA EL ACCESORIO DEL SELECTOR
+                                    document.getElementById("accoption-" + deviceId).hidden = true;
+                                    // SE RESETEA EL VALOR INICIAL DEL SELECOR
                                     form["selectedDevice"].selectedIndex = "";
                                 }
                             }
@@ -83,9 +89,14 @@
 
                                 if (deviceId != null) {
                                     if (selectedAccesories.find(x => x.DeviceId === deviceId)) {
+                                        // SE QUITA EL ELEMENTO DEL ARREGLO
                                         selectedAccesories.splice(selectedAccesories.indexOf(selectedAccesories.find(x => x.DeviceId === deviceId)), 1);
+                                        // SE OCULTA EL ACCESORIO DE LA TABLA
                                         document.getElementById("row-" + deviceId).style.display = "none";
+                                        // SE MUESTRA EL ACCESORIO EN EL SELECTOR
+                                        document.getElementById("accoption-" + deviceId).hidden = false;
 
+                                        // SE VUELVE A ESCRIBIR EL JSONOBJECT
                                         form["jsonDevices"].value = JSON.stringify(selectedAccesories);
                                     }
                                 }
@@ -211,11 +222,11 @@
                                     {
                                         if (!item.InUse)
                                         {
-                                            <option value="@item.DeviceId">@item.Type / @item.Brand / @item.Model / @item.DeviceId</option>
+                                            <option value="@item.DeviceId" id="accoption-@item.DeviceId">@item.Type / @item.Brand / @item.Model / @item.DeviceId</option>
                                         }
                                         else
                                         {
-                                            <option value="@item.DeviceId" hidden>@item.Type / @item.Brand / @item.Model / @item.DeviceId</option>
+                                            <option value="@item.DeviceId" id="accoption-@item.DeviceId" hidden>@item.Type / @item.Brand / @item.Model / @item.DeviceId</option>
                                         }
                                     }
                                 }
@@ -353,3 +364,12 @@
         </div>
     </div>
 </div>
+
+@if (computer.Devices != null)
+{
+    string s = new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(computer.Devices.ToArray());
+    <script type="text/javascript">
+        selectedAccesories = @Html.Raw(s);
+        form["jsonDevices"].value = JSON.stringify(selectedAccesories);
+    </script>
+}

@@ -44,6 +44,22 @@ namespace InventarioTIASPX.Services
             }
         }
 
+        public static void Update(Computer computer)
+        {
+            try
+            {
+                using (var db = new InventoryTIASPXContext())
+                {
+                    db.Computers.AddOrUpdate(computer);
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
         public static Computer Get(string computerId)
         {
             using (var db = new InventoryTIASPXContext())
