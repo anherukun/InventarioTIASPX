@@ -137,16 +137,20 @@ namespace InventarioTIASPX.Controllers
                 originalEntity.Architecture = computer.Architecture;
                 originalEntity.UserGUID = computer.UserGUID;
 
-                // REMUEVE TODOS LOS ACCESORIOS
+                // REGISTRA LOS CAMBIOS EN EL REPOSITORIO
+                RepositoryComputer.Update(originalEntity);
+
+                // REMUEVE TODOS LOS ACCESORIOS, EXEPTOP DEL TIPO LAPTOP Y PROCESADOR
                 foreach (var item in fromPrevAccesories)
-                    RepositoryDevice.UnassignComputer(item.DeviceId);
+                    if (item.Type != "PROCESADOR" && item.Type != "LAPTOP")
+                        RepositoryDevice.UnassignComputer(item.DeviceId);
 
                 // SI HAY ACCESORIOS QUE SE HAYAN REGISTRADO EN EL FORMULARIO DE MODIFICACION, SE ASIGNARAN O REASIGNARAN LOS ACCESORIOS CORRESPONDIENTES
                 if (fromEditAccesories != null)
                     foreach (var item in fromEditAccesories)
                         RepositoryDevice.AssignComputer(item.DeviceId, computer.ComputerId);
 
-                return (Redirect(Url.Action("Comupter", "Computers", new { computerId = computer.ComputerId, msgType = "success", msgString = Application.ApplicationManager.Base64Encode("Los cambios se guardaron correctamente") })));
+                return (Redirect(Url.Action("Computer", "Computers", new { computerId = computer.ComputerId, msgType = "success", msgString = Application.ApplicationManager.Base64Encode("Los cambios se guardaron correctamente") })));
             }
             catch (Exception ex)
             {

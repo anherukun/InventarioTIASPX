@@ -200,12 +200,19 @@
                         <!--UserId-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Usuario</label>
-                            <select class="form-control" name="UserId" style="width:225px;">
+                            <select class="form-control" name="UserGUID" style="width:225px;">
                                 <option value="">SELECCIONAR USUARIO...</option>
                                 @{
                                     foreach (var item in users)
                                     {
-                                        <option value="@item.UserId">@item.UserId - @item.Name</option>
+                                        if (item.UserGUID == computer.UserGUID)
+                                        {
+                                            <option value="@item.UserGUID" selected>@item.UserId - @item.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.UserGUID">@item.UserId - @item.Name</option>
+                                        }
                                     }
                                 }
                             </select>

@@ -69,11 +69,17 @@
 
                                 if (deviceId != "") {
                                     if (!selectedAccesories.find(x => x.DeviceId === deviceId)) {
+                                        // SE AGREGA UN ELEMENTO EN EL ARREGLO
                                         selectedAccesories.push(accesories.find(x => x.DeviceId === deviceId));
+                                        // SE VUELVE A ESCRIBIR EL JSONOBJECT
                                         form["jsonDevices"].value = JSON.stringify(selectedAccesories);
                                     }
 
+                                    // SE MUESTRA EL ACCESORIO EN LA TABLA
                                     document.getElementById("row-" + deviceId).style.display = "";
+                                    // SE OCULTA EL ACCESORIO DEL SELECTOR
+                                    document.getElementById("accoption-" + deviceId).hidden = true;
+                                    // SE RESETEA EL VALOR INICIAL DEL SELECOR
                                     form["selectedDevice"].selectedIndex = "";
                                 }
                             }
@@ -82,9 +88,14 @@
 
                                 if (deviceId != null) {
                                     if (selectedAccesories.find(x => x.DeviceId === deviceId)) {
+                                        // SE QUITA EL ELEMENTO DEL ARREGLO
                                         selectedAccesories.splice(selectedAccesories.indexOf(selectedAccesories.find(x => x.DeviceId === deviceId)), 1);
+                                        // SE OCULTA EL ACCESORIO DE LA TABLA
                                         document.getElementById("row-" + deviceId).style.display = "none";
+                                        // SE MUESTRA EL ACCESORIO EN EL SELECTOR
+                                        document.getElementById("accoption-" + deviceId).hidden = false;
 
+                                        // SE VUELVE A ESCRIBIR EL JSONOBJECT
                                         form["jsonDevices"].value = JSON.stringify(selectedAccesories);
                                     }
                                 }
@@ -194,12 +205,12 @@
                         <!--UserId-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Usuario</label>
-                            <select class="form-control" name="UserId" style="width:225px;">
+                            <select class="form-control" name="UserGUID" style="width:225px;">
                                 <option value="">SELECCIONAR USUARIO...</option>
                                 @{
                                     foreach (var item in users)
                                     {
-                                        <option value="@item.UserId">@item.UserId - @item.Name</option>
+                                        <option value="@item.UserGUID">@item.UserId - @item.Name</option>
                                     }
                                 }
                             </select>
@@ -216,7 +227,7 @@
                                     {
                                         if (!item.InUse)
                                         {
-                                            <option value="@item.DeviceId">@item.Type / @item.Brand / @item.Model / @item.DeviceId</option>
+                                            <option value="@item.DeviceId" id="accoption-@item.DeviceId">@item.Type / @item.Brand / @item.Model / @item.DeviceId</option>
                                         }
                                     }
                                 }
