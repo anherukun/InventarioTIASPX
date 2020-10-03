@@ -14,6 +14,14 @@ namespace InventarioTIASPX.Services
         {
             throw new NotImplementedException();
         }
+        public override void AddRange(List<Note> notes)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                db.Notes.AddRange(notes);
+                db.SaveChanges();
+            }
+        }
 
         public override void Delete(string noteId)
         {
@@ -34,7 +42,10 @@ namespace InventarioTIASPX.Services
 
         public override List<Note> GetAll()
         {
-            throw new NotImplementedException();
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Notes.ToList();
+            }
         }
 
         public override List<Note> GetAll(string parentId)

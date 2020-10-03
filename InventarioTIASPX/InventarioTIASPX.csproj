@@ -150,6 +150,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Backup.cs" />
     <Compile Include="Models\Computer.cs" />
     <Compile Include="Models\Device.cs" />
     <Compile Include="Models\FileObject.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Abstracts\RepositoryFiles.cs" />
     <Compile Include="Services\Abstracts\RepositoryNotes.cs" />
+    <Compile Include="Services\BackupService.cs" />
     <Compile Include="Services\RepositoryComputer.cs" />
     <Compile Include="Services\RepositoryComputerFiles.cs" />
     <Compile Include="Services\RepositoryComputerNotes.cs" />

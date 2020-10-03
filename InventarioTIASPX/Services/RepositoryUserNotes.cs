@@ -23,6 +23,10 @@ namespace InventarioTIASPX.Services
                 db.Database.ExecuteSqlCommand($"UPDATE notes SET User_UserGUID = \"{userGuid}\" WHERE noteId LIKE \"{note.NoteId}\"");
             }
         }
+        public override void AddRange(List<Note> notes)
+        {
+            throw new NotImplementedException();
+        }
 
         public override void Delete(string noteId)
         {

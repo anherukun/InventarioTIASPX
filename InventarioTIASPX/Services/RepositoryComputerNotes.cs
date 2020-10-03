@@ -22,6 +22,10 @@ namespace InventarioTIASPX.Services
                 db.Database.ExecuteSqlCommand($"UPDATE notes SET Computer_ComputerId = \"{computerId}\" WHERE noteId LIKE \"{note.NoteId}\"");
             }
         }
+        public override void AddRange(List<Note> notes)
+        {
+            throw new NotImplementedException();
+        }
 
         public override Note Get(string noteId)
         {
