@@ -28,7 +28,7 @@
                 <div class="panel-body">
                     <div>
                         <h3 class="col-md-7" style="margin-top:4px; margin-bottom:0px; padding:0px;">Crear copia de seguridad</h3>
-                        <a class="btn btn-success" href="@Url.Action("CreateBackup", "Tools")"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                        <a class="btn btn-default " href="@Url.Action("CreateBackup", "Tools")"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
                              Descargar copia de seguridad</a>
                     </div>
                 </div>
@@ -36,21 +36,39 @@
 
             <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
                 <div class="panel-body">
-                    @using (Html.BeginForm("Recover", "Tools", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "", enctype = "multipart/form-data" }))
+                    @using (Html.BeginForm("Recover", "Tools", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "validateSubmition()", enctype = "multipart/form-data" }))
                     {
+                        <script type="text/javascript">
+                            function validateSubmition() {
+                                var form = document.forms["form"];
+                                form["btn-submit"].disabled = true;
+
+                                document.getElementById("progressbar").style.display = "";
+                            }
+                        </script>
                         <h3 style="margin-top:0px;">Restaurar datos</h3>
-                        <p>Importante: Al restaurar con una copia de seguridad eliminaras todos los datos ya existentes.</p>
-                        <div style="margin-left:16px; margin-bottom:20px;">
+                        <p>
+                            Importante: Al restaurar con una copia de seguridad eliminaras todos los datos ya existentes.
+                            <br /><br />
+                            Este proceso puede llevar hasta <b>mas de un minuto</b> al cargar todos los datos.
+                        </p>
+                        <div style="margin-left:16px;">
                             <!--FileBackup-->
                             <div class="form-group" style="margin-bottom:10px;">
-                                <label style="width:210px;">Archivo de restauracion</label>
+                                <label style="width:280px;">Restaurar desde la copia de seguridad</label>
                                 <input class="form-control" id="fileBackup" type="file" name="fileBackup" accept=".bak" required />
                             </div>
                             <br />
                         </div>
 
-                        <div class="form-group" style="margin-top: 16px;">
-                            <button type="submit" class="btn btn-success" id="btn-submit"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Restaurar</button>
+                        <div class="form-group" style="margin-top: 16px; width:100%">
+                            <button type="submit" class="btn btn-success col-md-12" id="btn-submit"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Restaurar</button>
+                        </div>
+
+                        <div class="progress" id="progressbar" style="margin-bottom:0px; display:none">
+                            <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                <span class="sr-only">Cargando</span>
+                            </div>
                         </div>
                     }
                 </div>
