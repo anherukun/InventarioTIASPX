@@ -8,6 +8,7 @@ using System.Web;
 
 namespace InventarioTIASPX.Models
 {
+    [Serializable()]
     public class Computer
     {
         [Key] public string ComputerId { get; set; }

@@ -22,7 +22,10 @@ namespace InventarioTIASPX.Models
         public List<Note> Notes { get; set; }
 
         public List<Dictionary<string, string>> ComputerDeviceRelationship { get; set; }
-        
+
+        public Backup()
+        {
+        }
         public Backup(List<Device> devices, List<User> users, List<Computer> computers, List<Note> notes)
         {
             Devices = devices;
@@ -32,7 +35,6 @@ namespace InventarioTIASPX.Models
 
             PrepareRelationship();
         }
-
 
         public byte[] ToBytes()
         {
@@ -50,7 +52,7 @@ namespace InventarioTIASPX.Models
                 throw new NullReferenceException("El objeto \"Backup\" es nulo, no se puede convertir");
             }
         }
-        public static Backup FromBytes(byte[] bytes)
+        public Backup FromBytes(byte[] bytes)
         {
             try
             {
@@ -72,19 +74,29 @@ namespace InventarioTIASPX.Models
         /// </summary>
         private void PrepareRelationship()
         {
+            ComputerDeviceRelationship = new List<Dictionary<string, string>>();
+            
             for (int i = 0; i < Devices.Count; i++)
             {
+
                 if (Devices[i].InUse)
                 {
                     // CREA UN DICCIONARIO DEL DISPOSITIVO RELACIONADO CON EL EQUIPO DE COMPUTO
                     Dictionary<string, string> pair = new Dictionary<string, string>();
                     pair.Add(Devices[i].DeviceId, Devices[i].ParentComputerId);
+                    // AGREGA EL DICCIONARIO A LA LISTA DE RELACIONES CORRESPONDIENTES
+                    ComputerDeviceRelationship.Add(pair);
                     // ELIMINA DEL OBJETO DISPOSITIVO LA RELACION PARA EVITAR ERRORES DE CORRELACION AL REIMPORTAR LA INFOMRACION
                     Devices[i].InUse = false;
                     Devices[i].ParentComputerId = null;
-                    // AGREGA EL DICCIONARIO A LA LISTA DE RELACIONES CORRESPONDIENTES
-                    ComputerDeviceRelationship.Add(pair);
                 }
+            }
+
+            // Quita toda relacion a otras entidades para al momento de restaurar no existan problemas de correlacion
+            foreach (var item in Computers)
+            {
+                item.Processor = null;
+                item.Devices = null;
             }
         }
 

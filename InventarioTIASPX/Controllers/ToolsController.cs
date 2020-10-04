@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.IO;
 using System.Linq;
+using System.Security.Permissions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -29,6 +30,52 @@ namespace InventarioTIASPX.Controllers
             }
 
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult Backup(string msgType, string msgString)
+        {
+            if (msgType != null && msgString != null)
+            {
+                msgString = Application.ApplicationManager.Base64Decode(msgString);
+                ViewData["message"] = new { msgType, msgString };
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        public FileResult CreateBackup()
+        {
+            Backup backup = new Backup(RepositoryDevice.GetAllDevices(), RepositoryUser.GetAllUsers(), RepositoryComputer.GetAllComputers(), new RepositoryGenericNotes().GetAll());
+
+            if (backup != null)
+            {
+                return File(backup.ToBytes(), "application/octet-stream", $"{DateTime.Now.Ticks}_{DateTime.Now.ToShortDateString()}_Backup.bak");
+            }
+            else
+            {
+                throw new NullReferenceException("No se puede crear el archivo a partir de un objeto nulo");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Recover(HttpPostedFileBase fileBackup)
+        {
+            if (fileBackup != null)
+            {
+                DateTime dt1 = DateTime.Now, dt2;
+                // Lee los bytes del archivo .bak y los deserializa a un objeto Backup
+                Backup backup = new Backup().FromBytes(new BinaryReader(fileBackup.InputStream).ReadBytes(fileBackup.ContentLength));
+                // Llama al servicio de Backup y empieza la recuperacion de datos
+                BackupService.RecoverData(backup);
+
+                dt2 = DateTime.Now;
+                TimeSpan span = dt2.Subtract(dt1);
+                return Redirect(Url.Action("Backup", "Tools", new { msgType = "success", msgString = Application.ApplicationManager.Base64Encode($"Los datos fueron restaurados correctamente \nT: {span.ToString()}") }));
+            }
+            else
+                return Redirect(Url.Action("Backup", "Tools", new { msgType = "error", msgString = Application.ApplicationManager.Base64Encode("No se puede recuperar de un objeto nulo") }));
         }
 
         [HttpPost]
@@ -208,5 +255,6 @@ namespace InventarioTIASPX.Controllers
             TimeSpan span = b.Subtract(a);
             return Redirect(Url.Action("ImportData", "Tools", new { msgType = "success", msgString = Application.ApplicationManager.Base64Encode($"Datos importados correctamente \nT: {span.ToString()}") }));
         }
+
     }
 }

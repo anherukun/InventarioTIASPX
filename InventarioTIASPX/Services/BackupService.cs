@@ -18,7 +18,17 @@ namespace InventarioTIASPX.Services
             // Inserta las entidades Primarias y Secundarias
             RepositoryDevice.AddRange(backup.Devices);
             RepositoryUser.AddRange(backup.Users);
-            RepositoryComputer.AddRange(backup.Computers);
+            // RepositoryComputer.AddRange(backup.Computers);
+
+            // Inserta una a una todas las entidades de Computers
+            foreach (var item in backup.Computers)
+            {
+                RepositoryComputer.Add(item);
+            }
+
+            // Relaciona los dispositivos con las computadoras
+            foreach (var item in backup.ComputerDeviceRelationship)
+                RepositoryDevice.AssignComputer(item.FirstOrDefault().Key, item.FirstOrDefault().Value);
 
             // Reconstruye el origen de las notas
             foreach (var item in backup.Notes)

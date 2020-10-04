@@ -7,6 +7,7 @@ using System.Web;
 
 namespace InventarioTIASPX.Models
 {
+    [Serializable()]
     public class Device
     {
         [Key] public string DeviceId { get; set; }

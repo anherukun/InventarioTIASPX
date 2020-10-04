@@ -1,0 +1,213 @@
+﻿
+@{
+    ViewBag.Title = "Copia de seguridad";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="@Url.Action("", "")">Regresar</a></li>
+</ul>
+
+<div class="row">
+    <div class="row">
+        <!--Links-->
+        <div class="col-md-7">
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-body">
+                    <p style="text-align:justify; margin:0px">
+                        Con la copia de seguridad podras restaurar la informacion de la base de datos apartir de un solo archivo.
+                        <br /><br />
+                        <b>Nota: Esto no sustituye el metodo de importacion por lotes, la restauracion limpia toda al informacion almacenada al empezar el proceso.</b>
+                    </p>
+                </div>
+            </div>
+
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-body">
+                    <div>
+                        <h3 class="col-md-7" style="margin-top:4px; margin-bottom:0px; padding:0px;">Crear copia de seguridad</h3>
+                        <a class="btn btn-success" href="@Url.Action("CreateBackup", "Tools")"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                             Descargar copia de seguridad</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-body">
+                    @using (Html.BeginForm("Recover", "Tools", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "", enctype = "multipart/form-data" }))
+                    {
+                        <h3 style="margin-top:0px;">Restaurar datos</h3>
+                        <p>Importante: Al restaurar con una copia de seguridad eliminaras todos los datos ya existentes.</p>
+                        <div style="margin-left:16px; margin-bottom:20px;">
+                            <!--FileBackup-->
+                            <div class="form-group" style="margin-bottom:10px;">
+                                <label style="width:210px;">Archivo de restauracion</label>
+                                <input class="form-control" id="fileBackup" type="file" name="fileBackup" accept=".bak" required />
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="form-group" style="margin-top: 16px;">
+                            <button type="submit" class="btn btn-success" id="btn-submit"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Restaurar</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!--SIDE PANEL-->
+        <div class="col-md-5">
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <a href="#glosary" data-toggle="collapse">
+                    <div class="panel-heading" style="padding:16px;">
+                        <h3 style="margin-top:0px; margin-bottom:0px;"><span class="glyphicon glyphicon-question-sign"></span> Glosario <span class="caret"></span></h3>
+                    </div>
+                </a>
+                <div class="panel-body collapse" id="glosary">
+                    <ul>
+                        <li>
+                            <label>Dispositivos</label>
+                            <p>
+                                Estas son las siguientes propiedades que conforman una entidad del tipo Dispositivo:
+                            </p>
+                            <ul>
+                                <li>
+                                    <label>Serie</label>
+                                    <p>Numero de serie indicado por el fabricante, en caso de no contar con dicho dato, colocar un identificador global unico (GUID).</p>
+                                </li>
+                                <li>
+                                    <label>Inventario</label>
+                                    <p>Numero de inventario de la empresa en caso de que aplique</p>
+                                </li>
+                                <li>
+                                    <label>Tipo</label>
+                                    <p>Tipo de dispositivo: Procesador, Laptop, Monitor, Teclado, Mouse, Bocinas</p>
+                                </li>
+                                <li>
+                                    <label>Marca</label>
+                                    <p>Nombre del fabricante que diseña el dispositivo</p>
+                                </li>
+                                <li>
+                                    <label>Modelo</label>
+                                    <p>Identificador comercial del dispositivo</p>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <label>Usuarios</label>
+                            <p>
+                                Estas son las siguientes propiedades que conforman una entidad del tipo Usuario:
+                            </p>
+                            <ul>
+                                <li>
+                                    <label>Usuario</label>
+                                    <p>Nombre de usuario (Ficha o Pseudoficha) tal y como esta registrada en directorio activo</p>
+                                </li>
+                                <li>
+                                    <label>Nombre de cuenta</label>
+                                    <p>Nombre descriptivo de la cuenta, tal como aparece en directorio activo, libreta de direcciones o en el inicio de Windows</p>
+                                </li>
+                                <li>
+                                    <label>Email</label>
+                                    <p>Correo electronico vinculado a la cuenta</p>
+                                </li>
+                                <li>
+                                    <label>Ficha</label>
+                                    <p>Identificador del trabajador propietario de la cuenta</p>
+                                </li>
+                                <li>
+                                    <label>Trabajador</label>
+                                    <p>Nombre del trabajador propietario de la cuenta</p>
+                                </li>
+                                <li>
+                                    <label>Migrado</label>
+                                    <p>Propiedad de la cuenta para indicar si el correo electronico se encuentra migrado a O365 (1: SI, 0: NO)</p>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <label>Equipos de computo</label>
+                            <p>
+                                Estas son las siguientes propiedades que conforman una entidad del tipo Computadora:
+                            </p>
+                            <ul>
+                                <li>
+                                    <label>Serie</label>
+                                    <p>Numero de serie del procesador o laptop</p>
+                                </li>
+                                <li>
+                                    <label>Hostname</label>
+                                    <p>Nombre del dispositivo en red</p>
+                                </li>
+                                <li>
+                                    <label>Departamento</label>
+                                    <p>Departamento al que pertenece el equipo de computo</p>
+                                </li>
+                                <li>
+                                    <label>Ubicacion</label>
+                                    <p>Descripcion preciso del lugar donde se ubica el equipo (Edificio, oficina)</p>
+                                </li>
+                                <li>
+                                    <label>Arquitectura</label>
+                                    <p>Arquitectura del sistema operativo</p>
+                                </li>
+                                <li>
+                                    <label>Usuario</label>
+                                    <p>Nombre de usuario (Ficha 0 Pseudoficha) que utiliza el equipo de computo, Actuara como propietario del equipo de computo</p>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <label>Asignacion de accesorios</label>
+                            <p>
+                                Estas son las siguientes propiedades que complementan la entidad de Dispositivo:
+                            </p>
+                            <ul>
+                                <li>
+                                    <label>Serie procesador</label>
+                                    <p>Numero de serie del procesador o laptop</p>
+                                </li>
+                                <li>
+                                    <label>Serie dispositivo</label>
+                                    <p>Numero de serie del accesorio</p>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <label>Simbolo delimitador</label>
+                            <p>Caracter que separa los datos en el archivo *.csv</p>
+                            <p>
+                                MS Excel crea estos archivos utilizando <b>Comma (,)</b> o <b>SemmiColon (;)</b> dependiendo la version que se este ejecutando
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div>
+                <!--SNACK DE ALERTAS-->
+                <div class="alert alert-danger" id="error-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    Debes completar correctamente el formulario
+                </div>
+                <div class="alert alert-success" id="success-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                    Los cambios se han guardado correctamente
+                </div>
+
+                @if (ViewData["message"] != null)
+                {
+                    <script type="text/javascript">
+                        retriveMessage();
+                    </script>
+                }
+            </div>
+        </div>
+    </div>
+</div>

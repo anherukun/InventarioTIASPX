@@ -5,6 +5,7 @@ using System.Web;
 
 namespace InventarioTIASPX.Models
 {
+    [Serializable()]
     public class Note
     {
         public string NoteId { get; set; }
