@@ -8,6 +8,7 @@ using WebGrease.Activities;
 
 namespace InventarioTIASPX.Models
 {
+    [Serializable()]
     public class FileObject
     {
         [Key] public string FileId { get; set; }

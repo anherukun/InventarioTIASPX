@@ -32,6 +32,11 @@ namespace InventarioTIASPX.Services.Abstracts
         /// <param name="parentId">Propiedad que relaciona el registro con el objeto padre</param>
         /// <returns>Lista de <see cref="FileObject"/></returns>
         public abstract List<FileObject> GetAll(string parentId);
+        /// <summary>
+        /// Obtiene todos los registros relacionados con el <paramref name="parentId"/> y los regresa en una lista de <see cref="FileObject"/>. incluyendo el valor de <see cref="FileObject.Data"/>
+        /// </summary>
+        /// <returns></returns>
+        public abstract List<FileObject> GetAllWithData();
         //public abstract void AssignParent(string fileId, string parentId);
         //public abstract void UnassignParent(string fileId);
         /// <summary>

@@ -128,5 +128,10 @@ namespace InventarioTIASPX.Services
                 return list;
             }
         }
+
+        public override List<FileObject> GetAllWithData()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

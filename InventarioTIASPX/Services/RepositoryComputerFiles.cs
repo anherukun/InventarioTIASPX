@@ -119,6 +119,11 @@ namespace InventarioTIASPX.Services
             }
         }
 
+        public override List<FileObject> GetAllWithData()
+        {
+            throw new NotImplementedException();
+        }
+
         // public override void AssignParent(string fileId, string parentId)
         // {
         //     FileObject file = new RepositoryComputerFiles().Get(fileId);

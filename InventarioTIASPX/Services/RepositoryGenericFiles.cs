@@ -57,12 +57,47 @@ namespace InventarioTIASPX.Services
 
         public override List<FileObject> GetAll()
         {
-            throw new NotImplementedException();
+            using (var db = new InventoryTIASPXContext())
+            {
+                List<FileObject> list = new List<FileObject>();
+
+                var o = db.Files.Select(x => new {
+                    FileId = x.FileId,
+                    Name = x.Name,
+                    Mime = x.Mime,
+                    Size = x.Size,
+                    UploadedTicks = x.UploadedTicks,
+                    ParentObjectId = x.ParentObjectId
+                }).OrderBy(x => x.UploadedTicks).ToList();
+
+                foreach (var item in o)
+                {
+                    list.Add(new FileObject
+                    {
+                        FileId = item.FileId,
+                        Name = item.Name,
+                        Mime = item.Mime,
+                        Size = item.Size,
+                        UploadedTicks = item.UploadedTicks,
+                        ParentObjectId = item.ParentObjectId
+                    });
+                }
+
+                return list;
+            }
         }
 
         public override List<FileObject> GetAll(string parentId)
         {
             throw new NotImplementedException();
+        }
+
+        public override List<FileObject> GetAllWithData()
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Files.ToList();
+            }
         }
     }
 }

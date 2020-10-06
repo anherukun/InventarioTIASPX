@@ -45,7 +45,21 @@ namespace InventarioTIASPX.Services
                     item.ParentObjectId = item.ParentObjectId.Replace("USR_", "");
                     new RepositoryUserNotes().Add(item);
                 }
-            }                
+            }
+
+            foreach (var item in backup.Files)
+            {
+                if (item.ParentObjectId.Contains("COMP_"))
+                {
+                    item.ParentObjectId = item.ParentObjectId.Replace("COMP_", "");
+                    new RepositoryComputerFiles().Add(item);
+                }
+                if (item.ParentObjectId.Contains("USR_"))
+                {
+                    item.ParentObjectId = item.ParentObjectId.Replace("USR_", "");
+                    new RepositoryUserFiles().Add(item);
+                }
+            }
         }
 
         /// <summary>
@@ -53,6 +67,10 @@ namespace InventarioTIASPX.Services
         /// </summary>
         private static void ClearCurrentContext()
         {
+            // Elimina las entidades de Fileobject
+            foreach (var item in new RepositoryGenericFiles().GetAll())
+                new RepositoryGenericFiles().Delete(item.FileId);
+
             // Elimina las entidades de Notas
             foreach (var item in new RepositoryGenericNotes().GetAll())
                 new RepositoryGenericNotes().Delete(item.NoteId);

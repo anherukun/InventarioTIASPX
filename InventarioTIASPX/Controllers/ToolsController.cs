@@ -47,11 +47,13 @@ namespace InventarioTIASPX.Controllers
         [HttpGet]
         public FileResult CreateBackup()
         {
-            Backup backup = new Backup(RepositoryDevice.GetAllDevices(), RepositoryUser.GetAllUsers(), RepositoryComputer.GetAllComputers(), new RepositoryGenericNotes().GetAll());
+            Backup backup = new Backup(RepositoryDevice.GetAllDevices(), RepositoryUser.GetAllUsers(), RepositoryComputer.GetAllComputers(), new RepositoryGenericNotes().GetAll(), new RepositoryGenericFiles().GetAllWithData());
 
             if (backup != null)
             {
-                return File(backup.ToBytes(), "application/octet-stream", $"{DateTime.Now.Ticks}_{DateTime.Now.ToShortDateString()}_Backup.bak");
+                byte[] backupData = Application.ApplicationManager.Compress(backup.ToBytes());
+
+                return File(backupData, "application/octet-stream", $"{DateTime.Now.Ticks}_{DateTime.Now.ToShortDateString()}_Backup.bak");
             }
             else
             {
@@ -65,8 +67,10 @@ namespace InventarioTIASPX.Controllers
             if (fileBackup != null)
             {
                 DateTime dt1 = DateTime.Now, dt2;
+                // Descomprime el archivo y lo almacena en un arreglo de bytes
+                byte[] backupData = Application.ApplicationManager.Decompress(new BinaryReader(fileBackup.InputStream).ReadBytes(fileBackup.ContentLength));
                 // Lee los bytes del archivo .bak y los deserializa a un objeto Backup
-                Backup backup = new Backup().FromBytes(new BinaryReader(fileBackup.InputStream).ReadBytes(fileBackup.ContentLength));
+                Backup backup = new Backup().FromBytes(backupData);
                 // Llama al servicio de Backup y empieza la recuperacion de datos
                 BackupService.RecoverData(backup);
 

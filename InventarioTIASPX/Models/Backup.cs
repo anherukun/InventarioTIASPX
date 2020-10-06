@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Web;
+using System.Web.Services.Description;
 
 namespace InventarioTIASPX.Models
 {
@@ -18,20 +19,23 @@ namespace InventarioTIASPX.Models
         public List<User> Users { get; set; }
         // ENTIDAD SECUNDARIA DEPENDIENTE
         public List<Computer> Computers { get; set; }
-        // ENTIDAD DEPENDIENTE
+        // ENTIDAD SECUNDARIA DEPENDIENTE
         public List<Note> Notes { get; set; }
-
+        // ENTIDAD SECUNDARIA DEPENDIENTE
+        public List<FileObject> Files { get; set; }
+        // ENTIDAD SECUNDARIA DEPENDIENTE
         public List<Dictionary<string, string>> ComputerDeviceRelationship { get; set; }
 
         public Backup()
         {
         }
-        public Backup(List<Device> devices, List<User> users, List<Computer> computers, List<Note> notes)
+        public Backup(List<Device> devices, List<User> users, List<Computer> computers, List<Note> notes, List<FileObject> files)
         {
             Devices = devices;
             Users = users;
             Computers = computers;
             Notes = notes;
+            Files = files;
 
             PrepareRelationship();
         }
@@ -99,6 +103,5 @@ namespace InventarioTIASPX.Models
                 item.Devices = null;
             }
         }
-
     }
 }
