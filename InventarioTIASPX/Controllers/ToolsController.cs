@@ -101,22 +101,25 @@ namespace InventarioTIASPX.Controllers
                         // RECORRE CADA LINEA Y CREA UN DEVICE NUEVO AGREGANDOLO A LA LISTA DE DEVICES
                         foreach (var item in rows)
                         {
+                            // VERIFICA QUE EXISTAN DATOS EN LOS CAMPOS IMPORTANTES
                             if (item.Split(charSplit)[0].Trim().Length > 0 && item.Split(charSplit)[2].Trim().Length > 0 && item.Split(charSplit)[3].Trim().Length > 0)
-                            {
-                                Device d = new Device()
+                                // VERIFICA QUE NO EXISTA YA UN REGISTRO CON EL MISMO NUMERO DE SERIE
+                                if (!RepositoryDevice.Exist(item.Split(charSplit)[0].Trim().ToUpper()))
                                 {
-                                    DeviceId = item.Split(charSplit)[0].Trim().ToUpper(),
-                                    Type = item.Split(charSplit)[2].Trim().ToUpper(),
-                                    Brand = item.Split(charSplit)[3].Trim().ToUpper()
-                                };
+                                    Device d = new Device()
+                                    {
+                                        DeviceId = item.Split(charSplit)[0].Trim().ToUpper(),
+                                        Type = item.Split(charSplit)[2].Trim().ToUpper(),
+                                        Brand = item.Split(charSplit)[3].Trim().ToUpper()
+                                    };
 
-                                if (item.Split(charSplit)[1].Trim().Length > 0)
-                                    d.Inventory = item.Split(charSplit)[1].Trim().ToUpper();
-                                if (item.Split(charSplit)[4].Trim().Length > 0)
-                                    d.Model = item.Split(charSplit)[4].Trim().ToUpper();
+                                    if (item.Split(charSplit)[1].Trim().Length > 0)
+                                        d.Inventory = item.Split(charSplit)[1].Trim().ToUpper();
+                                    if (item.Split(charSplit)[4].Trim().Length > 0)
+                                        d.Model = item.Split(charSplit)[4].Trim().ToUpper();
 
-                                devices.Add(d);
-                            }
+                                    devices.Add(d);
+                                }
                         }
 
                         // SI HAY POR LO MENOS UN DISPOSITIVO NUEVO, SE ENVIA AL REPOSITORIO Y SE GUARDA EN LA BASE DE DATOS
@@ -144,22 +147,25 @@ namespace InventarioTIASPX.Controllers
                         // RECORRE CADA LINEA Y CREA UN USER NUEVO AGREGANDOLO A LA LISTA DE DEVICES
                         foreach (var item in rows)
                         {
+                            // VERIFICA QUE HAYA DATOS EN LOS CAMPOS IMPORTANTES
                             if (item.Split(charSplit)[0].Trim().Length > 0 && item.Split(charSplit)[1].Trim().Length > 0 && item.Split(charSplit)[3].Trim().Length > 0)
-                            {
-                                User u = new Models.User()
+                                // VERIFICA QUE NO EXISTA UN REGISTRO CON EL MISMO USUARIO
+                                if (!RepositoryUser.Exist(long.Parse(item.Split(charSplit)[0].Trim())))
                                 {
-                                    UserGUID = Application.ApplicationManager.GenerateGUID,
-                                    UserId = long.Parse(item.Split(charSplit)[0].Trim()),
-                                    Name = item.Split(charSplit)[1].Trim().ToUpper(),
-                                    EmployeId = int.Parse(item.Split(charSplit)[3].Trim()),
-                                    Employe = item.Split(charSplit)[4].Trim().ToUpper()
-                                };
-                                
-                                u.Email = item.Split(charSplit)[2].Trim().Length > 0 ? item.Split(charSplit)[2].Trim().ToUpper() : null;
-                                u.Migrated = item.Split(charSplit)[5].Trim() == "1" ? true : false;
+                                    User u = new Models.User()
+                                    {
+                                        UserGUID = Application.ApplicationManager.GenerateGUID,
+                                        UserId = long.Parse(item.Split(charSplit)[0].Trim()),
+                                        Name = item.Split(charSplit)[1].Trim().ToUpper(),
+                                        EmployeId = int.Parse(item.Split(charSplit)[3].Trim()),
+                                        Employe = item.Split(charSplit)[4].Trim().ToUpper()
+                                    };
 
-                                users.Add(u);
-                            }
+                                    u.Email = item.Split(charSplit)[2].Trim().Length > 0 ? item.Split(charSplit)[2].Trim().ToUpper() : null;
+                                    u.Migrated = item.Split(charSplit)[5].Trim() == "1" ? true : false;
+
+                                    users.Add(u);
+                                }
                         }
 
                         // SI HAY POR LO MENOS UN DISPOSITIVO NUEVO, SE ENVIA AL REPOSITORIO Y SE GUARDA EN LA BASE DE DATOS
@@ -187,25 +193,27 @@ namespace InventarioTIASPX.Controllers
                         // RECORRE CADA LINEA Y CREA UN COMPUTER NUEVO AGREGANDOLO A LA LISTA DE COMPUTERS
                         foreach (var item in rows)
                         {
+                            // VERIFICA QUE HAYA DATOSN EN LOS CAMPOS IMPORTANTES
                             if (item.Split(charSplit)[0].Trim().Length > 0 && item.Split(charSplit)[2].Trim().Length > 0 && item.Split(charSplit)[3].Trim().Length > 0)
-                            {
+                                // VERIFICA QUE EXISTA EL PROCESADOR EN LOS DISPOSITIVOS
                                 if (RepositoryDevice.Exist(item.Split(charSplit)[0].Trim()))
-                                {
-                                    Computer c = new Computer()
+                                    // VERIFICA QUE NO EXISTA UN REGISTRO DEL MISMO PROCESADOR EN LAS COMPUTADORAS
+                                    if (!RepositoryComputer.Exist(item.Split(charSplit)[0].Trim()))
                                     {
-                                        ComputerId = item.Split(charSplit)[0].Trim().ToUpper(),
-                                        Hostname = item.Split(charSplit)[1].Trim().ToUpper(),
-                                        Department = item.Split(charSplit)[2].Trim().ToUpper(),
-                                        Location = item.Split(charSplit)[3].Trim().ToUpper(),
-                                        Architecture = int.Parse(item.Split(charSplit)[4].Trim())
-                                    };
-                                    if (item.Split(charSplit)[5].Trim().Length > 0)
-                                        if (RepositoryUser.Exist(long.Parse(item.Split(charSplit)[5].Trim())))
-                                            c.UserGUID = RepositoryUser.Get(long.Parse(item.Split(charSplit)[5].Trim())).UserGUID;
+                                        Computer c = new Computer()
+                                        {
+                                            ComputerId = item.Split(charSplit)[0].Trim().ToUpper(),
+                                            Hostname = item.Split(charSplit)[1].Trim().ToUpper(),
+                                            Department = item.Split(charSplit)[2].Trim().ToUpper(),
+                                            Location = item.Split(charSplit)[3].Trim().ToUpper(),
+                                            Architecture = int.Parse(item.Split(charSplit)[4].Trim())
+                                        };
+                                        if (item.Split(charSplit)[5].Trim().Length > 0)
+                                            if (RepositoryUser.Exist(long.Parse(item.Split(charSplit)[5].Trim())))
+                                                c.UserGUID = RepositoryUser.Get(long.Parse(item.Split(charSplit)[5].Trim())).UserGUID;
 
-                                    computers.Add(c);
-                                }
-                            }
+                                        computers.Add(c);
+                                    }
                         }
 
                         // SI HAY POR LO MENOS UN DISPOSITIVO NUEVO, SE ENVIA AL REPOSITORIO Y SE GUARDA EN LA BASE DE DATOS
@@ -233,11 +241,16 @@ namespace InventarioTIASPX.Controllers
                         // RECORRE CADA LINEA ASIGNANDO EL DISPOSITIVO AL COMPUTER
                         foreach (var item in rows)
                         {
+                            // VERIFICA QUE HAYA DATOS EN LOS CAMPOS IMPORTANTES
                             if (item.Split(charSplit)[0].Trim().Length > 0 && item.Split(charSplit)[1].Trim().Length > 0)
                             {
+                                // VERIFICA QUE EXISTA EL REGISTRO DE COMPUTADOR
                                 if (RepositoryComputer.Exist(item.Split(charSplit)[0].Trim()))
+                                    // VERIFICA QUE EXISTA EL REGISTRO DEL DISPOSITIVO
                                     if (RepositoryDevice.Exist(item.Split(charSplit)[1].Trim()))
+                                        // VERIFICA QUE EL DISPOSITIVO NO ESTE EN USO
                                         if (!RepositoryDevice.Get(item.Split(charSplit)[1].Trim(), true).InUse)
+                                            // ASIGNA EL DISPOSITIVO A LA COMPUTADORA
                                             RepositoryDevice.AssignComputer(item.Split(charSplit)[1].Trim(), item.Split(charSplit)[0].Trim());
                             }
                         }
