@@ -57,7 +57,7 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-                return db.Users.Where(x => x.UserId == userId).FirstOrDefault();
+                return db.Users.Where(x => x.UserId == userId).Include(x => x.MemberOfs).FirstOrDefault();
             }
         }
 

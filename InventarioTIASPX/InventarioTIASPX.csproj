@@ -229,6 +229,7 @@
     <Content Include="Views\Users\User.cshtml" />
     <Content Include="Views\Files\DeleteFromUser.cshtml" />
     <Content Include="Views\Tools\Backup.cshtml" />
+    <Content Include="Views\Users\EditUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

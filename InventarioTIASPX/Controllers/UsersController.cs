@@ -55,7 +55,7 @@ namespace InventarioTIASPX.Controllers
         }
 
         [HttpGet]
-        public ActionResult EditUser(long userId, string msgType, string msgString)
+        public ActionResult EditUser(long? userId, string msgType, string msgString)
         {
             if (msgType != null && msgString != null)
             {
@@ -63,7 +63,17 @@ namespace InventarioTIASPX.Controllers
                 ViewData["message"] = new { msgType, msgString };
             }
 
-            return View();
+            if (userId != null)
+                if (RepositoryUser.Exist(userId.Value))
+                {
+                    ViewData["user"] = RepositoryUser.Get(userId.Value);
+                    ViewData["memberOfs"] = RepositoryUserMemberOf.GetAll();
+
+
+                    return View();
+                }
+
+            return Redirect(Url.Action("", "Users"));
         }
 
         [HttpPost]

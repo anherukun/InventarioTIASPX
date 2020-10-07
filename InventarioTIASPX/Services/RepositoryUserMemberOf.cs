@@ -26,11 +26,20 @@ namespace InventarioTIASPX.Services
             }
         }
 
+        public static List<UserMemberOf> GetAll()
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.UserMemberOfs.ToList();
+            }
+        }
+
         public static List<UserMemberOf> GetAllByUser(string userId)
         {
             using (var db = new InventoryTIASPXContext())
             {
-                return db.UserMemberOfs.Where(x => x.UserId == userId).OrderBy(x => x.MemberOf).ToList();
+                User u = RepositoryUser.Get(userId);
+                return db.UserMemberOfs.Where(x => x.Users.Contains(u)).OrderBy(x => x.Description).ToList();
             }
         }
 

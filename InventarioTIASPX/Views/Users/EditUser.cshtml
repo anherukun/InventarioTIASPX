@@ -1,0 +1,157 @@
+﻿
+@{
+    ViewBag.Title = "Editar usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{ 
+    InventarioTIASPX.Models.User user = ViewData["user"] as InventarioTIASPX.Models.User;
+    List<InventarioTIASPX.Models.UserMemberOf> memberOfs = ViewData["membetOfs"] as List<InventarioTIASPX.Models.UserMemberOf>;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="@Url.Action("", "Users")">Regresar</a></li>
+</ul>
+
+<div class="row">
+    <div class="row">
+        <!--Links-->
+        <div class="col-md-8">
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-body">
+                    @using (Html.BeginForm("Edit", "Users", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "return validateSubmition()" }))
+                    {
+                        <script type="text/javascript">
+                            function generateUUID() {
+                                var form = document.forms["form"];
+                                var guuid = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+                                    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)).toUpperCase();
+                                form["DeviceId"].value = guuid;
+                            }
+                            function validateSubmition() {
+                                var form = document.forms["form"];
+                                var input1 = form["UserId"], input2 = form["Name"], input3 = form["EmployeId"], input4 = form["Employe"];
+                                if (input1.value.trim() == "" || input2.value.trim() == "" || input3.value.trim() == "" || input4.value.trim() == "") {
+                                    showErrorMessage(8, "Debes completar los campos obligatorios... Para mas informacion revisa el glosario");
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            }
+                        </script>
+
+                        <!--UserId-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Usuario de AD *</label>
+                            <div class="input-group" style="width:225px;">
+                                <span class="input-group-addon" id="basic-addon1"><b>PEMEX\</b></span>
+                                <input type="number" class="form-control" name="UserId" id="UserId" placeholder="582509" aria-describedby="basic-addon1" readonly required value="@user.UserId">
+                            </div>
+                        </div>
+                        <br />
+
+                        <!--Name-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Nombre en AD *</label>
+                            <input class="form-control" type="text" name="Name" id="Name" autocomplete="off" spellcheck="false"
+                                   placeholder="ANGEL GERARDO JIMENEZ REYES" onkeyup="this.value = this.value.toUpperCase();" required style="width:225px;" value="@user.Name" />
+                        </div>
+                        <br />
+
+                        <!--Email-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Correo electronico</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" autocomplete="off" spellcheck="false" placeholder="NOMBRE.APELLIDOS" name="Email" id="Email"
+                                       aria-describedby="basic-addon2" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" value="@user.Email.Replace("@PEMEX.COM", "")"/>
+                                <span class="input-group-addon" id="basic-addon2">@("@PEMEX.COM")</span>
+                            </div>
+                            <label style="margin-left:8px; margin-right:8px;">¿Correo migrado?</label>
+                            @Html.CheckBox("Migrated", user.Migrated, new { @class = "form-control" })
+                        </div>
+                        <br />
+
+                        <!--Trabajador-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Titular de la cuenta *</label>
+                            <!--EmployeId-->
+                            <div class="input-group col-md-1" style="width:100px;">
+                                <label>Ficha</label>
+                                <input class="form-control" type="number" name="EmployeId" id="EmployeId" placeholder="582509" required value="@user.EmployeId"/>
+                            </div>
+                            <div class="input-group" style="width:280px;">
+                                <label>Nombre</label>
+                                <input class="form-control" type="text" name="Employe" id="Employe" placeholder="NOMBRES Y APELLIDOS" autocomplete="off" spellcheck="false"
+                                       onkeyup="this.value = this.value.toUpperCase();" required value="@user.Employe"/>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="form-group" style="margin-top: 16px;">
+                            <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Guardar</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!--SIDE PANEL-->
+        <div class="col-md-4">
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <a href="#glosary" data-toggle="collapse">
+                    <div class="panel-heading" style="padding:16px;">
+                        <h3 style="margin-top:0px; margin-bottom:0px;"><span class="glyphicon glyphicon-question-sign"></span> Glosario <span class="caret"></span></h3>
+                    </div>
+                </a>
+                <div class="panel-body collapse" id="glosary">
+                    <ul>
+                        <li>
+                            <label>Usuario de AD</label>
+                            <p>Es el identificador de cuenta con la cual esta registrada en directorio activo.</p>
+                            <p>Ej: PEMEX\98002376</p>
+                        </li>
+
+                        <li>
+                            <label>Nombre en AD</label>
+                            <p>Nombre asignado a la cuenta desde el directorio activo, este mismo nombre aparece en la libreta de direcciones (Si es que tiene correo electronico).</p>
+                            <p>Ej: SOPORTE SISTEMAS TM TUXPAN</p>
+                        </li>
+
+                        <li>
+                            <label>Correo electronico</label>
+                            <p>Es la direccion de correo propio de la cuenta en directorio activo.</p>
+                            <p>Ej: RCCADOMINGUEZC02@PEMEX.COM</p>
+                        </li>
+
+                        <li>
+                            <label>Correo migrado</label>
+                            <p>Identifica la cuenta como migrada a Office365</p>
+                        </li>
+                    </ul>
+
+                    <p>* Estos campos son obligatorios</p>
+                </div>
+            </div>
+
+            <div>
+                <!--SNACK DE ALERTAS-->
+                <div class="alert alert-danger" id="error-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    Debes completar correctamente el formulario
+                </div>
+                <div class="alert alert-success" id="success-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                    Los cambios se han guardado correctamente
+                </div>
+
+                @if (ViewData["message"] != null)
+                {
+                    <script type="text/javascript">
+                        retriveMessage();
+                    </script>
+                }
+            </div>
+        </div>
+    </div>
+</div>
