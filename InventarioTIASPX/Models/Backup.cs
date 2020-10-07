@@ -26,9 +26,20 @@ namespace InventarioTIASPX.Models
         // ENTIDAD SECUNDARIA DEPENDIENTE
         public List<Dictionary<string, string>> ComputerDeviceRelationship { get; set; }
 
+        /// <summary>
+        /// Crea un objeto de recuperacion
+        /// </summary>
         public Backup()
         {
         }
+        /// <summary>
+        /// Crea un objeto de recuperacion a partir de los objetos enumerados
+        /// </summary>
+        /// <param name="devices">Objeto lista de dispositivos</param>
+        /// <param name="users">Objeto lista de usuarios</param>
+        /// <param name="computers">Objeto lista de computadoras</param>
+        /// <param name="notes">Objeto lista de notas</param>
+        /// <param name="files">Objeto lista de archivos</param>
         public Backup(List<Device> devices, List<User> users, List<Computer> computers, List<Note> notes, List<FileObject> files)
         {
             Devices = devices;
@@ -40,6 +51,10 @@ namespace InventarioTIASPX.Models
             PrepareRelationship();
         }
 
+        /// <summary>
+        /// Crea un arreglo de bytes apartir del mismo objeto de recuperacion
+        /// </summary>
+        /// <returns>Arreglo de bytes</returns>
         public byte[] ToBytes()
         {
             if (this != null)
@@ -56,7 +71,12 @@ namespace InventarioTIASPX.Models
                 throw new NullReferenceException("El objeto \"Backup\" es nulo, no se puede convertir");
             }
         }
-        public Backup FromBytes(byte[] bytes)
+        /// <summary>
+        /// Crea un objeto de recuperacion apartir de un arreglo de bytes
+        /// </summary>
+        /// <param name="bytes">Arreglo de bytes</param>
+        /// <returns>Objeto de recuperacion</returns>
+        public static Backup FromBytes(byte[] bytes)
         {
             try
             {

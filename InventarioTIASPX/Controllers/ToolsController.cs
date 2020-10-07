@@ -47,13 +47,14 @@ namespace InventarioTIASPX.Controllers
         [HttpGet]
         public FileResult CreateBackup()
         {
-            Backup backup = new Backup(RepositoryDevice.GetAllDevices(), RepositoryUser.GetAllUsers(), RepositoryComputer.GetAllComputers(), new RepositoryGenericNotes().GetAll(), new RepositoryGenericFiles().GetAllWithData());
+            Backup backup = new Backup(RepositoryDevice.GetAllDevices(), RepositoryUser.GetAllUsers(), RepositoryComputer.GetAllComputers(),
+                                       new RepositoryGenericNotes().GetAll(), new RepositoryGenericFiles().GetAllWithData());
 
             if (backup != null)
             {
-                byte[] backupData = Application.ApplicationManager.Compress(backup.ToBytes());
+                byte[] bytes = Application.ApplicationManager.Compress(backup.ToBytes());
 
-                return File(backupData, "application/octet-stream", $"{DateTime.Now.Ticks}_{DateTime.Now.ToShortDateString()}_Backup.bak");
+                return File(bytes, "application/octet-stream", $"{DateTime.Now.Ticks}_{DateTime.Now.ToShortDateString()}_InventoryBackup.bak");
             }
             else
             {
@@ -67,10 +68,10 @@ namespace InventarioTIASPX.Controllers
             if (fileBackup != null)
             {
                 DateTime dt1 = DateTime.Now, dt2;
-                // Descomprime el archivo y lo almacena en un arreglo de bytes
-                byte[] backupData = Application.ApplicationManager.Decompress(new BinaryReader(fileBackup.InputStream).ReadBytes(fileBackup.ContentLength));
+                // Descomprime los bytes del archivo y lo almacena en un arreglo de bytes
+                byte[] bytes = Application.ApplicationManager.Decompress(new BinaryReader(fileBackup.InputStream).ReadBytes(fileBackup.ContentLength));
                 // Lee los bytes del archivo .bak y los deserializa a un objeto Backup
-                Backup backup = new Backup().FromBytes(backupData);
+                Backup backup = Models.Backup.FromBytes(bytes);
                 // Llama al servicio de Backup y empieza la recuperacion de datos
                 BackupService.RecoverData(backup);
 
