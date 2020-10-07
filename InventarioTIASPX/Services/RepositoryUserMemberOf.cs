@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 
@@ -18,11 +19,20 @@ namespace InventarioTIASPX.Services
             }
         }
 
+        public static void AssignUserToMemberOf(string usermemberId, string userGUID)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                db.Database.ExecuteSqlCommand($"INSERT INTO usermemberofusers VALUES (\"{usermemberId}\", \"{userGUID}\")");
+                db.SaveChanges();
+            }
+        }
+
         public static UserMemberOf Get(string userMemberId)
         {
             using (var db = new InventoryTIASPXContext())
             {
-                return db.UserMemberOfs.Where(x => x.UserMemberId == userMemberId).FirstOrDefault();
+                return db.UserMemberOfs.Where(x => x.UserMemberId == userMemberId).Include(x => x.Users).FirstOrDefault();
             }
         }
 
@@ -49,6 +59,14 @@ namespace InventarioTIASPX.Services
             {
                 db.Entry(Get(userMemberId)).State = EntityState.Deleted;
                 db.SaveChanges();
+            }
+        }
+
+        public static bool Exist(string description)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.UserMemberOfs.Any(x => x.Description == description);
             }
         }
     }

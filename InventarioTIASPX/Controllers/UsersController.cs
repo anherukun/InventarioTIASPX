@@ -36,6 +36,8 @@ namespace InventarioTIASPX.Controllers
                     ViewData["notes"] = new RepositoryUserNotes().GetAll(u.UserGUID);
                     ViewData["files"] = new RepositoryUserFiles().GetAll(u.UserGUID);
 
+                    ViewData["memberOfs"] = RepositoryUserMemberOf.GetAll();
+
                     return View();
                 }
 
@@ -67,9 +69,6 @@ namespace InventarioTIASPX.Controllers
                 if (RepositoryUser.Exist(userId.Value))
                 {
                     ViewData["user"] = RepositoryUser.Get(userId.Value);
-                    ViewData["memberOfs"] = RepositoryUserMemberOf.GetAll();
-
-
                     return View();
                 }
 
@@ -91,11 +90,51 @@ namespace InventarioTIASPX.Controllers
 
             return Redirect(Url.Action("NewUser", "Users", new { msgType = "success", msgString = Application.ApplicationManager.Base64Encode($"El usuario {user.UserId} fue registrado correctamente.") }));
         }
+        [HttpPost]
+        public ActionResult AddMemberOf(UserMemberOf memberOf, string userGUID, string path, string controller)
+        {
+            if (userGUID != null)
+            {
+                if (memberOf != null)
+                    if (memberOf.UserMemberId == null && memberOf.Description.Trim() != null)
+                    {
+                        memberOf.UserMemberId = Application.ApplicationManager.GenerateGUID;
+                        RepositoryUserMemberOf.Add(memberOf);
+                        RepositoryUserMemberOf.AssignUserToMemberOf(memberOf.UserMemberId, userGUID);
+
+                        return Redirect(Url.Action("User", "Users", new { userId = RepositoryUser.Get(userGUID).UserId, msgType = "success", msgString = Application.ApplicationManager.Base64Encode("Los cambios se guardaron corractamente") }));
+                    }
+                    else if (memberOf.UserMemberId != null)
+                    {
+                        RepositoryUserMemberOf.AssignUserToMemberOf(memberOf.UserMemberId, userGUID);
+
+                        return Redirect(Url.Action("User", "Users", new { userId = RepositoryUser.Get(userGUID).UserId, msgType = "success", msgString = Application.ApplicationManager.Base64Encode("Los cambios se guardaron corractamente") }));
+                    }
+
+                return Redirect(Url.Action("User", "Users", new { userId = RepositoryUser.Get(userGUID).UserId, msgType = "error", msgString = Application.ApplicationManager.Base64Encode("No se pudo completar la solicitud") }));
+            }
+
+            return Redirect(Url.Action("", "Users", new { userId = RepositoryUser.Get(userGUID).UserId, msgType = "error", msgString = Application.ApplicationManager.Base64Encode("No se pudo completar la solicitud") }));
+        }
 
         [HttpPost]
         public ActionResult Edit(User user)
         {
-            return Redirect(Url.Action("User", "Users", new { userId = user.UserId }));
+            try
+            {
+                user.UserGUID = RepositoryUser.Get(user.UserId).UserGUID;
+
+                if (!user.Email.Contains("@PEMEX.COM"))
+                    user.Email = $"{user.Email}@PEMEX.COM";
+
+                RepositoryUser.Update(user);
+
+                return Redirect(Url.Action("User", "Users", new { userId = user.UserId, msgType = "success", msgString = Application.ApplicationManager.Base64Encode($"Los cambios se guardaron correctamente.") }));
+            }
+            catch (Exception ex)
+            {
+                return Redirect(Url.Action("User", "Users", new { userId = user.UserId, msgType = "error", msgString = Application.ApplicationManager.Base64Encode($"{ex.Message}") }));
+            }
         }
     }
 }

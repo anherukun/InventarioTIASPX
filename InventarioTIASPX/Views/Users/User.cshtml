@@ -8,6 +8,7 @@
     InventarioTIASPX.Models.User user = ViewData["user"] as InventarioTIASPX.Models.User;
     List<InventarioTIASPX.Models.FileObject> files = ViewData["files"] as List<InventarioTIASPX.Models.FileObject>;
     List<InventarioTIASPX.Models.Note> notes = ViewData["notes"] as List<InventarioTIASPX.Models.Note>;
+    List<InventarioTIASPX.Models.UserMemberOf> memberOfs = ViewData["memberOfs"] as List<InventarioTIASPX.Models.UserMemberOf>;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -67,6 +68,104 @@
                     </div>
 
                     @Html.ActionLink("Editar", "EditUser", "Users", new { userId = user.UserId }, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-body">
+                    <!--NOTAS-->
+                    <h3 style="margin-top:0px">Notas y observaciones</h3>
+
+                    <table class="table" id="devicetable">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Miembro de
+                                    <br />
+                                </th>
+
+                                <th scope="col" style="width:70px;">
+                                    Acciones
+                                    <br />
+                                </th>
+
+                            </tr>
+                        </thead>
+                        @if (notes != null)
+                        {
+                            <tbody>
+                                @foreach (var item in user.MemberOfs)
+                                {
+                                    <tr>
+                                        <td scope="row">@item.Description</td>
+                                        <td style="text-align:right;">
+                                            @Html.ActionLink("Remover", "", "Users", new { userMemberOfId = item.UserMemberId, redirect = Url.Action("User", "Users", new { userId = user.UserId }) }, new { @class = "btn btn-danger btn-sm hidden-print" })
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                    </table>
+
+                    @using (Html.BeginForm("AddMemberOf", "Users", FormMethod.Post, new { @class = "form-inline", id = "form-memberof", onsubmit = "return validateForm()", enctype = "multipart/form-data" }))
+                    {
+                        <script type="text/javascript">
+                            function optionSelected(option) {
+                                var form = document.forms["form-memberof"];
+                                var select = form["UserMemberId"];
+
+                                if (option == "-1") {
+                                    forms["Description"].style.display = "";
+                                } else {
+                                    forms["Description"].style.display = "none";
+                                    forms["Description"].style.value = "";
+                                }
+                            }
+                            function validateForm() {
+                                var form = document.forms["form-memberof"];
+                                var usermemberid = form["UserMemberId"];
+                                var description = form["Description"];
+
+                                if (usermemberid.value != "" || description.value.trim() != "") {
+                                    return true;
+                                }
+
+                                return false;
+                            }
+                        </script>
+                        <div class="form-group" style="display:none;">
+                            <label>UsertGUID</label>
+                            <input class="form-control" name="userGUID" value="@user.UserGUID" readonly />
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            <label>Redirect</label>
+                            <input class="form-control" name="redirect" value="@Url.Action("User", "Users", new { userId = user.UserId})" readonly />
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            <label>Route</label>
+                            <input class="form-control" name="path" value="User" readonly />
+                            <input class="form-control" name="controller" value="Users" readonly />
+                        </div>
+                        <div class="form-group form-group-sm col-md-12" style="text-align:right; padding-right:0px">
+                            <label style="vertical-align:top; margin-right:8px;">Nueva nota</label>
+                            <div class="form-inline">
+                                <input type="text" name="Description" id="Description" placeholder="USUARIO DE INTERNET" onkeyup="this.value = this.value.toUpperCase();" value="" style="width:130px;"/>
+                                <select name="UserMemberId" id="UserMemberId" onchange="optionSelected(this.value)">
+                                    <option value="">Seleccionar opcion...</option>
+                                    <option value="-1">(Agregar permiso...)</option>
+                                    @if (memberOfs != null)
+                                    {
+                                        foreach (var item in memberOfs)
+                                        {
+                                            <option value="@item.UserMemberId">@item.Description</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <br />
+                            <input style="margin-top:8px;" class="btn btn-sm btn-success" type="submit" value="Cargar" />
+                        </div>
+                    }
                 </div>
             </div>
 

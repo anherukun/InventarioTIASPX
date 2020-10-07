@@ -10,7 +10,7 @@ namespace InventarioTIASPX.Models
     public class UserMemberOf
     {
         [Key] public string UserMemberId { get; set; }
-        [Required] public List<User> Users{ get; set; }
         [Required] public string Description { get; set; }
+        public List<User> Users{ get; set; }
     }
 }
