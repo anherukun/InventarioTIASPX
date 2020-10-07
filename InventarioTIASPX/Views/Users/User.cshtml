@@ -73,8 +73,8 @@
 
             <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
                 <div class="panel-body">
-                    <!--NOTAS-->
-                    <h3 style="margin-top:0px">Notas y observaciones</h3>
+                    <!--MIEMBRO DE-->
+                    <h3 style="margin-top:0px">Miembro de...</h3>
 
                     <table class="table" id="devicetable">
                         <thead>
@@ -99,7 +99,7 @@
                                     <tr>
                                         <td scope="row">@item.Description</td>
                                         <td style="text-align:right;">
-                                            @Html.ActionLink("Remover", "", "Users", new { userMemberOfId = item.UserMemberId, redirect = Url.Action("User", "Users", new { userId = user.UserId }) }, new { @class = "btn btn-danger btn-sm hidden-print" })
+                                            @Html.ActionLink("Remover", "Remove", "UserMemberOf", new { memberID = item.UserMemberId, userGUID = user.UserGUID, redirect = Url.Action("User", "Users", new { userId = user.UserId }) }, new { @class = "btn btn-danger btn-sm hidden-print" })
                                         </td>
                                     </tr>
                                 }
@@ -107,18 +107,24 @@
                         }
                     </table>
 
-                    @using (Html.BeginForm("AddMemberOf", "Users", FormMethod.Post, new { @class = "form-inline", id = "form-memberof", onsubmit = "return validateForm()", enctype = "multipart/form-data" }))
+                    @using (Html.BeginForm("Add", "UserMemberOf", FormMethod.Post, new { @class = "form-inline", id = "form-memberof", onsubmit = "return validateForm()", enctype = "multipart/form-data" }))
                     {
                         <script type="text/javascript">
                             function optionSelected(option) {
                                 var form = document.forms["form-memberof"];
                                 var select = form["UserMemberId"];
+                                var input = form["Description"];
 
                                 if (option == "-1") {
-                                    forms["Description"].style.display = "";
+                                    input.style.display = "";
+                                    input.required = true;
+                                    select.required = false;
                                 } else {
-                                    forms["Description"].style.display = "none";
-                                    forms["Description"].style.value = "";
+                                    input.style.display = "none";
+                                    input.value = "";
+
+                                    input.required = false;
+                                    select.required = true;
                                 }
                             }
                             function validateForm() {
@@ -129,7 +135,11 @@
                                 if (usermemberid.value != "" || description.value.trim() != "") {
                                     return true;
                                 }
+                                else if (usermemberid.value == "-1" && description.value.trim() != "") {
+                                    return true;
+                                }
 
+                                showErrorMessage(8, "Debes establecer un valor");
                                 return false;
                             }
                         </script>
@@ -147,10 +157,10 @@
                             <input class="form-control" name="controller" value="Users" readonly />
                         </div>
                         <div class="form-group form-group-sm col-md-12" style="text-align:right; padding-right:0px">
-                            <label style="vertical-align:top; margin-right:8px;">Nueva nota</label>
+                            <label style="vertical-align:top; margin-right:8px;">Definir</label>
                             <div class="form-inline">
-                                <input type="text" name="Description" id="Description" placeholder="USUARIO DE INTERNET" onkeyup="this.value = this.value.toUpperCase();" value="" style="width:130px;"/>
-                                <select name="UserMemberId" id="UserMemberId" onchange="optionSelected(this.value)">
+                                <input class="form-control" type="text" name="Description" id="Description" placeholder="USUARIO DE INTERNET" onkeyup="this.value = this.value.toUpperCase();" value="" style="width:130px; display:none;"/>
+                                <select class="form-control" name="UserMemberId" id="UserMemberId" onchange="optionSelected(this.value)" required>
                                     <option value="">Seleccionar opcion...</option>
                                     <option value="-1">(Agregar permiso...)</option>
                                     @if (memberOfs != null)

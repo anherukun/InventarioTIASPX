@@ -23,7 +23,16 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-                db.Database.ExecuteSqlCommand($"INSERT INTO usermemberofusers VALUES (\"{usermemberId}\", \"{userGUID}\")");
+                db.Database.ExecuteSqlCommand($"INSERT INTO {db.Database.Connection.Database}.usermemberofusers VALUES (\"{usermemberId}\", \"{userGUID}\")");
+                db.SaveChanges();
+            }
+        }
+
+        public static void UnassignUserToMemberOf(string usermemberId, string userGUID)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                db.Database.ExecuteSqlCommand($"DELETE FROM {db.Database.Connection.Database}.usermemberofusers WHERE UserMemberOf_UserMemberId = \"{usermemberId}\" AND User_UserGUID = \"{userGUID}\"");
                 db.SaveChanges();
             }
         }
@@ -36,21 +45,26 @@ namespace InventarioTIASPX.Services
             }
         }
 
-        public static List<UserMemberOf> GetAll()
+        public static List<UserMemberOf> GetAll(bool includeChild)
         {
             using (var db = new InventoryTIASPXContext())
             {
-                return db.UserMemberOfs.ToList();
+                if (includeChild)
+                    return db.UserMemberOfs.OrderBy(x => x.Description).Include(x => x.Users).ToList();
+
+                return db.UserMemberOfs.OrderBy(x => x.Description).ToList();
             }
         }
 
-        public static List<UserMemberOf> GetAllByUser(string userId)
+        public static List<UserMemberOf> GetAllByUser(string userGUID)
         {
-            using (var db = new InventoryTIASPXContext())
-            {
-                User u = RepositoryUser.Get(userId);
-                return db.UserMemberOfs.Where(x => x.Users.Contains(u)).OrderBy(x => x.Description).ToList();
-            }
+            User u = RepositoryUser.Get(userGUID);
+            return u.MemberOfs;
+            // using (var db = new InventoryTIASPXContext())
+            // {
+            //     
+            //     return db.UserMemberOfs.Include(x => x.Users).Where(x => x.Users.Contains(u)).OrderBy(x => x.Description).ToList();
+            // }
         }
 
         public static void Delete(string userMemberId)

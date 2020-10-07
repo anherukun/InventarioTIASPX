@@ -36,6 +36,18 @@ namespace InventarioTIASPX.Services.Abstracts
         /// <returns>Lista de <see cref="Note"/></returns>
         public abstract List<Note> GetAll(string parentId);
         /// <summary>
+        /// Determina si existen entidades relacionadas con alguna otra entidad
+        /// </summary>
+        /// <param name="parentId">Identificador de entidad externa</param>
+        /// <returns></returns>
+        public abstract bool HasNotesRelated(string parentId);
+        /// <summary>
+        /// Rompre la relacion entre la entidad y la entidad externa
+        /// </summary>
+        /// <param name="noteId">Propiedad identificadora del objeto <see cref="Note"/></param>
+        /// <param name="parentId">Propiedad identificadora del objeto externo</param>
+        public abstract void BreakRelationship(string noteId, string parentId);
+        /// <summary>
         /// Elimina un <see cref="Note"/> del registro
         /// </summary>
         /// <param name="noteId">Propiedad identificadora del objeto <see cref="Note"/></param>

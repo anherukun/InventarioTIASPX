@@ -48,7 +48,7 @@ namespace InventarioTIASPX.Controllers
         public FileResult CreateBackup()
         {
             Backup backup = new Backup(RepositoryDevice.GetAllDevices(), RepositoryUser.GetAllUsers(), RepositoryComputer.GetAllComputers(),
-                                       new RepositoryGenericNotes().GetAll(), new RepositoryGenericFiles().GetAllWithData());
+                                       new RepositoryGenericNotes().GetAll(), new RepositoryGenericFiles().GetAllWithData(), RepositoryUserMemberOf.GetAll(true));
 
             if (backup != null)
             {

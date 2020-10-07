@@ -94,6 +94,14 @@ namespace InventarioTIASPX.Services
             if (computer.Devices != null)
                 foreach (var item in computer.Devices)
                     RepositoryDevice.UnassignComputer(item.DeviceId);
+            if (new RepositoryComputerFiles().GetAll(computerId) != null)
+            {
+                // TO-DO: METODO PARA DEASIGNAR LOS FILEOBJECTS DE LA ENTIDAD COMPUTER
+            }
+            if (new RepositoryComputerNotes().GetAll(computerId) != null)
+            {
+                // TO-DO: METODO PARA DEASIGNAR LAS NOTAS DE LA ENTIDAD COMPUTER
+            }
 
             using (var db = new InventoryTIASPXContext())
             {

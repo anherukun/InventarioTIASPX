@@ -50,7 +50,7 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-                return db.Users.Where(x => x.UserGUID == userGUID).FirstOrDefault();
+                return db.Users.Where(x => x.UserGUID == userGUID).Include(x => x.MemberOfs).FirstOrDefault();
             }
         }
         public static User Get(long userId)
@@ -71,6 +71,8 @@ namespace InventarioTIASPX.Services
 
         public static void Delete(long userId)
         {
+            // TO-DO: METODO PARA DESASIGNAR LOS FILEOBJECTS DE LA ENTIDAD
+            // TO-DO: METODO PARA DESASIGNAR LOS NOTES DE LA ENTIDAD
             using (var db = new InventoryTIASPXContext())
             {
                 db.Entry(Get(userId)).State = EntityState.Deleted;

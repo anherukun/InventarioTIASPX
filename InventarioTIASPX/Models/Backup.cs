@@ -24,7 +24,10 @@ namespace InventarioTIASPX.Models
         // ENTIDAD SECUNDARIA DEPENDIENTE
         public List<FileObject> Files { get; set; }
         // ENTIDAD SECUNDARIA DEPENDIENTE
+        public List<UserMemberOf> MemberOfs { get; set; }
+        // ENTIDAD SECUNDARIA DEPENDIENTE
         public List<Dictionary<string, string>> ComputerDeviceRelationship { get; set; }
+        public List<Dictionary<string, string>> UserMemberOfRelationship { get; set; }
 
         /// <summary>
         /// Crea un objeto de recuperacion
@@ -40,13 +43,14 @@ namespace InventarioTIASPX.Models
         /// <param name="computers">Objeto lista de computadoras</param>
         /// <param name="notes">Objeto lista de notas</param>
         /// <param name="files">Objeto lista de archivos</param>
-        public Backup(List<Device> devices, List<User> users, List<Computer> computers, List<Note> notes, List<FileObject> files)
+        public Backup(List<Device> devices, List<User> users, List<Computer> computers, List<Note> notes, List<FileObject> files, List<UserMemberOf> memberOfs)
         {
             Devices = devices;
             Users = users;
             Computers = computers;
             Notes = notes;
             Files = files;
+            MemberOfs = memberOfs;
 
             PrepareRelationship();
         }
@@ -102,7 +106,6 @@ namespace InventarioTIASPX.Models
             
             for (int i = 0; i < Devices.Count; i++)
             {
-
                 if (Devices[i].InUse)
                 {
                     // CREA UN DICCIONARIO DEL DISPOSITIVO RELACIONADO CON EL EQUIPO DE COMPUTO
@@ -121,6 +124,23 @@ namespace InventarioTIASPX.Models
             {
                 item.Processor = null;
                 item.Devices = null;
+            }
+
+            UserMemberOfRelationship = new List<Dictionary<string, string>>();
+
+            foreach (var item in MemberOfs)
+            {
+                foreach (var user in item.Users)
+                {
+                    // CREA UN DICCIONARIO CON LA RELACION DE MEMBEROFID Y USERGUID
+                    Dictionary<string, string> pair = new Dictionary<string, string>();
+                    pair.Add(item.UserMemberId, user.UserGUID);
+                    // AGREGA EL DICCIONARIO A LA LISTA DE RELACIONES CORRESPONDIENTES
+                    UserMemberOfRelationship.Add(pair);
+                }
+                
+                // QUITA LAS RELACIONES ACTUALES DE ESTA ENTIDAD PARA EVITAR PROBLEMAS DE CORRELACION
+                item.Users = null;
             }
         }
     }

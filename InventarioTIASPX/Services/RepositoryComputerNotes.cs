@@ -3,6 +3,7 @@ using InventarioTIASPX.Services.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 
@@ -34,7 +35,6 @@ namespace InventarioTIASPX.Services
                 return db.Notes.Where(x => x.NoteId == noteId).FirstOrDefault();
             }
         }
-
         public override List<Note> GetAll()
         {
             using (var db = new InventoryTIASPXContext())
@@ -42,7 +42,6 @@ namespace InventarioTIASPX.Services
                 return db.Notes.ToList();
             }
         }
-
         public override List<Note> GetAll(string parentId)
         {
             string parentObjectId = $"COMP_{parentId}";
@@ -58,6 +57,28 @@ namespace InventarioTIASPX.Services
             {
                 db.Entry(Get(noteId)).State = EntityState.Deleted;
                 db.SaveChanges();
+            }
+        }
+
+        public override bool HasNotesRelated(string parentId)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Notes.Any(x => x.ParentObjectId == $"COMP_{parentId}");
+            }
+        }
+
+        public override void BreakRelationship(string noteId, string parentId)
+        {
+            Note note = new RepositoryComputerNotes().Get(noteId);
+            note.ParentObjectId = null;
+
+            using (var db = new InventoryTIASPXContext())
+            {
+                db.Notes.AddOrUpdate(note);
+                db.SaveChanges();
+
+                db.Database.ExecuteSqlCommand($"UPDATE notes SET Computer_ComputerId = NULL WHERE noteId LIKE \"{note.NoteId}\"");
             }
         }
     }

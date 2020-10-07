@@ -7,6 +7,7 @@ using System.Web;
 
 namespace InventarioTIASPX.Models
 {
+    [Serializable()]
     public class UserMemberOf
     {
         [Key] public string UserMemberId { get; set; }
