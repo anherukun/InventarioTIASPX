@@ -1,0 +1,220 @@
+﻿
+@{
+    ViewBag.Title = "Nuevo Dispositivo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    List<string> deviceTypes = ViewData["deviceTypes"] as List<string>;
+    List<string> deviceBrands = ViewData["deviceBrands"] as List<string>;
+    List<string> deviceModels = ViewData["deviceModels"] as List<string>;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="@Url.Action("", "Devices")">Regresar</a></li>
+</ul>
+
+<div class="row">
+    <div class="row">
+        <!--Links-->
+        <div class="col-md-8">
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-body">
+                    @using (Html.BeginForm("Add", "Devices", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "return validateSubmition()" }))
+                    {
+                        <script type="text/javascript">
+                            function generateUUID() {
+                                var form = document.forms["form"];
+                                var guuid = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+                                    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)).toUpperCase();
+                                form["DeviceId"].value = guuid;
+                            }
+                            function toggleType() {
+                                var form = document.forms["form"];
+
+                                if (form["SelectedType"].value == -1) {
+                                    form["Type"].style.display = "";
+                                    form["Type"].value = "";
+                                } else {
+                                    form["Type"].style.display = "none";
+                                    form["Type"].value = form["SelectedType"].value;
+                                }
+                            }
+                            function toggleModel() {
+                                var form = document.forms["form"];
+
+                                if (form["SelectedModel"].value == -1) {
+                                    form["Model"].style.display = "";
+                                    form["Model"].value = "";
+                                } else {
+                                    form["Model"].style.display = "none";
+                                    form["Model"].value = form["SelectedModel"].value;
+                                }
+                            }
+                            function toggleBrand() {
+                                var form = document.forms["form"];
+
+                                if (form["SelectedBrand"].value == -1) {
+                                    form["Brand"].style.display = "";
+                                    form["Brand"].value = "";
+                                } else {
+                                    form["Brand"].style.display = "none";
+                                    form["Brand"].value = form["SelectedBrand"].value;
+                                }
+                            }
+                            function validateSubmition() {
+                                var form = document.forms["form"];
+                                var input1 = form["DeviceId"], input2 = form["Type"], input3 = form["Brand"];
+                                if (input1.value == "" || input2.value == "" || input3.value == "") {
+                                    showErrorMessage(8, "Debes completar los campos obligatorios... Para mas informacion revisa el glosario");
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            }
+                        </script>
+
+                        <!--DeviceId-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Numero de serie</label>
+                            <input class="form-control" type="text" name="DeviceId" placeholder="xxxx-xxxx-xxxxx" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" />
+                            <button type="button" class="btn btn-success" onclick="generateUUID()"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Auto-Generar</button>
+                        </div>
+                        <br />
+
+                        <!--Brand-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Marca del dispositivo</label>
+                            <select class="form-control" name="SelectedBrand" onchange="toggleBrand()" style="width:225px;">
+                                <option value="">SELECCIONAR MARCA...</option>
+                                <option value="-1">(AGREGAR NUEVO...)</option>
+                                @{
+                                    foreach (var item in deviceBrands)
+                                    {
+                                        if (item != null)
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                            <input class="form-control" type="text" name="Brand" id="Brand" onkeyup="this.value = this.value.toUpperCase();" style="display:none; margin-left:8px;" />
+                        </div>
+                        <br />
+
+                        <!--Type-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Tipo de dispositivo</label>
+                            <select class="form-control" name="SelectedType" onchange="toggleType()" style="width:225px;">
+                                <option value="">SELECCIONAR TIPO...</option>
+                                <option value="-1">(AGREGAR NUEVO...)</option>
+                                @{
+                                    foreach (var item in deviceTypes)
+                                    {
+                                        if (item != null)
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                            <input class="form-control" type="text" name="Type" id="Type" onkeyup="this.value = this.value.toUpperCase();" style="display:none; margin-left:8px;" />
+                        </div>
+                        <br />
+
+                        <!--Model-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Modelo del dispositivo</label>
+                            <select class="form-control" name="SelectedModel" onchange="toggleModel()" style="width:225px;">
+                                <option value="">SELECCIONAR MODELO...</option>
+                                <option value="-1">(AGREGAR NUEVO...)</option>
+                                @{
+                                    foreach (var item in deviceModels)
+                                    {
+                                        if (item != null)
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                            <input class="form-control" type="text" name="Model" id="Model" onkeyup="this.value = this.value.toUpperCase();" style="display:none; margin-left:8px;" />
+                        </div>
+                        <br />
+
+                        <!--Inventory-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Numero de inventario</label>
+                            <input class="form-control" type="text" name="Inventory" placeholder="xxxx-xxxx-xxxxx" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" />
+                        </div>
+                        <br />
+
+                        <div class="form-group" style="margin-top: 16px;">
+                            <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Guardar</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!--SIDE PANEL-->
+        <div class="col-md-4">
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <a href="#glosary" data-toggle="collapse">
+                    <div class="panel-heading" style="padding:16px;">
+                        <h3 style="margin-top:0px; margin-bottom:0px;"><span class="glyphicon glyphicon-question-sign"></span> Glosario <span class="caret"></span></h3>
+                    </div>
+                </a>
+                <div class="panel-body collapse" id="glosary">
+                    <ul>
+                        <li>
+                            <label>Numero de serie</label>
+                            <p>...</p>
+                        </li>
+
+                        <li>
+                            <label>Tipo de dispositivo</label>
+                            <p>...</p>
+                        </li>
+
+                        <li>
+                            <label>Marca del dispositivo</label>
+                            <p>...</p>
+                        </li>
+
+                        <li>
+                            <label>Modelo del dispositivo</label>
+                            <p>...</p>
+                        </li>
+
+                        <li>
+                            <label>Numero de inventario</label>
+                            <p>...</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div>
+                <!--SNACK DE ALERTAS-->
+                <div class="alert alert-danger" id="error-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    Debes completar correctamente el formulario
+                </div>
+                <div class="alert alert-success" id="success-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                    Los cambios se han guardado correctamente
+                </div>
+
+                @if (ViewData["message"] != null)
+                {
+                    <script type="text/javascript">
+                        retriveMessage();
+                    </script>
+                }
+            </div>
+        </div>
+    </div>
+</div>

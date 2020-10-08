@@ -1,0 +1,352 @@
+﻿
+@{
+    ViewBag.Title = "Nuevo equipo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    List<InventarioTIASPX.Models.Device> processors = ViewData["processors"] as List<InventarioTIASPX.Models.Device>;
+    List<InventarioTIASPX.Models.Device> accesories = ViewData["accesories"] as List<InventarioTIASPX.Models.Device>;
+    List<InventarioTIASPX.Models.User> users = ViewData["users"] as List<InventarioTIASPX.Models.User>;
+    List<string> departments = ViewData["departments"] as List<string>;
+}
+
+<script type="text/javascript">
+    var processors = @Html.Raw(Json.Encode(processors));
+    var accesories = @Html.Raw(Json.Encode(accesories));
+    var selectedAccesories = new Array();
+</script>
+
+<h2>@ViewBag.Title</h2>
+
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="@Url.Action("", "Computers")">Regresar</a></li>
+</ul>
+
+<div class="row" style="margin-top: 0px">
+    <div class="row">
+        <!--Links-->
+        <div class="col-md-8">
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-body">
+                    @using (Html.BeginForm("Add", "Computers", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "return validateSubmition()" }))
+                    {
+                        <script type="text/javascript">
+                            function generateUUID() {
+                                var form = document.forms["form"];
+                                var guuid = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+                                    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)).toUpperCase();
+                                form["DeviceId"].value = guuid;
+                            }
+                            function toggleComputer() {
+                                var form = document.forms["form"];
+
+                                if (form["ComputerId"].value == -1 || form["ComputerId"].value == "") {
+                                    document.getElementById("computerBrand").innerHTML = "...";
+                                    document.getElementById("computerModel").innerHTML = "...";
+                                    document.getElementById("computerType").innerHTML = "...";
+                                } else {
+                                    var selectedComputer = processors.find(x => x.DeviceId === form["ComputerId"].value);
+
+                                    document.getElementById("computerBrand").innerHTML = selectedComputer.Brand;
+                                    document.getElementById("computerModel").innerHTML = selectedComputer.Model;
+                                    document.getElementById("computerType").innerHTML = selectedComputer.Type;
+                                }
+                            }
+                            function toggleDepartment() {
+                                var form = document.forms["form"];
+
+                                if (form["SelectedDepartment"].value == -1) {
+                                    form["Department"].value = "";
+                                    form["Department"].style.display = "";
+                                } else {
+                                    form["Department"].value = form["SelectedDepartment"].value;
+                                    form["Department"].style.display = "none";
+                                }
+                            }
+                            function addAccesory(deviceId) {
+                                var form = document.forms["form"];
+
+                                if (deviceId != "") {
+                                    if (!selectedAccesories.find(x => x.DeviceId === deviceId)) {
+                                        // SE AGREGA UN ELEMENTO EN EL ARREGLO
+                                        selectedAccesories.push(accesories.find(x => x.DeviceId === deviceId));
+                                        // SE VUELVE A ESCRIBIR EL JSONOBJECT
+                                        form["jsonDevices"].value = JSON.stringify(selectedAccesories);
+                                    }
+
+                                    // SE MUESTRA EL ACCESORIO EN LA TABLA
+                                    document.getElementById("row-" + deviceId).style.display = "";
+                                    // SE OCULTA EL ACCESORIO DEL SELECTOR
+                                    document.getElementById("accoption-" + deviceId).hidden = true;
+                                    // SE RESETEA EL VALOR INICIAL DEL SELECOR
+                                    form["selectedDevice"].selectedIndex = "";
+                                }
+                            }
+                            function removeAccesory(deviceId) {
+                                var form = document.forms["form"];
+
+                                if (deviceId != null) {
+                                    if (selectedAccesories.find(x => x.DeviceId === deviceId)) {
+                                        // SE QUITA EL ELEMENTO DEL ARREGLO
+                                        selectedAccesories.splice(selectedAccesories.indexOf(selectedAccesories.find(x => x.DeviceId === deviceId)), 1);
+                                        // SE OCULTA EL ACCESORIO DE LA TABLA
+                                        document.getElementById("row-" + deviceId).style.display = "none";
+                                        // SE MUESTRA EL ACCESORIO EN EL SELECTOR
+                                        document.getElementById("accoption-" + deviceId).hidden = false;
+
+                                        // SE VUELVE A ESCRIBIR EL JSONOBJECT
+                                        form["jsonDevices"].value = JSON.stringify(selectedAccesories);
+                                    }
+                                }
+                            }
+                            function validateSubmition() {
+                                var form = document.forms["form"];
+                                var input1 = form["ComputerId"], input2 = form["Hostname"], input3 = form["Department"], input4 = form["Location"], input5 = form["Architecture"];
+                                if (input1.value == "" || input2.value == "" || input3.value == "" || input4.value == "" || input5.value == "") {
+                                    showErrorMessage(8, "Debes completar los campos obligatorios... Para mas informacion revisa el glosario");
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            }
+                        </script>
+
+                        <!--ComputerId-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Serie del procesador</label>
+
+                            <!--
+                            <input class="form-control" type="text" list="computerlist" name="ComputerId"/>
+                            <datalist id="computerlist">
+                                @{
+                                    //foreach (var item in processors)
+                                    //{
+                                    //    <option value="@item.DeviceId">@item.DeviceId</option>
+                                    //}
+                                }
+                            </datalist>
+                                -->
+
+                            <select class="form-control" name="ComputerId" onchange="toggleComputer()" style="width:225px;">
+                                <option value="">SELECCIONA DISPOSITIVO...</option>
+                                @{
+                                    foreach (var item in processors)
+                                    {
+                                        <option value="@item.DeviceId">@item.DeviceId</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Fabricante: </label>
+                                <p id="computerBrand">...</p>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Modelo: </label>
+                                <p id="computerModel">...</p>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Tipo: </label>
+                                <p id="computerType">...</p>
+                            </div>
+                        </div>
+                        <br />
+
+                        <!--Hostname-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Nombre de equipo</label>
+                            <input class="form-control" type="text" name="Hostname" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" />
+                        </div>
+                        <br />
+
+                        <!--Department-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Departamento</label>
+                            <select class="form-control" name="SelectedDepartment" onchange="toggleDepartment()" style="width:225px;">
+                                <option value="">SELECCIONAR DEPARTAMENTO...</option>
+                                <option value="-1">(AGREGAR NUEVO...)</option>
+                                @{
+                                    foreach (var item in departments)
+                                    {
+                                        if (item != null)
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                            <input class="form-control" type="text" name="Department" onkeyup="this.value = this.value.toUpperCase();" style="width:225px; display:none;" />
+                        </div>
+                        <br />
+
+                        <!--Location-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Ubicacion fisica</label>
+                            <input class="form-control" type="text" name="Location" id="Type" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" />
+                        </div>
+                        <br />
+
+                        <!--Architecture-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Arquitectura del sistema</label>
+                            <select class="form-control" name="Architecture" onchange="" style="width:225px;">
+                                <option value="">SELECCIONAR ARQUITECTURA...</option>
+                                <option value="32">32 BITS</option>
+                                <option value="64">64 BITS</option>
+                            </select>
+                        </div>
+                        <br />
+
+                        <!--UserId-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Usuario</label>
+                            <select class="form-control" name="UserGUID" style="width:225px;">
+                                <option value="">SELECCIONAR USUARIO...</option>
+                                @{
+                                    foreach (var item in users)
+                                    {
+                                        <option value="@item.UserGUID">@item.UserId - @item.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <br />
+
+                        <!--Devices-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Accesorios</label>
+                            <select class="form-control" name="selectedDevice" style="width:225px;" onchange="addAccesory(this.value)">
+                                <option value="">SELECCIONAR ACCESORIO...</option>
+                                @{
+                                    foreach (var item in accesories)
+                                    {
+                                        if (!item.InUse)
+                                        {
+                                            <option value="@item.DeviceId" id="accoption-@item.DeviceId">@item.Type / @item.Brand / @item.Model / @item.DeviceId</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <br />
+
+                        <table class="table" id="devicetable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">
+                                        Dispositivo
+                                    </th>
+
+                                    <th scope="col">
+                                        Marca
+                                    </th>
+
+                                    <th scope="col">
+                                        Modelo
+                                    </th>
+
+                                    <th scope="col">
+                                        Serie
+                                    </th>
+
+                                    <th scope="col">
+                                        Acciones
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            @if (accesories.Count > 0)
+                            {
+                                <tbody>
+                                    @{
+                                        foreach (var item in accesories)
+                                        {
+                                            <tr id="row-@item.DeviceId" style="display:none;">
+                                                <td scope="row">@item.Type</td>
+                                                <td>@item.Brand</td>
+                                                <td>@item.Model</td>
+                                                <td>@item.DeviceId</td>
+                                                <td style="text-align:right;">
+                                                    <button type="button" class="btn btn-danger" onclick="removeAccesory('@item.DeviceId')">Quitar</button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            }
+                        </table>
+                        <input class="form-control" type="text" name="jsonDevices" readonly style="display:none;" />
+                        <br />
+
+                        <div class="form-group" style="margin-top: 16px;">
+                            <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Guardar</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!--SIDE PANEL-->
+        <div class="col-md-4">
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <a href="#glosary" data-toggle="collapse">
+                    <div class="panel-heading" style="padding:16px;">
+                        <h3 style="margin-top:0px; margin-bottom:0px;"><span class="glyphicon glyphicon-question-sign"></span> Glosario <span class="caret"></span></h3>
+                    </div>
+                </a>
+                <div class="panel-body collapse" id="glosary">
+                    <ul>
+                        <li>
+                            <label>Serie del procesador</label>
+                            <p>...</p>
+                        </li>
+
+                        <li>
+                            <label>Departamento</label>
+                            <p>...</p>
+                        </li>
+
+                        <li>
+                            <label>Ubicacion fisica</label>
+                            <p>...</p>
+                        </li>
+
+                        <li>
+                            <label>Arquitectura del sistema</label>
+                            <p>...</p>
+                        </li>
+
+                        <li>
+                            <label>Usuario</label>
+                            <p>...</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div>
+                <!--SNACK DE ALERTAS-->
+                <div class="alert alert-danger" id="error-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    Debes completar correctamente el formulario
+                </div>
+                <div class="alert alert-success" id="success-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                    Los cambios se han guardado correctamente
+                </div>
+
+                @if (ViewData["message"] != null)
+                {
+                    <script type="text/javascript">
+                        retriveMessage();
+                    </script>
+                }
+            </div>
+        </div>
+    </div>
+</div>

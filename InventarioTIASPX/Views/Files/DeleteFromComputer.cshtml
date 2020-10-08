@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Eliminar archivo";
+}
+@{ 
+    InventarioTIASPX.Models.Computer computer = ViewData["computer"] as InventarioTIASPX.Models.Computer;
+    InventarioTIASPX.Models.FileObject file = ViewData["file"] as InventarioTIASPX.Models.FileObject;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="panel-body">
+    <div class="col-md-8 col-lg-offset-2">
+        <div class="row">
+            <p>
+                Estas apunto de eliminar <b>"@file.Name"</b>. No podras revertir el esta accion.<br />
+            </p>
+            <p>
+                PARA CONFIRMAR LA SOLICITUD ESCRIBE LO SIGUENTE EN EL CAMPO DE CONFIRMACION:<br /><b>@file.FileId</b>
+            </p>
+        </div>
+
+        <div class="row">
+            @using (Html.BeginForm("Delete", "Files", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "return validateSubmition()" }))
+            {
+                <script type="text/javascript">
+            function validateSubmition() {
+                var file = @Html.Raw(Json.Encode(file));
+                var form = document.forms["form"];
+                var input1 = form["fileId"];
+
+                if (input1.value == device.FileId) {
+                    return true;
+                } else {
+                    showErrorMessage(5, "El valor es incorrecto")
+                    return false;
+                }
+            }
+                </script>
+
+                <!--FileId-->
+                <div class="form-group">
+                    <label>Confirmacion</label>
+                    <input class="form-control" type="text" name="fileId" />
+                </div>
+
+                <!--Redirect-->
+
+                <div class="form-group" style="display:none;">
+                    <label>Redirect</label>
+                    <input class="form-control" type="text" name="redirect" value="@Url.Action("Computer", "Computers", new { computerId = computer.ComputerId })" readonly />
+                </div>
+
+                <div class="form-group" style="margin-left:16px;">
+                    <a class="btn btn-default" href="@Url.Action("Computer", "Computers", new { computerId = computer.ComputerId})">Cancelar</a>
+                    <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> ELIMINAR</button>
+                </div>
+
+                <div class="form-group" style="margin-left:16px;">
+                    <div>
+                        <!--SNACK DE ALERTAS-->
+                        <div class="alert alert-danger" id="error-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            Debes completar correctamente el formulario
+                        </div>
+                        <div class="alert alert-success" id="success-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                            Los cambios se han guardado correctamente
+                        </div>
+
+                        @if (ViewData["message"] != null)
+                        {
+                            <script type="text/javascript">
+                                retriveMessage();
+                            </script>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    
+
+    
+</div>
