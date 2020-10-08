@@ -11,6 +11,22 @@ namespace InventarioTIASPX.Services
 {
     public class RepositoryComputerNotes : RepositoryNotes
     {
+        // NO IMPLEMENTADO EN ESTA CLASE
+        public override void AddRange(List<Note> notes)
+        {
+            throw new NotImplementedException();
+        }
+        // NO IMPLEMENTADO EN ESTA CLASE
+        public override void BreakRelationship(string noteId)
+        {
+            throw new NotImplementedException();
+        }
+        // NO IMPLEMENTADO EN ESTA CLASE
+        public override List<Note> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Add(Note note)
         {
             string computerId = note.ParentObjectId;
@@ -23,23 +39,19 @@ namespace InventarioTIASPX.Services
                 db.Database.ExecuteSqlCommand($"UPDATE notes SET Computer_ComputerId = \"{computerId}\" WHERE noteId LIKE \"{note.NoteId}\"");
             }
         }
-        public override void AddRange(List<Note> notes)
+        public override void Delete(string noteId)
         {
-            throw new NotImplementedException();
+            using (var db = new InventoryTIASPXContext())
+            {
+                db.Entry(Get(noteId)).State = EntityState.Deleted;
+                db.SaveChanges();
+            }
         }
-
         public override Note Get(string noteId)
         {
             using (var db = new InventoryTIASPXContext())
             {
                 return db.Notes.Where(x => x.NoteId == noteId).FirstOrDefault();
-            }
-        }
-        public override List<Note> GetAll()
-        {
-            using (var db = new InventoryTIASPXContext())
-            {
-                return db.Notes.ToList();
             }
         }
         public override List<Note> GetAll(string parentId)
@@ -50,35 +62,12 @@ namespace InventarioTIASPX.Services
                 return db.Notes.Where(x => x.ParentObjectId == parentObjectId).OrderByDescending(x => x.Ticks).ToList();
             }
         }
-
-        public override void Delete(string noteId)
-        {
-            using (var db = new InventoryTIASPXContext())
-            {
-                db.Entry(Get(noteId)).State = EntityState.Deleted;
-                db.SaveChanges();
-            }
-        }
-
         public override bool HasNotesRelated(string parentId)
         {
             using (var db = new InventoryTIASPXContext())
             {
-                return db.Notes.Any(x => x.ParentObjectId == $"COMP_{parentId}");
-            }
-        }
-
-        public override void BreakRelationship(string noteId, string parentId)
-        {
-            Note note = new RepositoryComputerNotes().Get(noteId);
-            note.ParentObjectId = null;
-
-            using (var db = new InventoryTIASPXContext())
-            {
-                db.Notes.AddOrUpdate(note);
-                db.SaveChanges();
-
-                db.Database.ExecuteSqlCommand($"UPDATE notes SET Computer_ComputerId = NULL WHERE noteId LIKE \"{note.NoteId}\"");
+                string parentFixed = $"COMP_{parentId}";
+                return db.Notes.Any(x => x.ParentObjectId == parentFixed);
             }
         }
     }

@@ -66,6 +66,18 @@ namespace InventarioTIASPX.Services
             //     return db.UserMemberOfs.Include(x => x.Users).Where(x => x.Users.Contains(u)).OrderBy(x => x.Description).ToList();
             // }
         }
+        /// <summary>
+        /// Elimina los registros de relacion que coincidan con el GUID del usuario
+        /// </summary>
+        /// <param name="userGUID">Parametro de identificacion de la entidad externa</param>
+        public static void RemoveAllUserReference(string userGUID)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                // ELIMINA LOS REGISTROS QUE COINCIDAN CON USERGUID
+                db.Database.ExecuteSqlCommand($"DELETE FROM {db.Database.Connection.Database}.usermemberofusers WHERE User_UserGUID = \"{userGUID}\"");
+            }
+        }
 
         public static void Delete(string userMemberId)
         {

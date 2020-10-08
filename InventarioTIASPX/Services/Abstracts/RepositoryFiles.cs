@@ -37,8 +37,18 @@ namespace InventarioTIASPX.Services.Abstracts
         /// </summary>
         /// <returns></returns>
         public abstract List<FileObject> GetAllWithData();
-        //public abstract void AssignParent(string fileId, string parentId);
-        //public abstract void UnassignParent(string fileId);
+        /// <summary>
+        /// Determina si existen entidades relacionadas con alguna otra entidad externa
+        /// </summary>
+        /// <param name="parentId">Identificador de entidad externa</param>
+        /// <returns></returns>
+        public abstract bool HasFilesRelated(string parentId);
+        /// <summary>
+        /// Rompre la relacion entre la entidad y la entidad externa
+        /// </summary>
+        /// <param name="noteId">Propiedad identificadora del objeto <see cref="Note"/></param>
+        /// <param name="parentId">Propiedad identificadora del objeto externo</param>
+        public abstract void BreakRelationship(string noteId);
         /// <summary>
         /// Elimina un <see cref="FileObject"/> del registro
         /// </summary>

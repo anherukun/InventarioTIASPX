@@ -3,6 +3,7 @@ using InventarioTIASPX.Services.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 
@@ -10,11 +11,36 @@ namespace InventarioTIASPX.Services
 {
     public class RepositoryGenericFiles : RepositoryFiles
     {
+        // NO IMPLEMENTADO EN ESTA CLASE
         public override void Add(FileObject fileObject)
         {
             throw new NotImplementedException();
         }
+        // NO IMPLEMENTADO EN ESTA CLASE
+        public override List<FileObject> GetAll(string parentId)
+        {
+            throw new NotImplementedException();
+        }
+        // NO IMPLEMENTADO EN ESTA CLASE
+        public override bool HasFilesRelated(string parentId)
+        {
+            throw new NotImplementedException();
+        }
 
+        public override void BreakRelationship(string fileId)
+        {
+            FileObject file = new RepositoryGenericFiles().Get(fileId, true);
+            file.ParentObjectId = null;
+
+            using (var db = new InventoryTIASPXContext())
+            {
+                db.Files.AddOrUpdate(file);
+                db.SaveChanges();
+
+                db.Database.ExecuteSqlCommand($"UPDATE fileobjects SET Computer_ComputerId = NULL WHERE fileId LIKE \"{file.FileId}\"");
+                db.Database.ExecuteSqlCommand($"UPDATE fileobjects SET User_UserGUID = NULL WHERE fileId LIKE \"{file.FileId}\"");
+            }
+        }
         public override void Delete(string fileId)
         {
             using (var db = new InventoryTIASPXContext())
@@ -23,7 +49,6 @@ namespace InventarioTIASPX.Services
                 db.SaveChanges();
             }
         }
-
         public override FileObject Get(string fileId, bool includeData)
         {
             using (var db = new InventoryTIASPXContext())
@@ -54,7 +79,6 @@ namespace InventarioTIASPX.Services
                 }
             }
         }
-
         public override List<FileObject> GetAll()
         {
             using (var db = new InventoryTIASPXContext())
@@ -86,12 +110,6 @@ namespace InventarioTIASPX.Services
                 return list;
             }
         }
-
-        public override List<FileObject> GetAll(string parentId)
-        {
-            throw new NotImplementedException();
-        }
-
         public override List<FileObject> GetAllWithData()
         {
             using (var db = new InventoryTIASPXContext())

@@ -135,12 +135,6 @@ namespace InventarioTIASPX.Controllers
         [HttpPost]
         public ActionResult Delete(long userId)
         {
-            User u = RepositoryUser.Get(userId);
-
-            foreach (var item in u.MemberOfs)
-            {
-                RepositoryUserMemberOf.UnassignUserToMemberOf(item.UserMemberId, u.UserGUID);
-            }
             RepositoryUser.Delete(userId);
 
             return Redirect(Url.Action("", "Users"));

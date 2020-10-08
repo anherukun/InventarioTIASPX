@@ -46,7 +46,7 @@ namespace InventarioTIASPX.Services.Abstracts
         /// </summary>
         /// <param name="noteId">Propiedad identificadora del objeto <see cref="Note"/></param>
         /// <param name="parentId">Propiedad identificadora del objeto externo</param>
-        public abstract void BreakRelationship(string noteId, string parentId);
+        public abstract void BreakRelationship(string noteId);
         /// <summary>
         /// Elimina un <see cref="Note"/> del registro
         /// </summary>

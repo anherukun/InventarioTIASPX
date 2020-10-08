@@ -71,8 +71,27 @@ namespace InventarioTIASPX.Services
 
         public static void Delete(long userId)
         {
-            // TO-DO: METODO PARA DESASIGNAR LOS FILEOBJECTS DE LA ENTIDAD
-            // TO-DO: METODO PARA DESASIGNAR LOS NOTES DE LA ENTIDAD
+            // SE MANTIENE UNA REFERENCIA DEL OBJETO EN MEMORIA
+            User u = RepositoryUser.Get(userId);
+            // SE QUITAN TODAS LAS RELACIONES CON LAS ENTIDADES DE COMPUTADORA
+            RepositoryComputer.RemoveUserFromAll(u.UserGUID);
+            // SE QUITAN TODAS LAS RELACIONES CON MEMBEROFS
+            RepositoryUserMemberOf.RemoveAllUserReference(u.UserGUID);
+            // SI EXISTEN FILEOBJECTS RELACIONADOS
+            if (new RepositoryUserFiles().HasFilesRelated(u.UserGUID))
+            {
+                foreach (var item in new RepositoryUserFiles().GetAll(u.UserGUID))
+                    // CADA UNO SERA DESVINCULADO
+                    new RepositoryGenericFiles().BreakRelationship(item.FileId);
+            }
+            // SI EXISTEN NOTES RELACIONADOS
+            if (new RepositoryUserNotes().HasNotesRelated(u.UserGUID))
+            {
+                foreach (var item in new RepositoryUserNotes().GetAll(u.UserGUID))
+                    // CADA UNO SERA ELIMINADO
+                    new RepositoryGenericNotes().Delete(item.NoteId);                
+            }
+
             using (var db = new InventoryTIASPXContext())
             {
                 db.Entry(Get(userId)).State = EntityState.Deleted;

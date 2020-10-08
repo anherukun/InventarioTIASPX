@@ -88,19 +88,53 @@ namespace InventarioTIASPX.Services
             }
         }
 
+        public static void RemoveUserFromAll(string userGUID)
+        {
+            List<Computer> computers = null;
+            using (var db = new InventoryTIASPXContext())
+            {
+                computers = db.Computers.Where(x => x.UserGUID == userGUID).ToList();
+            }
+
+            if (computers != null)
+            {
+                foreach (var item in computers)
+                {
+                    item.UserGUID = null;
+                    item.User = null;
+                    
+                    using (var db = new InventoryTIASPXContext())
+                    {
+                        db.Computers.AddOrUpdate(item);
+                        db.SaveChanges();
+                    }
+                }
+            }
+        }
+
         public static void Delete(string computerId)
         {
+            // QUITA LA RELACION DE LA COMPUTADORA Y LOS ACCESORIOS
             Computer computer = RepositoryComputer.Get(computerId);
             if (computer.Devices != null)
                 foreach (var item in computer.Devices)
                     RepositoryDevice.UnassignComputer(item.DeviceId);
-            if (new RepositoryComputerFiles().GetAll(computerId) != null)
+
+            // COMPRUEBA QUE EXISTAN FILEOBJECTS RELACIONADOS CON LA ENTIDAD COMPUTADORA
+            if (new RepositoryComputerFiles().HasFilesRelated(computerId))
             {
-                // TO-DO: METODO PARA DEASIGNAR LOS FILEOBJECTS DE LA ENTIDAD COMPUTER
+                // CADA FILEOBJECT QUE EXISTA
+                foreach (var item in new RepositoryComputerFiles().GetAll(computerId))
+                    // ROMPERA LA RELACION DE ESTA ENTIDAD CON LA ENTIDAD EXTERNA
+                    new RepositoryGenericFiles().BreakRelationship(item.FileId);
             }
-            if (new RepositoryComputerNotes().GetAll(computerId) != null)
+            // COMPRUEBA QUE EXISTAN NOTAS RELACIONADAS A LA ENTIDAD COMPUTADORA
+            if (new RepositoryComputerNotes().HasNotesRelated(computerId))
             {
-                // TO-DO: METODO PARA DEASIGNAR LAS NOTAS DE LA ENTIDAD COMPUTER
+                // CADA NOTA QUE EXISTA
+                foreach (var item in new RepositoryComputerNotes().GetAll(computerId))
+                    // SERA ELIMINADA, PARA NO DEJAR UN LOG QUE NUNCA SE VA A OCUPAR
+                    new RepositoryGenericNotes().Delete(item.NoteId);
             }
 
             using (var db = new InventoryTIASPXContext())
