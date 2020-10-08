@@ -20,6 +20,7 @@ namespace InventarioTIASPX.Services
             // Inserta las entidades Primarias y Secundarias
             RepositoryDevice.AddRange(backup.Devices);
             RepositoryUser.AddRange(backup.Users);
+            RepositoryUserMemberOf.AddRange(backup.MemberOfs);
             // RepositoryComputer.AddRange(backup.Computers);
 
             // Inserta una a una todas las entidades de Computers
@@ -60,6 +61,10 @@ namespace InventarioTIASPX.Services
                     new RepositoryUserFiles().Add(item);
                 }
             }
+
+            // Relaciona los usuarios con sus memberOfs
+            foreach (var item in backup.UserMemberOfRelationship)
+                RepositoryUserMemberOf.AssignUserToMemberOf(item.FirstOrDefault().Key, item.FirstOrDefault().Value);
         }
 
         /// <summary>
@@ -67,6 +72,10 @@ namespace InventarioTIASPX.Services
         /// </summary>
         private static void ClearCurrentContext()
         {
+            // Elimina las entida de UserMemberOf
+            foreach (var item in RepositoryUserMemberOf.GetAll(false))
+                RepositoryUserMemberOf.Delete(item.UserMemberId);
+
             // Elimina las entidades de Fileobject
             foreach (var item in new RepositoryGenericFiles().GetAll())
                 new RepositoryGenericFiles().Delete(item.FileId);

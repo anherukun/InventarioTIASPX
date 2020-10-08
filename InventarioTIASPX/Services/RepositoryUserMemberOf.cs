@@ -18,6 +18,14 @@ namespace InventarioTIASPX.Services
                 db.SaveChanges();
             }
         }
+        public static void AddRange(List<UserMemberOf> memberOfs)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                db.UserMemberOfs.AddRange(memberOfs);
+                db.SaveChanges();
+            }
+        }
 
         public static void AssignUserToMemberOf(string usermemberId, string userGUID)
         {
@@ -78,9 +86,26 @@ namespace InventarioTIASPX.Services
                 db.Database.ExecuteSqlCommand($"DELETE FROM {db.Database.Connection.Database}.usermemberofusers WHERE User_UserGUID = \"{userGUID}\"");
             }
         }
-
+        /// <summary>
+        /// Elimina los registros de relacion que coincidan con el ID de la entidad
+        /// </summary>
+        /// <param name="userMemberId">Parametro de identificaicon de la entidad</param>
+        public static void RemoveAllMemberOfReference(string userMemberId)
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                // ELIMINA LOS REGISTROS QUE COINCIDAN CON USERMEMBERID
+                db.Database.ExecuteSqlCommand($"DELETE FROM {db.Database.Connection.Database}.usermemberofusers WHERE UserMemberOf_UserMemberId = \"{userMemberId}\"");
+            }
+        }
+        /// <summary>
+        /// Elimina la entidad y quita todas las relaciones con la misma
+        /// </summary>
+        /// <param name="userMemberId">Parametro de identificacion de la entidad</param>
         public static void Delete(string userMemberId)
         {
+            RemoveAllMemberOfReference(userMemberId);
+
             using (var db = new InventoryTIASPXContext())
             {
                 db.Entry(Get(userMemberId)).State = EntityState.Deleted;
