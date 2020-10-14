@@ -1,0 +1,133 @@
+﻿
+@{
+    ViewBag.Title = "Coleccion de impresoras";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ 
+    List<InventarioTIASPX.Models.Printer> printers = ViewData["printers"] as List<InventarioTIASPX.Models.Printer>;
+    List<string> departments = ViewData["departments"] as List<string>;
+    List<string> brands = ViewData["brands"] as List<string>;
+    List<string> models = ViewData["models"] as List<string>;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="@Url.Action("", "")">Ir al menu</a></li>
+    <li role="presentation"><a href="@Url.Action("NewPrinter", "Printers")">Agregar impresora</a></li>
+</ul>
+
+<table class="table" id="devicetable">
+    <thead>
+        <tr>
+            <th scope="col">
+                Departamento
+                <br />
+                <select class="form-control" id="filter-1">
+                    <option value="" selected>Filtrar...</option>
+                    @foreach (var item in departments)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </select>
+            </th>
+
+            <th scope="col">
+                Serie
+                <br />
+                <input class="form-control" placeholder="Filtrar..." type="text" list="printerIdlist" id="filter-2" onkeyup="this.value = this.value.toUpperCase();" />
+                <datalist id="printerIdlist">
+                    <option value="" selected>Filtrar...</option>
+                    @foreach (var item in printers)
+                    {
+                        <option value="@item.PrinterId">@item.PrinterId</option>
+                    }
+                </datalist>
+            </th>
+
+            <th scope="col">
+                Modelo
+                <br />
+                <input class="form-control" type="text" id="filter-3" placeholder="Filtrar..."/>
+            </th>
+
+
+            <th scope="col" style="width:275px;">
+                Acciones
+                <br />
+                <button class="btn btn-default hidden-print" onclick="ClearFilters()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Quitar filtros</button>
+                <button class="btn btn-default hidden-print" onclick="ApplyFilters()"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Aplicar filtros</button>
+            </th>
+
+        </tr>
+    </thead>
+    @if (printers.Count > 0)
+    {
+        <tbody>
+            @{
+                foreach (var item in printers)
+                {
+                    <tr>
+                        <td scope="row">@item.Department</td>
+                        <td>@item.PrinterId</td>
+                        <td>@item.Brand - @item.Model</td>
+                        <td style="text-align:right;">
+                            @Html.ActionLink("Ver mas...", "Printer", "Printers", new { printerId = item.PrinterId }, new { @class = "btn btn-default btn-sm hidden-print" })
+                            @Html.ActionLink("Modificar", "EditPrinter", "Printers", new { printerId = item.PrinterId }, new { @class = "btn btn-default btn-sm hidden-print" })
+                            @Html.ActionLink("Eliminar", "", "Printers", new { printerId = item.PrinterId }, new { @class = "btn btn-danger btn-sm hidden-print" })
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    }
+</table>
+
+<script type="text/javascript">
+    function ClearFilters() {
+        document.getElementById("filter-1").value = "";
+        document.getElementById("filter-2").value = "";
+        document.getElementById("filter-3").value = "";
+        RemoveFilters()
+    }
+    function RemoveFilters() {
+        FilterBy("", 0);
+        FilterBy("", 1);
+        FilterBy("", 2);
+    }
+    function ApplyFilters() {
+        RemoveFilters();
+        // col-0
+        if (document.getElementById("filter-1").value.trim() != "") {
+            FilterBy(document.getElementById("filter-1").value, 0);
+        }
+        // col-1
+        if (document.getElementById("filter-2").value.trim() != "") {
+            FilterBy(document.getElementById("filter-2").value, 1);
+        }
+        // col-2
+        if (document.getElementById("filter-3").value.trim() != "") {
+            FilterBy(document.getElementById("filter-3").value, 2);
+        }
+    }
+    function FilterBy(str, col) {
+        var table = document.getElementById("devicetable");
+        var rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+        for (var i = 0; i < rows.length; i++) {
+            var cell = rows[i].getElementsByTagName("td")[col];
+
+            if (str != "") {
+                if (rows[i].style.display == "") {
+                    if (cell.textContent.includes(str.trim().toUpperCase())) {
+                        rows[i].style.display = "";
+                    } else {
+                        rows[i].style.display = "none";
+                    }
+                }
+            } else {
+                rows[i].style.display = "";
+            }
+        }
+    }
+</script>

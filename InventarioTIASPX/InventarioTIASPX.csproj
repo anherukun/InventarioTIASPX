@@ -19,10 +19,8 @@
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort>44378</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -147,6 +145,7 @@
     <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NotesController.cs" />
+    <Compile Include="Controllers\PrintersController.cs" />
     <Compile Include="Controllers\ToolsController.cs" />
     <Compile Include="Controllers\UserMemberOfController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -237,6 +236,8 @@
     <Content Include="Views\Tools\Backup.cshtml" />
     <Content Include="Views\Users\EditUser.cshtml" />
     <Content Include="Views\Users\DeleteUser.cshtml" />
+    <Content Include="Views\Printers\Index.cshtml" />
+    <Content Include="Views\Printers\NewPrinter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -57,6 +57,20 @@ namespace InventarioTIASPX.Services
                 return db.Printers.Select(x => x.Department).OrderBy(x => x).ToList();
             }
         }
+        public static List<string> GetAllModels()
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Printers.Select(x => x.Model).OrderBy(x => x).ToList();
+            }
+        }
+        public static List<string> GetAllBrands()
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Printers.Select(x => x.Brand).OrderBy(x => x).ToList();
+            }
+        }
 
         public static void RemoveUserFromAll(string userGUID)
         {
