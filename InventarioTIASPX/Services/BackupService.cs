@@ -21,7 +21,7 @@ namespace InventarioTIASPX.Services
             RepositoryDevice.AddRange(backup.Devices);
             RepositoryUser.AddRange(backup.Users);
             RepositoryUserMemberOf.AddRange(backup.MemberOfs);
-            // RepositoryComputer.AddRange(backup.Computers);
+            RepositoryPrinter.AddRange(backup.Printers);
 
             // Inserta una a una todas las entidades de Computers
             foreach (var item in backup.Computers)
@@ -46,6 +46,12 @@ namespace InventarioTIASPX.Services
                     item.ParentObjectId = item.ParentObjectId.Replace("USR_", "");
                     new RepositoryUserNotes().Add(item);
                 }
+                if (item.ParentObjectId.Contains("PRT_"))
+                {
+                    // TO-DO: IMPLEMENTAR REPOSITORIO DE NOTAS PARA IMPRESORAS
+                    item.ParentObjectId = item.ParentObjectId.Replace("USR_", "");
+                    //new RepositoryPrinterNotes().Add(item);
+                }
             }
 
             foreach (var item in backup.Files)
@@ -59,6 +65,12 @@ namespace InventarioTIASPX.Services
                 {
                     item.ParentObjectId = item.ParentObjectId.Replace("USR_", "");
                     new RepositoryUserFiles().Add(item);
+                }
+                if (item.ParentObjectId.Contains("PRT_"))
+                {
+                    // TO-DO: IMPLEMENTAR REPOSITORIO DE ARCHVIOS PARA IMPRESORAS
+                    item.ParentObjectId = item.ParentObjectId.Replace("USR_", "");
+                    //new RepositoryPrinterFiles().Add(item);
                 }
             }
 

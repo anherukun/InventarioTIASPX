@@ -19,8 +19,10 @@
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort>44378</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -158,6 +160,7 @@
     <Compile Include="Models\FileObject.cs" />
     <Compile Include="Models\InventoryTIASPXContext.cs" />
     <Compile Include="Models\Note.cs" />
+    <Compile Include="Models\Printer.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserMemberOf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -170,6 +173,7 @@
     <Compile Include="Services\RepositoryDevice.cs" />
     <Compile Include="Services\RepositoryGenericFiles.cs" />
     <Compile Include="Services\RepositoryGenericNotes.cs" />
+    <Compile Include="Services\RepositoryPrinter.cs" />
     <Compile Include="Services\RepositoryUser.cs" />
     <Compile Include="Services\RepositoryUserFiles.cs" />
     <Compile Include="Services\RepositoryUserMemberOf.cs" />
