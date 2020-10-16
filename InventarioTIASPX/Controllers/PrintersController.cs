@@ -22,8 +22,33 @@ namespace InventarioTIASPX.Controllers
         }
 
         [HttpGet]
+        public ActionResult Printer(string printerId, string msgType, string msgString)
+        {
+            if (RepositoryPrinter.Exist(printerId))
+            {
+                if (msgType != null && msgString != null)
+                {
+                    msgString = Application.ApplicationManager.Base64Decode(msgString);
+                    ViewData["message"] = new { msgType, msgString };
+                }
+
+                ViewData["printer"] = RepositoryPrinter.Get(printerId);
+                
+                return View();
+            }
+
+            return Redirect(Url.Action("", "Printers"));
+        }
+
+        [HttpGet]
         public ActionResult NewPrinter(string msgType, string msgString)
         {
+            if (msgType != null && msgString != null)
+            {
+                msgString = Application.ApplicationManager.Base64Decode(msgString);
+                ViewData["message"] = new { msgType, msgString };
+            }
+
             ViewData["departments"] = RepositoryPrinter.GetAllDepartments();
             ViewData["brands"] = RepositoryPrinter.GetAllBrands();
             ViewData["models"] = RepositoryPrinter.GetAllModels();
@@ -31,6 +56,7 @@ namespace InventarioTIASPX.Controllers
             return View();
         }
 
+        [HttpGet]
         public ActionResult Add(Printer printer)
         {
             if (printer != null)

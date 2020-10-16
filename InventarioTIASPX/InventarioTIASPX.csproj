@@ -238,6 +238,7 @@
     <Content Include="Views\Users\DeleteUser.cshtml" />
     <Content Include="Views\Printers\Index.cshtml" />
     <Content Include="Views\Printers\NewPrinter.cshtml" />
+    <Content Include="Views\Printers\Printer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

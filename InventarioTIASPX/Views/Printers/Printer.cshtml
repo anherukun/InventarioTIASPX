@@ -1,0 +1,144 @@
+﻿
+@{
+    ViewBag.Title = "Impresora";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ 
+    InventarioTIASPX.Models.Printer printer = ViewData["printer"] as InventarioTIASPX.Models.Printer;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="@Url.Action("", "Computers")">Regresar</a></li>
+</ul>
+
+<div class="row" style="margin-top: 0px">
+    <div class="row">
+        <!--Links-->
+        <div class="col-md-8">
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-body">
+                    <!--DATOS DE LA IMPRESORA-->
+                    <h3 style="margin-top:0px;">Datos de la impresora</h3>
+                    <div class="row" style="margin-left:16px;">
+                        <div class="col-md-4">
+                            <label>Serie de la impresora</label>
+                            <p style="margin-left:8px;">@printer.PrinterId</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Modelo de la impresora</label>
+                            <p style="margin-left:8px;">@printer.Model</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Marca/Fabricante</label>
+                            <p style="margin-left:8px;">@printer.Brand</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Tipo de conexion</label>
+                            <p style="margin-left:8px;">@printer.ConnectionType</p>
+                        </div>
+
+                        @if (printer.ConnectionType == "RED")
+                        {
+                            <div class="col-md-4">
+                                <label>Hostname</label>
+                                <p style="margin-left:8px;">@printer.Hostname</p>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Direccion IP</label>
+                                <p style="margin-left:8px;">@InventarioTIASPX.Application.NetworkTools.ResolveIPAddress(printer.Hostname)</p>
+                            </div>
+                        }
+                    </div>
+
+                    <!--OTROS DATOS-->
+                    <h3 style="margin-top:0px;">Otros datos</h3>
+                    <div class="row" style="margin-left:16px;">
+                        <div class="col-md-4">
+                            <label>Departamento</label>
+                            <p style="margin-left:8px;">@printer.Department</p>
+                        </div>
+                    </div>
+
+                    <!--DATOS DEL USUARIO-->
+                    @if (printer.User != null)
+                    {
+                        <h3 style="margin-top:0px;">Usuario responsable</h3>
+                        <div class="row" style="margin-left:16px; margin-bottom:20px;">
+                            <div class="col-md-3">
+                                <label>Ficha</label>
+                                <p style="margin-left:8px;">@printer.User.EmployeId</p>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label>Titular de la cuenta</label>
+                                <p style="margin-left:8px;">@printer.User.Employe</p>
+                            </div>
+
+                            @if (printer.User.Email != null)
+                            {
+                                <div class="col-md-4">
+                                    <label>Correo electronico</label>
+                                    <p style="margin-left:8px;">@printer.User.Email</p>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    @Html.ActionLink("Editar", "EditPriter", "Printers", new { printerId = printer.PrinterId }, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+
+
+        </div>
+
+        <!--SIDE PANEL-->
+        <div class="col-md-4">
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <a href="#glosary" data-toggle="collapse">
+                    <div class="panel-heading" style="padding:16px;">
+                        <h3 style="margin-top:0px; margin-bottom:0px;"><span class="glyphicon glyphicon-question-sign"></span> Glosario <span class="caret"></span></h3>
+                    </div>
+                </a>
+                <div class="panel-body collapse" id="glosary">
+                    <ul>
+                        <li>
+                            <label>Datos de la impresora</label>
+                            <p>Muestra la informacion registrada del equipo</p>
+                        </li>
+
+                        <li>
+                            <label>Datos adjuntos</label>
+                            <p>Permite adjuntar documentos o archivos relacionados al equipo de computo y/o sus dependientes, tales como Responsivas, Manuales, Fotografias, Etc. <br />El tamaño por archivo debe ser estrictamente menor o igual a 2MB (2048KB)</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div>
+                <!--SNACK DE ALERTAS-->
+                <div class="alert alert-danger" id="error-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    Debes completar correctamente el formulario
+                </div>
+                <div class="alert alert-success" id="success-alert-snack" role="alert" style="margin-top: 16px; display:none;">
+                    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                    Los cambios se han guardado correctamente
+                </div>
+
+                @if (ViewData["message"] != null)
+                {
+                    <script type="text/javascript">
+                        retriveMessage();
+                    </script>
+                }
+            </div>
+        </div>
+    </div>
+</div>
