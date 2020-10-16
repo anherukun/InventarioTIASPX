@@ -37,6 +37,17 @@
                                     form["Brand"].style.display = "none";
                                 }
                             }
+                            function toggleModel() {
+                                var form = document.forms["form"];
+
+                                if (form["modelselect"].value == -1) {
+                                    form["Model"].value = "";
+                                    form["Model"].style.display = "";
+                                } else {
+                                    form["Model"].value = form["modelselect"].value;
+                                    form["Model"].style.display = "none";
+                                }
+                            }
                             function toggleDepartment() {
                                 var form = document.forms["form"];
 
@@ -64,6 +75,7 @@
                                     form["Hostname"].value = "";
                                 }
                             }
+
                             function validateSubmition() {
                                 var form = document.forms["form"];
                                 var input1 = form["PrinterId"], input3 = form["Department"], input4 = form["Location"], input5 = form["Architecture"];
@@ -99,7 +111,7 @@
                         <!--Model-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Modelo</label>
-                            <select class="form-control" name="modelselect" required style="width:225px;">
+                            <select class="form-control" name="modelselect" onchange="toggleModel()" required style="width:225px;">
                                 <option value="">SELECCIONAR MODELO...</option>
                                 <option value="-1">(AGREGAR NUEVO...)</option>
                                 @foreach (var item in models)
@@ -120,7 +132,7 @@
                             </select>
 
                             <!--Hostname-->
-                            <div id="hostnamegroup" style="margin-top:10px">
+                            <div id="hostnamegroup" style="margin-top:10px; display:none;">
                                 <label style="width:160px;">Nombre de equipo</label>
                                 <input class="form-control" type="text" name="Hostname" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" />
                             </div>
@@ -149,7 +161,7 @@
                         <!--UserGUID-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Usuario</label>
-                            <select class="form-control" name="UserGUID" required style="width:225px;">
+                            <select class="form-control" name="UserGUID" style="width:225px;">
                                 <option value="">SELECCIONAR USUARIO...</option>
                                 @{
                                     foreach (var item in users)
