@@ -16,6 +16,19 @@
     <li role="presentation"><a href="@Url.Action("NewComputer", "Computers")">Agregar computadora</a></li>
 </ul>
 
+<div class="row" style="text-align:right;">
+    <div class="col-md-10" style="text-align:right;">
+        <label>Total de elementos</label>
+        <p>@computers.Count Registro(s)</p>
+    </div>
+    <div class="col-md-2" style="text-align:right;">
+        <label>Elementos filtrados</label>
+        <p id="regcount">0 Registro(s)</p>
+    </div>
+</div>
+
+
+
 <table class="table" id="computersTable">
     <thead>
         <tr>
@@ -144,6 +157,7 @@
     function FilterBy(str, col) {
         var table = document.getElementById("computersTable");
         var rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+        var count = 0;
         for (var i = 0; i < rows.length; i++) {
             var cell = rows[i].getElementsByTagName("td")[col];
 
@@ -151,6 +165,7 @@
                 if (rows[i].style.display == "") {
                     if (cell.textContent.includes(str.trim().toUpperCase())) {
                         rows[i].style.display = "";
+                        count += 1;
                     } else {
                         rows[i].style.display = "none";
                     }
@@ -159,5 +174,7 @@
                 rows[i].style.display = "";
             }
         }
+
+        document.getElementById("regcount").innerHTML = count + " Registro(s)"
     }
 </script>
