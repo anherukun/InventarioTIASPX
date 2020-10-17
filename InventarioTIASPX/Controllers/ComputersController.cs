@@ -19,7 +19,7 @@ namespace InventarioTIASPX.Controllers
         {
             ViewData["computers"] = RepositoryComputer.GetAllComputers();
             ViewData["departments"] = RepositoryComputer.GetAllDepartments();
-
+            ViewData["locations"] = RepositoryComputer.GetAllLocations();
             return View();
         }
 
@@ -41,7 +41,7 @@ namespace InventarioTIASPX.Controllers
 
             return Redirect(Url.Action("", "Computers"));
         }
-
+        [HttpGet]
         public ActionResult NewComputer(string msgType, string msgString)
         {
             if (msgType != null && msgString != null)
@@ -54,10 +54,11 @@ namespace InventarioTIASPX.Controllers
             ViewData["departments"] = RepositoryComputer.GetAllDepartments();
             ViewData["users"] = RepositoryUser.GetAllUsers();
             ViewData["accesories"] = RepositoryDevice.GetAllAccesories(false);
+            ViewData["locations"] = RepositoryComputer.GetAllLocations();
 
             return View();
         }
-
+        [HttpGet]
         public ActionResult EditComputer(string computerId, string msgType, string msgString)
         {
             if (computerId != null)
@@ -85,6 +86,8 @@ namespace InventarioTIASPX.Controllers
                     ViewData["departments"] = RepositoryComputer.GetAllDepartments();
                     ViewData["users"] = RepositoryUser.GetAllUsers();
                     ViewData["accesories"] = RepositoryDevice.GetAllAccesories();
+                    ViewData["locations"] = RepositoryComputer.GetAllLocations();
+
 
                     return View();
                 }
@@ -157,7 +160,7 @@ namespace InventarioTIASPX.Controllers
                 return (Redirect(Url.Action("EditComupter", "Computers", new { computerId = computer.ComputerId, msgType = "error", msgString = Application.ApplicationManager.Base64Encode(ex.Message) })));
             }
         }
-
+        [HttpGet]
         public ActionResult Delete(string computerId)
         {
             RepositoryComputer.Delete(computerId);

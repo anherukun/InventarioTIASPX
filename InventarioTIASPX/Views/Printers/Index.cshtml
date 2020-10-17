@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@{ 
+@{
     List<InventarioTIASPX.Models.Printer> printers = ViewData["printers"] as List<InventarioTIASPX.Models.Printer>;
     List<string> departments = ViewData["departments"] as List<string>;
     List<string> brands = ViewData["brands"] as List<string>;
@@ -18,7 +18,18 @@
     <li role="presentation"><a href="@Url.Action("NewPrinter", "Printers")">Agregar impresora</a></li>
 </ul>
 
-<table class="table" id="devicetable">
+<div class="row" style="text-align:right;">
+    <div class="col-md-10" style="text-align:right;">
+        <label>Total de elementos</label>
+        <p>@printers.Count Registro(s)</p>
+    </div>
+    <div class="col-md-2" style="text-align:right;">
+        <label>Elementos filtrados</label>
+        <p id="regcount">0 Registro(s)</p>
+    </div>
+</div>
+
+<table class="table" id="printerstable">
     <thead>
         <tr>
             <th scope="col">
@@ -49,7 +60,7 @@
             <th scope="col">
                 Modelo
                 <br />
-                <input class="form-control" type="text" id="filter-3" placeholder="Filtrar..."/>
+                <input class="form-control" type="text" id="filter-3" placeholder="Filtrar..." onkeyup="this.value = this.value.toUpperCase();"/>
             </th>
 
 
@@ -84,7 +95,10 @@
     }
 </table>
 
+<script src="~/Scripts/MyScripts/JSFilter.js"></script>
 <script type="text/javascript">
+    Filter = new JSFilter(document.getElementById("printerstable"), document.getElementById("regcount"));
+
     function ClearFilters() {
         document.getElementById("filter-1").value = "";
         document.getElementById("filter-2").value = "";
@@ -92,42 +106,23 @@
         RemoveFilters()
     }
     function RemoveFilters() {
-        FilterBy("", 0);
-        FilterBy("", 1);
-        FilterBy("", 2);
+        Filter.FilterBy("", 0);
+        Filter.FilterBy("", 1);
+        Filter.FilterBy("", 2);
     }
     function ApplyFilters() {
         RemoveFilters();
         // col-0
         if (document.getElementById("filter-1").value.trim() != "") {
-            FilterBy(document.getElementById("filter-1").value, 0);
+            Filter.FilterBy(document.getElementById("filter-1").value, 0);
         }
         // col-1
         if (document.getElementById("filter-2").value.trim() != "") {
-            FilterBy(document.getElementById("filter-2").value, 1);
+            Filter.FilterBy(document.getElementById("filter-2").value, 1);
         }
         // col-2
         if (document.getElementById("filter-3").value.trim() != "") {
-            FilterBy(document.getElementById("filter-3").value, 2);
-        }
-    }
-    function FilterBy(str, col) {
-        var table = document.getElementById("devicetable");
-        var rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-        for (var i = 0; i < rows.length; i++) {
-            var cell = rows[i].getElementsByTagName("td")[col];
-
-            if (str != "") {
-                if (rows[i].style.display == "") {
-                    if (cell.textContent.includes(str.trim().toUpperCase())) {
-                        rows[i].style.display = "";
-                    } else {
-                        rows[i].style.display = "none";
-                    }
-                }
-            } else {
-                rows[i].style.display = "";
-            }
+            Filter.FilterBy(document.getElementById("filter-3").value, 2);
         }
     }
 </script>

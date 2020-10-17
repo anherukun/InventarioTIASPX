@@ -69,6 +69,14 @@ namespace InventarioTIASPX.Services
             }
         }
 
+        public static List<string> GetAllEmployeNames()
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Users.Select(x => x.Employe).Distinct().OrderBy(x => x).ToList();
+            }
+        }
+
         public static void Delete(long userId)
         {
             // SE MANTIENE UNA REFERENCIA DEL OBJETO EN MEMORIA

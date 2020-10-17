@@ -4,8 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@{ 
+@{
     List<InventarioTIASPX.Models.User> users = ViewData["users"] as List<InventarioTIASPX.Models.User>;
+    List<string> employenames = ViewData["employenames"] as List<string>;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -15,29 +16,60 @@
     <li role="presentation"><a href="@Url.Action("NewUser", "Users")">Agregar usuario</a></li>
 </ul>
 
-<table class="table" id="devicetable">
+<div class="row" style="text-align:right;">
+    <div class="col-md-10" style="text-align:right;">
+        <label>Total de elementos</label>
+        <p>@users.Count Registro(s)</p>
+    </div>
+    <div class="col-md-2" style="text-align:right;">
+        <label>Elementos filtrados</label>
+        <p id="regcount">0 Registro(s)</p>
+    </div>
+</div>
+
+<table class="table" id="userstable">
     <thead>
         <tr>
             <th scope="col" style="min-width:120px;">
                 Usuario de AD
+                <select class="form-control" id="filter-1">
+                    <option value="">Filtrar...</option>
+                    @foreach (var item in users)
+                    {
+                        <option value="@item.UserId">@item.UserId</option>
+                    }
+                </select>
             </th>
 
             <th scope="col">
                 Nombre de la cuenta
-            </th>
-
-            <th scope="col">
-                Correo electronico
+                <input class="form-control" placeholder="Filtrar..." type="text" list="usernameslist" id="filter-2" onkeyup="this.value = this.value.toUpperCase();" />
+                <datalist id="usernameslist">
+                    <option value="" selected></option>
+                    @foreach (var item in users)
+                    {
+                        <option value="@item.Name">@item.Name</option>
+                    }
+                </datalist>
             </th>
 
             <th scope="col">
                 Titular
+                <input class="form-control" placeholder="Filtrar..." type="text" list="employenameslist" id="filter-3" onkeyup="this.value = this.value.toUpperCase();" />
+                <datalist id="employenameslist">
+                    <option value="" selected></option>
+                    @foreach (var item in employenames)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </datalist>
             </th>
 
             <th scope="col" style="width:275px;">
                 Acciones
-                <button class="btn btn-default hidden-print" onclick="ClearFilters()" style="display:none;"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Quitar filtros</button>
-                <button class="btn btn-default hidden-print" onclick="ApplyFilters()" style="display:none;"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Aplicar filtros</button>
+                <br />
+                <button class="btn btn-default hidden-print" onclick="ClearFilters()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Quitar filtros</button>
+                <button class="btn btn-default hidden-print" onclick="ApplyFilters()"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Aplicar filtros</button>
             </th>
 
         </tr>
@@ -51,7 +83,6 @@
                     <tr>
                         <td scope="row">@item.UserId</td>
                         <td>@item.Name</td>
-                        <td>@item.Email</td>
                         <td>@item.Employe</td>
                         <td style="text-align:right;">
                             @Html.ActionLink("Ver mas...", "User", "Users", new { userId = item.UserId }, new { @class = "btn btn-default btn-sm hidden-print" })
@@ -65,57 +96,35 @@
     }
 </table>
 
+<script src="~/Scripts/MyScripts/JSFilter.js"></script>
 <script type="text/javascript">
+    Filter = new JSFilter(document.getElementById("userstable"), document.getElementById("regcount"));
+
     function ClearFilters() {
         document.getElementById("filter-1").value = "";
         document.getElementById("filter-2").value = "";
         document.getElementById("filter-3").value = "";
-        document.getElementById("filter-4").value = "";
+
         RemoveFilters()
     }
     function RemoveFilters() {
-        FilterBy("", 0);
-        FilterBy("", 1);
-        FilterBy("", 2);
-        FilterBy("", 3);
+        Filter.FilterBy("", 0);
+        Filter.FilterBy("", 1);
+        Filter.FilterBy("", 2);
     }
     function ApplyFilters() {
         RemoveFilters();
         // col-0
         if (document.getElementById("filter-1").value.trim() != "") {
-            FilterBy(document.getElementById("filter-1").value, 0);
+            Filter.FilterBy(document.getElementById("filter-1").value, 0);
         }
         // col-1
         if (document.getElementById("filter-2").value.trim() != "") {
-            FilterBy(document.getElementById("filter-2").value, 1);
+            Filter.FilterBy(document.getElementById("filter-2").value, 1);
         }
         // col-2
         if (document.getElementById("filter-3").value.trim() != "") {
-            FilterBy(document.getElementById("filter-3").value, 2);
-        }
-        // col-3
-        if (document.getElementById("filter-4").value.trim() != "") {
-            FilterBy(document.getElementById("filter-4").value, 3);
-        }
-
-    }
-    function FilterBy(str, col) {
-        var table = document.getElementById("devicetable");
-        var rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-        for (var i = 0; i < rows.length; i++) {
-            var cell = rows[i].getElementsByTagName("td")[col];
-
-            if (str != "") {
-                if (rows[i].style.display == "") {
-                    if (cell.textContent.includes(str.trim().toUpperCase())) {
-                        rows[i].style.display = "";
-                    } else {
-                        rows[i].style.display = "none";
-                    }
-                }
-            } else {
-                rows[i].style.display = "";
-            }
+            Filter.FilterBy(document.getElementById("filter-3").value, 2);
         }
     }
 </script>

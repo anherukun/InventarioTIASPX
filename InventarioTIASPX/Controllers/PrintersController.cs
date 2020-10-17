@@ -56,7 +56,7 @@ namespace InventarioTIASPX.Controllers
             return View();
         }
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult Add(Printer printer)
         {
             if (printer != null)

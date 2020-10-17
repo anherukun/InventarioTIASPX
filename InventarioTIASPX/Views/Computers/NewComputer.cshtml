@@ -9,6 +9,7 @@
     List<InventarioTIASPX.Models.Device> accesories = ViewData["accesories"] as List<InventarioTIASPX.Models.Device>;
     List<InventarioTIASPX.Models.User> users = ViewData["users"] as List<InventarioTIASPX.Models.User>;
     List<string> departments = ViewData["departments"] as List<string>;
+    List<string> locations = ViewData["locations"] as List<string>;
 }
 
 <script type="text/javascript">
@@ -117,16 +118,16 @@
                             <label style="width:160px;">Serie del procesador</label>
 
                             <!--
-                            <input class="form-control" type="text" list="computerlist" name="ComputerId"/>
-                            <datalist id="computerlist">
-                                @{
-                                    //foreach (var item in processors)
-                                    //{
-                                    //    <option value="@item.DeviceId">@item.DeviceId</option>
-                                    //}
-                                }
-                            </datalist>
-                                -->
+            <input class="form-control" type="text" list="computerlist" name="ComputerId"/>
+            <datalist id="computerlist">
+                @{
+                    //foreach (var item in processors)
+                    //{
+                    //    <option value="@item.DeviceId">@item.DeviceId</option>
+                    //}
+                }
+            </datalist>
+                -->
 
                             <select class="form-control" name="ComputerId" onchange="toggleComputer()" style="width:225px;">
                                 <option value="">SELECCIONA DISPOSITIVO...</option>
@@ -187,7 +188,14 @@
                         <!--Location-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Ubicacion fisica</label>
-                            <input class="form-control" type="text" name="Location" id="Type" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" />
+                            <input class="form-control" type="text" name="Location" list="locationslist" id="Type" autocomplete="off" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" />
+                            <datalist id="locationslist">
+                                <option value="" selected></option>
+                                @foreach (var item in locations)
+                                {
+                                    <option value="@item">@item</option>
+                                }
+                            </datalist>
                         </div>
                         <br />
 

@@ -87,6 +87,13 @@ namespace InventarioTIASPX.Services
                 return db.Computers.Select(x => x.Department).Distinct().OrderBy(x => x).ToList();
             }
         }
+        public static List<string> GetAllLocations()
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Computers.Select(x => x.Location).Distinct().OrderBy(x => x).ToList();
+            }
+        }
 
         public static void RemoveUserFromAll(string userGUID)
         {

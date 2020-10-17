@@ -8,6 +8,7 @@
     List<InventarioTIASPX.Models.Device> accesories = ViewData["accesories"] as List<InventarioTIASPX.Models.Device>;
     List<InventarioTIASPX.Models.User> users = ViewData["users"] as List<InventarioTIASPX.Models.User>;
     List<string> departments = ViewData["departments"] as List<string>;
+    List<string> locations = ViewData["locations"] as List<string>;
 
     InventarioTIASPX.Models.Device processor = ViewData["processor"] as InventarioTIASPX.Models.Device;
     InventarioTIASPX.Models.Computer computer = ViewData["computer"] as InventarioTIASPX.Models.Computer;
@@ -174,7 +175,14 @@
                         <!--Location-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Ubicacion fisica</label>
-                            <input class="form-control" type="text" name="Location" id="Type" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" required value="@computer.Location" />
+                            <input class="form-control" type="text" name="Location" list="locationslist" id="Type" autocomplete="off" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" required value="@computer.Location" />
+                            <datalist id="locationslist">
+                                <option value="" selected></option>
+                                @foreach (var item in locations)
+                                {
+                                    <option value="@item">@item</option>
+                                }
+                            </datalist>
                         </div>
                         <br />
 
