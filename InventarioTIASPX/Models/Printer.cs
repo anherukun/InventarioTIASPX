@@ -7,6 +7,7 @@ using System.Web;
 
 namespace InventarioTIASPX.Models
 {
+    [Serializable()]
     public class Printer
     {
         [Key] public string PrinterId { get; set; }

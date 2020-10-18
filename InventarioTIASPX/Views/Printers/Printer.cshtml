@@ -6,6 +6,9 @@
 
 @{ 
     InventarioTIASPX.Models.Printer printer = ViewData["printer"] as InventarioTIASPX.Models.Printer;
+
+    List<InventarioTIASPX.Models.FileObject> files = ViewData["files"] as List<InventarioTIASPX.Models.FileObject>;
+    List<InventarioTIASPX.Models.Note> notes = ViewData["notes"] as List<InventarioTIASPX.Models.Note>;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -91,11 +94,162 @@
                         </div>
                     }
 
-                    @Html.ActionLink("Editar", "EditPriter", "Printers", new { printerId = printer.PrinterId }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Editar", "EditPrinter", "Printers", new { printerId = printer.PrinterId }, new { @class = "btn btn-primary" })
                 </div>
             </div>
 
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-body">
+                    <!--NOTAS-->
+                    <h3 style="margin-top:0px">Notas y observaciones</h3>
 
+                    <table class="table" id="devicetable">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Nota
+                                    <br />
+                                </th>
+
+                                <th scope="col" style="width:120px;">
+                                    Fecha
+                                    <br />
+                                </th>
+
+                                <th scope="col" style="width:70px;">
+                                    Acciones
+                                    <br />
+                                </th>
+
+                            </tr>
+                        </thead>
+                        @if (notes != null)
+                        {
+                            <tbody>
+                                @foreach (var item in notes)
+                                {
+                                    <tr>
+                                        <td scope="row">@item.Body</td>
+                                        <td>@(new DateTime(item.Ticks).ToString())</td>
+                                        <td style="text-align:right;">
+                                            @Html.ActionLink("Eliminar", "DeleteNote", "Notes", new { noteId = item.NoteId, redirect = Url.Action("Printer", "Printers", new { printerId = printer.PrinterId }) }, new { @class = "btn btn-danger btn-sm hidden-print" })
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                    </table>
+
+                    @using (Html.BeginForm("AddPrinterNote", "Notes", FormMethod.Post, new { @class = "form-inline", id = "form-notes", onsubmit = "", enctype = "multipart/form-data" }))
+                    {
+                        <div class="form-group" style="display:none;">
+                            <label>ParentId</label>
+                            <input class="form-control" name="parentId" value="@printer.PrinterId" readonly />
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            <label>Redirect</label>
+                            <input class="form-control" name="redirect" value="@Url.Action("Printer", "Printers", new { printerId = printer.PrinterId})" readonly />
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            <label>Route</label>
+                            <input class="form-control" name="path" value="Printer" readonly />
+                            <input class="form-control" name="controller" value="Printers" readonly />
+                        </div>
+                        <div class="form-group form-group-sm col-md-12" style="text-align:right; padding-right:0px">
+                            <label style="vertical-align:top; margin-right:8px;">Nueva nota</label>
+                            <textarea class="form-control" name="body" placeholder="Redactar la nota aqui..." onkeyup="this.value = this.value.toUpperCase();" style="min-width:300px; min-height:50px; max-height:200px;" required></textarea>
+                            <br />
+                            <input style="margin-top:8px;" class="btn btn-sm btn-success" type="submit" value="Cargar" />
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
+                <div class="panel-body">
+                    <!--ARCHIVOS-->
+                    <h3 style="margin-top:0px">Datos adjuntos</h3>
+
+                    <table class="table" id="devicetable">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Nombre de archivo
+                                    <br />
+                                </th>
+
+                                <th scope="col">
+                                    Tamaño
+                                    <br />
+                                </th>
+
+                                <th scope="col" style="width:100px">
+                                    Cargado
+                                    <br />
+                                </th>
+
+                                <th scope="col" style="width:180px">
+                                    Acciones
+                                    <br />
+                                </th>
+
+                            </tr>
+                        </thead>
+                        @if (files != null)
+                        {
+                            <tbody>
+                                @foreach (var item in files)
+                                {
+                                    <tr>
+                                        <td scope="row">@item.Name</td>
+                                        <td>@(item.Size / 1024) KB</td>
+                                        <td>@(new DateTime(item.UploadedTicks).ToString())</td>
+                                        <td style="text-align:right;">
+                                            @Html.ActionLink("Descargar", "DownloadFile", "Files", new { fileId = item.FileId }, new { @class = "btn btn-default btn-sm hidden-print" })
+                                            @Html.ActionLink("Eliminar", "DeleteFromPrinter", "Files", new { fileId = item.FileId, printerId = printer.PrinterId }, new { @class = "btn btn-danger btn-sm hidden-print" })
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                    </table>
+
+                    @using (Html.BeginForm("UploadPrinterFile", "Files", FormMethod.Post, new { @class = "form-inline", id = "form-files", onsubmit = "return validateFile()", enctype = "multipart/form-data" }))
+                    {
+                        <script type="text/javascript">
+                            function validateFile() {
+                                var form = document.forms["form-files"];
+                                if (form["file"].value != null) {
+                                    if (form["file"].files[0].size <= 2097152) {
+                                        return true;
+                                    } else {
+                                        showErrorMessage(8, "El archivo supera el limite de 2MB (2048KB)");
+                                        return false;
+                                    }
+                                }
+                            }
+                        </script>
+                        <div class="form-group" style="display:none;">
+                            <label>ParenId</label>
+                            <input class="form-control" name="parentId" value="@printer.PrinterId" readonly />
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            <label>Redirect</label>
+                            <input class="form-control" name="redirect" value="@Url.Action("Printer", "Printers", new { printerId = printer.PrinterId})" readonly />
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            <label>Route</label>
+                            <input class="form-control" name="path" value="Printer" readonly />
+                            <input class="form-control" name="controller" value="Printers" readonly />
+                        </div>
+                        <div class="form-group form-group-sm col-md-12" style="text-align:end; padding-right:0px">
+                            <label style="margin-right:8px;">Subir archivo - Max. 2MB(2048 KB)</label>
+                            <input class="form-control" id="file" type="file" name="file" required value="" />
+                            <input class="btn btn-sm btn-success" type="submit" value="Cargar" />
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
 
         <!--SIDE PANEL-->

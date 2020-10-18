@@ -9,13 +9,10 @@ namespace InventarioTIASPX.Services
 {
     public class BackupService
     {
-        // NOTES & FILES PREFIX: _COMP | _USR
+        // NOTES & FILES PREFIX: _COMP | _USR | _PRT
         public static void RecoverData(Backup backup)
         {
             BackupService.ClearCurrentContext();
-
-            List<Note> ComputerNotes = new List<Note>();
-            List<Note> UserNotes = new List<Note>();
 
             // Inserta las entidades Primarias y Secundarias
             if (backup.Devices != null)
@@ -53,8 +50,8 @@ namespace InventarioTIASPX.Services
                 if (item.ParentObjectId.Contains("PRT_"))
                 {
                     // TO-DO: IMPLEMENTAR REPOSITORIO DE NOTAS PARA IMPRESORAS
-                    item.ParentObjectId = item.ParentObjectId.Replace("USR_", "");
-                    //new RepositoryPrinterNotes().Add(item);
+                    item.ParentObjectId = item.ParentObjectId.Replace("PRT_", "");
+                    new RepositoryPrinterNotes().Add(item);
                 }
             }
 
@@ -73,8 +70,8 @@ namespace InventarioTIASPX.Services
                 if (item.ParentObjectId.Contains("PRT_"))
                 {
                     // TO-DO: IMPLEMENTAR REPOSITORIO DE ARCHVIOS PARA IMPRESORAS
-                    item.ParentObjectId = item.ParentObjectId.Replace("USR_", "");
-                    //new RepositoryPrinterFiles().Add(item);
+                    item.ParentObjectId = item.ParentObjectId.Replace("PRT_", "");
+                    new RepositoryPrinterFiles().Add(item);
                 }
             }
 

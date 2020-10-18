@@ -26,6 +26,16 @@ namespace InventarioTIASPX.Services
         {
             throw new NotImplementedException();
         }
+        // NO IMPLEMENTADO EN ESTA CLASE
+        public override void Delete(string fileId)
+        {
+            throw new NotImplementedException();
+        }
+        // NO IMPLEMENTADO EN ESTA CLASE
+        public override FileObject Get(string fileId, bool includeData)
+        {
+            throw new NotImplementedException();
+        }
 
         public override void Add(FileObject fileObject)
         {
@@ -38,44 +48,6 @@ namespace InventarioTIASPX.Services
                 db.SaveChanges();
 
                 db.Database.ExecuteSqlCommand($"UPDATE fileobjects SET Computer_ComputerId = \"{computerId}\" WHERE fileId LIKE \"{fileObject.FileId}\"");
-            }
-        }
-        public override void Delete(string fileId)
-        {
-                using (var db = new InventoryTIASPXContext())
-                {
-                    db.Entry(Get(fileId, true)).State = EntityState.Deleted;
-                    db.SaveChanges();
-                }
-        }
-        public override FileObject Get(string fileId, bool includeData)
-        {
-            using (var db = new InventoryTIASPXContext())
-            {
-                if (includeData)
-                    return db.Files.Where(x => x.FileId == fileId).FirstOrDefault();
-                else
-                {
-                    var o = db.Files.Where(x => x.FileId == fileId).Select(x => new
-                    {
-                        FileId = x.FileId,
-                        Name = x.Name,
-                        Mime = x.Mime,
-                        Size = x.Size,
-                        UploadedTicks = x.UploadedTicks,
-                        ParentObjectId = x.ParentObjectId
-                    }).FirstOrDefault();
-
-                    return new FileObject()
-                    {
-                        FileId = o.FileId,
-                        Name = o.Name,
-                        Mime = o.Mime,
-                        Size = o.Size,
-                        UploadedTicks = o.UploadedTicks,
-                        ParentObjectId = o.ParentObjectId
-                    };
-                }
             }
         }
         public override List<FileObject> GetAll(string parentId)

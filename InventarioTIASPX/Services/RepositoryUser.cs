@@ -83,6 +83,8 @@ namespace InventarioTIASPX.Services
             User u = RepositoryUser.Get(userId);
             // SE QUITAN TODAS LAS RELACIONES CON LAS ENTIDADES DE COMPUTADORA
             RepositoryComputer.RemoveUserFromAll(u.UserGUID);
+            // SE QUITAN TODAS LA RELACIONES CON IMPRESORAS
+            RepositoryPrinter.RemoveUserFromAll(u.UserGUID);
             // SE QUITAN TODAS LAS RELACIONES CON MEMBEROFS
             RepositoryUserMemberOf.RemoveAllUserReference(u.UserGUID);
             // SI EXISTEN FILEOBJECTS RELACIONADOS

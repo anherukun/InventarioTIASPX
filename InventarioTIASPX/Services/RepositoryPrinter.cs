@@ -33,6 +33,7 @@ namespace InventarioTIASPX.Services
             using (var db = new InventoryTIASPXContext())
             {
                 db.Printers.AddOrUpdate(printer);
+                db.SaveChanges();
             }
         }
 
@@ -54,7 +55,7 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-                return db.Printers.Select(x => x.Department).OrderBy(x => x).ToList();
+                return db.Printers.Select(x => x.Department).Distinct().OrderBy(x => x).ToList();
             }
         }
         public static List<string> GetAllModels()
@@ -95,6 +96,18 @@ namespace InventarioTIASPX.Services
         }
         public static void Delete(string printerId)
         {
+            // SI EXISTEN FILEOBJECTS RELACIONEADOS CON LA ENTIDAD
+            if (new RepositoryPrinterFiles().HasFilesRelated(printerId)) 
+                // ROMPERAN LA RELACION QUE TIENEN CON LA ENTIDAD
+                foreach (var item in new RepositoryPrinterFiles().GetAll(printerId))
+                    new RepositoryGenericFiles().BreakRelationship(item.FileId);
+
+            // SI EXISTEN NOTES RELACIONADOS CON LA ENTIDAD
+            if (new RepositoryPrinterNotes().HasNotesRelated(printerId))
+                // CADA NOTA SERA ELIMINADA
+                foreach (var item in new RepositoryPrinterNotes().GetAll(printerId))
+                    new RepositoryGenericNotes().Delete(item.NoteId);
+
             using (var db = new InventoryTIASPXContext())
             {
                 db.Entry(Get(printerId)).State = EntityState.Deleted;
