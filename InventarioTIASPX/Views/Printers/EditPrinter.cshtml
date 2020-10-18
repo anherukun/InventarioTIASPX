@@ -139,7 +139,7 @@
 
                         <!--ConnectionType-->
                         <div class="form-group" style="margin-bottom:10px;">
-                            <label style="width:160px;">Modelo</label>
+                            <label style="width:160px;">Tipo de conexion</label>
                             <select class="form-control" name="ConnectionType" onchange="toggleConnection()" required style="width:225px;">
                                 <option value="">SELECCIONAR CONEXION...</option>
                                 @if (printer.ConnectionType == "LOCAL")
@@ -241,28 +241,17 @@
                 <div class="panel-body collapse" id="glosary">
                     <ul>
                         <li>
-                            <label>Serie del procesador</label>
-                            <p>...</p>
-                        </li>
-
-                        <li>
-                            <label>Departamento</label>
-                            <p>...</p>
-                        </li>
-
-                        <li>
-                            <label>Ubicacion fisica</label>
-                            <p>...</p>
-                        </li>
-
-                        <li>
-                            <label>Arquitectura del sistema</label>
-                            <p>...</p>
-                        </li>
-
-                        <li>
-                            <label>Usuario</label>
-                            <p>...</p>
+                            <p>
+                                Los datos obligatorios para poder registrar una impresora son los siguentes:
+                            </p>
+                            <ul>
+                                <li><b>Serie de la impresora</b></li>
+                                <li><b>Marca o fabricante</b></li>
+                                <li><b>Modelo</b></li>
+                                <li><b>Tipo de conexion</b></li>
+                                <li><b>Nombre de equipo (Cuando aplique)</b></li>
+                                <li><b>Departamento</b></li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
