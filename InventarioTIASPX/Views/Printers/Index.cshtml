@@ -1,27 +1,27 @@
 ﻿
 @{
-    ViewBag.Title = "Catalogo de dispositivos";
+    ViewBag.Title = "Coleccion de impresoras";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @{
-    List<InventarioTIASPX.Models.Device> devices = ViewData["devices"] as List<InventarioTIASPX.Models.Device>;
-    List<string> devicetypes = ViewData["devicetypes"] as List<string>;
-    List<string> devicebrands = ViewData["deviceBrands"] as List<string>;
-    List<string> devicemodels = ViewData["deviceModels"] as List<string>;
+    List<InventarioTIASPX.Models.Printer> printers = ViewData["printers"] as List<InventarioTIASPX.Models.Printer>;
+    List<string> departments = ViewData["departments"] as List<string>;
+    List<string> brands = ViewData["brands"] as List<string>;
+    List<string> models = ViewData["models"] as List<string>;
 }
 
 <h2>@ViewBag.Title</h2>
 
 <ul class="nav nav-pills">
     <li role="presentation"><a href="@Url.Action("", "")">Ir al menu</a></li>
-    <li role="presentation"><a href="@Url.Action("NewDevice", "Devices")">Agregar dispositivo</a></li>
+    <li role="presentation"><a href="@Url.Action("NewPrinter", "Printers")">Agregar impresora</a></li>
 </ul>
 
 <div class="row" style="text-align:right;">
     <div class="col-md-10" style="text-align:right;">
         <label>Total de elementos</label>
-        <p>@devices.Count Registro(s)</p>
+        <p>@printers.Count Registro(s)</p>
     </div>
     <div class="col-md-2" style="text-align:right;">
         <label>Elementos filtrados</label>
@@ -29,44 +29,17 @@
     </div>
 </div>
 
-<table class="table" id="devicetable">
+<table class="table" id="printerstable">
     <thead>
         <tr>
             <th scope="col">
-                Dispositivo
+                Departamento
                 <br />
                 <select class="form-control" id="filter-1">
-                    <option value="">Filtrar...</option>
-                    @foreach (var item in devicetypes)
+                    <option value="" selected>Filtrar...</option>
+                    @foreach (var item in departments)
                     {
                         <option value="@item">@item</option>
-                    }
-                </select>
-            </th>
-
-            <th scope="col">
-                Fabricante
-                <br />
-                <select class="form-control" id="filter-2">
-                    <option value="">Filtrar...</option>
-                    @foreach (var item in devicebrands)
-                    {
-                        <option value="@item">@item</option>
-                    }
-                </select>
-            </th>
-
-            <th scope="col">
-                Modelo
-                <br />
-                <select class="form-control" id="filter-3">
-                    <option value="">Filtrar...</option>
-                    @foreach (var item in devicemodels)
-                    {
-                        if (item != null)
-                        {
-                            <option value="@item">@item</option>
-                        }
                     }
                 </select>
             </th>
@@ -74,8 +47,22 @@
             <th scope="col">
                 Serie
                 <br />
-                <input class="form-control" placeholder="Filtrar..." type="text" id="filter-4" onkeyup="this.value = this.value.toUpperCase();" />
+                <input class="form-control" placeholder="Filtrar..." type="text" list="printerIdlist" id="filter-2" onkeyup="this.value = this.value.toUpperCase();" />
+                <datalist id="printerIdlist">
+                    <option value="" selected>Filtrar...</option>
+                    @foreach (var item in printers)
+                    {
+                        <option value="@item.PrinterId">@item.PrinterId</option>
+                    }
+                </datalist>
             </th>
+
+            <th scope="col">
+                Modelo
+                <br />
+                <input class="form-control" type="text" id="filter-3" placeholder="Filtrar..." onkeyup="this.value = this.value.toUpperCase();"/>
+            </th>
+
 
             <th scope="col" style="width:275px;">
                 Acciones
@@ -86,21 +73,20 @@
 
         </tr>
     </thead>
-    @if (devices.Count > 0)
+    @if (printers.Count > 0)
     {
         <tbody>
             @{
-                foreach (var item in devices)
+                foreach (var item in printers)
                 {
                     <tr>
-                        <td scope="row">@item.Type</td>
-                        <td>@item.Brand</td>
-                        <td>@item.Model</td>
-                        <td>@item.DeviceId</td>
+                        <td scope="row">@item.Department</td>
+                        <td>@item.PrinterId</td>
+                        <td>@item.Brand - @item.Model</td>
                         <td style="text-align:right;">
-                            @Html.ActionLink("Ver mas...", "Device", "Devices", new { deviceId = item.DeviceId }, new { @class = "btn btn-default btn-sm hidden-print" })
-                            @Html.ActionLink("Modificar", "EditDevice", "Devices", new { deviceId = item.DeviceId }, new { @class = "btn btn-default btn-sm hidden-print" })
-                            @Html.ActionLink("Eliminar", "DeleteDevice", "Devices", new { deviceId = item.DeviceId }, new { @class = "btn btn-danger btn-sm hidden-print" })
+                            @Html.ActionLink("Ver mas...", "Printer", "Printers", new { printerId = item.PrinterId }, new { @class = "btn btn-default btn-sm hidden-print" })
+                            @Html.ActionLink("Modificar", "EditPrinter", "Printers", new { printerId = item.PrinterId }, new { @class = "btn btn-default btn-sm hidden-print" })
+                            @Html.ActionLink("Eliminar", "DeletePrinter", "Printers", new { printerId = item.PrinterId }, new { @class = "btn btn-danger btn-sm hidden-print" })
                         </td>
                     </tr>
                 }
@@ -111,21 +97,18 @@
 
 <script src="~/Scripts/MyScripts/JSFilter.js"></script>
 <script type="text/javascript">
-    Filter = new JSFilter(document.getElementById("devicetable"), document.getElementById("regcount"));
+    Filter = new JSFilter(document.getElementById("printerstable"), document.getElementById("regcount"));
 
     function ClearFilters() {
         document.getElementById("filter-1").value = "";
         document.getElementById("filter-2").value = "";
         document.getElementById("filter-3").value = "";
-        document.getElementById("filter-4").value = "";
-
         RemoveFilters()
     }
     function RemoveFilters() {
         Filter.FilterBy("", 0);
         Filter.FilterBy("", 1);
         Filter.FilterBy("", 2);
-        Filter.FilterBy("", 3);
     }
     function ApplyFilters() {
         RemoveFilters();
@@ -141,10 +124,5 @@
         if (document.getElementById("filter-3").value.trim() != "") {
             Filter.FilterBy(document.getElementById("filter-3").value, 2);
         }
-        // col-3
-        if (document.getElementById("filter-4").value.trim() != "") {
-            Filter.FilterBy(document.getElementById("filter-4").value, 3);
-        }
-
     }
 </script>

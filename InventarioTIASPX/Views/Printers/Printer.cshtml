@@ -1,11 +1,12 @@
 ﻿
 @{
-    ViewBag.Title = "Equipo de computo";
+    ViewBag.Title = "Impresora";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@{
-    InventarioTIASPX.Models.Computer computer = ViewData["computer"] as InventarioTIASPX.Models.Computer;
+@{ 
+    InventarioTIASPX.Models.Printer printer = ViewData["printer"] as InventarioTIASPX.Models.Printer;
+
     List<InventarioTIASPX.Models.FileObject> files = ViewData["files"] as List<InventarioTIASPX.Models.FileObject>;
     List<InventarioTIASPX.Models.Note> notes = ViewData["notes"] as List<InventarioTIASPX.Models.Note>;
 }
@@ -13,7 +14,7 @@
 <h2>@ViewBag.Title</h2>
 
 <ul class="nav nav-pills">
-    <li role="presentation"><a href="@Url.Action("", "Computers")">Regresar</a></li>
+    <li role="presentation"><a href="@Url.Action("", "Printers")">Regresar</a></li>
 </ul>
 
 <div class="row" style="margin-top: 0px">
@@ -22,38 +23,41 @@
         <div class="col-md-8">
             <div class="panel panel-default" style="padding:0px; margin-top: 16px;">
                 <div class="panel-body">
-                    <!--DATOS DEL EQUIPO-->
-                    <h3 style="margin-top:0px;">Datos del equipo</h3>
+                    <!--DATOS DE LA IMPRESORA-->
+                    <h3 style="margin-top:0px;">Datos de la impresora</h3>
                     <div class="row" style="margin-left:16px;">
                         <div class="col-md-4">
-                            <label>Serie del procesador</label>
-                            <p style="margin-left:8px;">@computer.Processor.DeviceId</p>
+                            <label>Serie de la impresora</label>
+                            <p style="margin-left:8px;">@printer.PrinterId</p>
                         </div>
 
                         <div class="col-md-4">
-                            <label>Modelo del procesador</label>
-                            <p style="margin-left:8px;">@computer.Processor.Model</p>
+                            <label>Modelo de la impresora</label>
+                            <p style="margin-left:8px;">@printer.Model</p>
                         </div>
 
                         <div class="col-md-4">
                             <label>Marca/Fabricante</label>
-                            <p style="margin-left:8px;">@computer.Processor.Brand</p>
+                            <p style="margin-left:8px;">@printer.Brand</p>
                         </div>
 
                         <div class="col-md-4">
-                            <label>Hostname</label>
-                            <p style="margin-left:8px;">@computer.Hostname</p>
+                            <label>Tipo de conexion</label>
+                            <p style="margin-left:8px;">@printer.ConnectionType</p>
                         </div>
 
-                        <div class="col-md-4">
-                            <label>Arquitectura del sistema</label>
-                            <p style="margin-left:8px;">@computer.Architecture BITS</p>
-                        </div>
+                        @if (printer.ConnectionType == "RED")
+                        {
+                            <div class="col-md-4">
+                                <label>Hostname</label>
+                                <p style="margin-left:8px;">@printer.Hostname</p>
+                            </div>
 
-                        <div class="col-md-4">
-                            <label>Direccion IP</label>
-                            <p style="margin-left:8px;">@InventarioTIASPX.Application.NetworkTools.ResolveIPAddress(computer.Hostname)</p>
-                        </div>
+                            <div class="col-md-4">
+                                <label>Direccion IP</label>
+                                <p style="margin-left:8px;">@InventarioTIASPX.Application.NetworkTools.ResolveIPAddress(printer.Hostname)</p>
+                            </div>
+                        }
                     </div>
 
                     <!--OTROS DATOS-->
@@ -61,98 +65,36 @@
                     <div class="row" style="margin-left:16px;">
                         <div class="col-md-4">
                             <label>Departamento</label>
-                            <p style="margin-left:8px;">@computer.Department</p>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label>Ubicacion fisica</label>
-                            <p style="margin-left:8px;">@computer.Location</p>
+                            <p style="margin-left:8px;">@printer.Department</p>
                         </div>
                     </div>
 
-                    <!--ACCESORIOS DEL EQUIPO-->
-                    @if (computer.Devices != null)
-                    {
-                        <h3>Accesorios del equipo</h3>
-
-                        <table class="table" id="devicetable">
-                            <thead>
-                                <tr>
-                                    <th scope="col">
-                                        Dispositivo
-                                        <br />
-                                    </th>
-
-                                    <th scope="col">
-                                        Fabricante
-                                        <br />
-                                    </th>
-
-                                    <th scope="col" style="width:100px">
-                                        Modelo
-                                        <br />
-                                    </th>
-
-                                    <th scope="col">
-                                        Serie
-                                        <br />
-                                    </th>
-
-                                    <th scope="col" style="width:180px">
-                                        Acciones
-                                        <br />
-                                    </th>
-
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                @foreach (var item in computer.Devices)
-                                {
-                                    if (item.Type != "PROCESADOR" && item.Type != "LAPTOP")
-                                    {
-                                        <tr>
-                                            <td scope="row">@item.Type</td>
-                                            <td>@item.Brand</td>
-                                            <td>@item.Model</td>
-                                            <td>@item.DeviceId</td>
-                                            <td style="text-align:right;">
-                                                @Html.ActionLink("Ver mas...", "Device", "Devices", new { deviceId = item.DeviceId }, new { @class = "btn btn-default btn-sm hidden-print" })
-                                                @Html.ActionLink("Remover", "UnassignComputer", "Devices", new { deviceId = item.DeviceId, redirect = Url.Action("Computer", "Computers", new { computerId = computer.ComputerId }) }, new { @class = "btn btn-danger btn-sm hidden-print" })
-                                            </td>
-                                        </tr>
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    }
-
                     <!--DATOS DEL USUARIO-->
-                    @if (computer.User != null)
+                    @if (printer.User != null)
                     {
-                        <h3 style="margin-top:0px;">Usuario asignado</h3>
+                        <h3 style="margin-top:0px;">Usuario responsable</h3>
                         <div class="row" style="margin-left:16px; margin-bottom:20px;">
                             <div class="col-md-3">
-                                <label>Usuario de AD</label>
-                                <p style="margin-left:8px;">@computer.User.UserId</p>
+                                <label>Ficha</label>
+                                <p style="margin-left:8px;">@printer.User.EmployeId</p>
                             </div>
 
                             <div class="col-md-6">
                                 <label>Titular de la cuenta</label>
-                                <p style="margin-left:8px;">@computer.User.Employe</p>
+                                <p style="margin-left:8px;">@printer.User.Employe</p>
                             </div>
 
-                            @if (computer.User.Email != null)
+                            @if (printer.User.Email != null)
                             {
                                 <div class="col-md-4">
                                     <label>Correo electronico</label>
-                                    <p style="margin-left:8px;">@computer.User.Email</p>
+                                    <p style="margin-left:8px;">@printer.User.Email</p>
                                 </div>
                             }
                         </div>
                     }
 
-                    @Html.ActionLink("Editar", "EditComputer", "Computers", new { computerId = computer.ComputerId }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Editar", "EditPrinter", "Printers", new { printerId = printer.PrinterId }, new { @class = "btn btn-primary" })
                 </div>
             </div>
 
@@ -190,7 +132,7 @@
                                         <td scope="row">@item.Body</td>
                                         <td>@(new DateTime(item.Ticks).ToString())</td>
                                         <td style="text-align:right;">
-                                            @Html.ActionLink("Eliminar", "DeleteNote", "Notes", new { noteId = item.NoteId, redirect = Url.Action("Computer", "Computers", new { computerId = computer.ComputerId }) }, new { @class = "btn btn-danger btn-sm hidden-print" })
+                                            @Html.ActionLink("Eliminar", "DeleteNote", "Notes", new { noteId = item.NoteId, redirect = Url.Action("Printer", "Printers", new { printerId = printer.PrinterId }) }, new { @class = "btn btn-danger btn-sm hidden-print" })
                                         </td>
                                     </tr>
                                 }
@@ -198,20 +140,20 @@
                         }
                     </table>
 
-                    @using (Html.BeginForm("AddComputerNote", "Notes", FormMethod.Post, new { @class = "form-inline", id = "form-notes", onsubmit = "", enctype = "multipart/form-data" }))
+                    @using (Html.BeginForm("AddPrinterNote", "Notes", FormMethod.Post, new { @class = "form-inline", id = "form-notes", onsubmit = "", enctype = "multipart/form-data" }))
                     {
                         <div class="form-group" style="display:none;">
                             <label>ParentId</label>
-                            <input class="form-control" name="parentId" value="@computer.ComputerId" readonly />
+                            <input class="form-control" name="parentId" value="@printer.PrinterId" readonly />
                         </div>
                         <div class="form-group" style="display:none;">
                             <label>Redirect</label>
-                            <input class="form-control" name="redirect" value="@Url.Action("Computer", "Computers", new { computerId = computer.ComputerId})" readonly />
+                            <input class="form-control" name="redirect" value="@Url.Action("Printer", "Printers", new { printerId = printer.PrinterId})" readonly />
                         </div>
                         <div class="form-group" style="display:none;">
                             <label>Route</label>
-                            <input class="form-control" name="path" value="Computer" readonly />
-                            <input class="form-control" name="controller" value="Computers" readonly />
+                            <input class="form-control" name="path" value="Printer" readonly />
+                            <input class="form-control" name="controller" value="Printers" readonly />
                         </div>
                         <div class="form-group form-group-sm col-md-12" style="text-align:right; padding-right:0px">
                             <label style="vertical-align:top; margin-right:8px;">Nueva nota</label>
@@ -264,7 +206,7 @@
                                         <td>@(new DateTime(item.UploadedTicks).ToString())</td>
                                         <td style="text-align:right;">
                                             @Html.ActionLink("Descargar", "DownloadFile", "Files", new { fileId = item.FileId }, new { @class = "btn btn-default btn-sm hidden-print" })
-                                            @Html.ActionLink("Eliminar", "DeleteFromComputer", "Files", new { fileId = item.FileId, computerId = computer.ComputerId }, new { @class = "btn btn-danger btn-sm hidden-print" })
+                                            @Html.ActionLink("Eliminar", "DeleteFromPrinter", "Files", new { fileId = item.FileId, printerId = printer.PrinterId }, new { @class = "btn btn-danger btn-sm hidden-print" })
                                         </td>
                                     </tr>
                                 }
@@ -272,7 +214,7 @@
                         }
                     </table>
 
-                    @using (Html.BeginForm("UploadComputerFile", "Files", FormMethod.Post, new { @class = "form-inline", id = "form-files", onsubmit = "return validateFile()", enctype = "multipart/form-data" }))
+                    @using (Html.BeginForm("UploadPrinterFile", "Files", FormMethod.Post, new { @class = "form-inline", id = "form-files", onsubmit = "return validateFile()", enctype = "multipart/form-data" }))
                     {
                         <script type="text/javascript">
                             function validateFile() {
@@ -289,16 +231,16 @@
                         </script>
                         <div class="form-group" style="display:none;">
                             <label>ParenId</label>
-                            <input class="form-control" name="parentId" value="@computer.ComputerId" readonly />
+                            <input class="form-control" name="parentId" value="@printer.PrinterId" readonly />
                         </div>
                         <div class="form-group" style="display:none;">
                             <label>Redirect</label>
-                            <input class="form-control" name="redirect" value="@Url.Action("Computer", "Computers", new { computerId = computer.ComputerId})" readonly />
+                            <input class="form-control" name="redirect" value="@Url.Action("Printer", "Printers", new { printerId = printer.PrinterId})" readonly />
                         </div>
                         <div class="form-group" style="display:none;">
                             <label>Route</label>
-                            <input class="form-control" name="path" value="Computer" readonly />
-                            <input class="form-control" name="controller" value="Computers" readonly />
+                            <input class="form-control" name="path" value="Printer" readonly />
+                            <input class="form-control" name="controller" value="Printers" readonly />
                         </div>
                         <div class="form-group form-group-sm col-md-12" style="text-align:end; padding-right:0px">
                             <label style="margin-right:8px;">Subir archivo - Max. 2MB(2048 KB)</label>
@@ -321,32 +263,13 @@
                 <div class="panel-body collapse" id="glosary">
                     <ul>
                         <li>
-                            <label>Datos del equipo</label>
-                            <p>
-                                Muestra la informacion registrada del equipo
-                            </p>
-                        </li>
-
-                        <li>
-                            <label>Accessorios del equipo</label>
-                            <p>
-                                Muestra los dispositivos que pertenecen al equipo de computo, exceptuando las catogorias de: Laptop y Procesador
-                            </p>
-                        </li>
-
-                        <li>
-                            <label>Notas y observaciones</label>
-                            <p>
-                                Permite crear anotaciones relevantes relacionados al equipo de computo
-                            </p>
+                            <label>Datos de la impresora</label>
+                            <p>Muestra la informacion registrada del equipo</p>
                         </li>
 
                         <li>
                             <label>Datos adjuntos</label>
-                            <p>
-                                Permite adjuntar documentos o archivos relacionados al equipo de computo y/o sus dependientes, tales como Responsivas, Manuales, Fotografias, Etc. <br />
-                                El tamaño por archivo debe ser estrictamente menor o igual a 2MB (2048KB)
-                            </p>
+                            <p>Permite adjuntar documentos o archivos relacionados al equipo de computo y/o sus dependientes, tales como Responsivas, Manuales, Fotografias, Etc. <br />El tamaño por archivo debe ser estrictamente menor o igual a 2MB (2048KB)</p>
                         </li>
                     </ul>
                 </div>

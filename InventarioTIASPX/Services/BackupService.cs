@@ -9,19 +9,20 @@ namespace InventarioTIASPX.Services
 {
     public class BackupService
     {
-        // NOTES & FILES PREFIX: _COMP | _USR
+        // NOTES & FILES PREFIX: _COMP | _USR | _PRT
         public static void RecoverData(Backup backup)
         {
             BackupService.ClearCurrentContext();
 
-            List<Note> ComputerNotes = new List<Note>();
-            List<Note> UserNotes = new List<Note>();
-
             // Inserta las entidades Primarias y Secundarias
-            RepositoryDevice.AddRange(backup.Devices);
-            RepositoryUser.AddRange(backup.Users);
-            RepositoryUserMemberOf.AddRange(backup.MemberOfs);
-            // RepositoryComputer.AddRange(backup.Computers);
+            if (backup.Devices != null)
+                RepositoryDevice.AddRange(backup.Devices);
+            if (backup.Users != null)
+                RepositoryUser.AddRange(backup.Users);
+            if (backup.MemberOfs != null)
+                RepositoryUserMemberOf.AddRange(backup.MemberOfs);
+            if (backup.Printers != null)
+                RepositoryPrinter.AddRange(backup.Printers);
 
             // Inserta una a una todas las entidades de Computers
             foreach (var item in backup.Computers)
@@ -46,6 +47,12 @@ namespace InventarioTIASPX.Services
                     item.ParentObjectId = item.ParentObjectId.Replace("USR_", "");
                     new RepositoryUserNotes().Add(item);
                 }
+                if (item.ParentObjectId.Contains("PRT_"))
+                {
+                    // TO-DO: IMPLEMENTAR REPOSITORIO DE NOTAS PARA IMPRESORAS
+                    item.ParentObjectId = item.ParentObjectId.Replace("PRT_", "");
+                    new RepositoryPrinterNotes().Add(item);
+                }
             }
 
             foreach (var item in backup.Files)
@@ -59,6 +66,12 @@ namespace InventarioTIASPX.Services
                 {
                     item.ParentObjectId = item.ParentObjectId.Replace("USR_", "");
                     new RepositoryUserFiles().Add(item);
+                }
+                if (item.ParentObjectId.Contains("PRT_"))
+                {
+                    // TO-DO: IMPLEMENTAR REPOSITORIO DE ARCHVIOS PARA IMPRESORAS
+                    item.ParentObjectId = item.ParentObjectId.Replace("PRT_", "");
+                    new RepositoryPrinterFiles().Add(item);
                 }
             }
 
@@ -87,6 +100,10 @@ namespace InventarioTIASPX.Services
             // Elimina las entidades de Computadoras
             foreach (var item in RepositoryComputer.GetAllComputers())
                 RepositoryComputer.Delete(item.ComputerId);
+
+            // Elimina las entidades de las Impresoras
+            foreach (var item in RepositoryPrinter.GetAll())
+                RepositoryPrinter.Delete(item.PrinterId);
 
             // Elimina las entidades de Dispositivos
             foreach (var item in RepositoryDevice.GetAllDevices())

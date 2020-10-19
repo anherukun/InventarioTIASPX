@@ -3,13 +3,12 @@ using InventarioTIASPX.Services.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 
 namespace InventarioTIASPX.Services
 {
-    public class RepositoryUserFiles : RepositoryFiles
+    public class RepositoryPrinterFiles : RepositoryFiles
     {
         // NO IMPLEMENTADO EN ESTA CLASE
         public override List<FileObject> GetAll()
@@ -22,7 +21,7 @@ namespace InventarioTIASPX.Services
             throw new NotImplementedException();
         }
         // NO IMPLEMENTADO EN ESTA CLASE
-        public override void BreakRelationship(string fileId)
+        public override void BreakRelationship(string noteId)
         {
             throw new NotImplementedException();
         }
@@ -39,20 +38,20 @@ namespace InventarioTIASPX.Services
 
         public override void Add(FileObject fileObject)
         {
-            string userGuid = fileObject.ParentObjectId;
-            fileObject.ParentObjectId = $"USR_{userGuid}";
+            string printerId = fileObject.ParentObjectId;
+            fileObject.ParentObjectId = $"PRT_{printerId}";
 
             using (var db = new InventoryTIASPXContext())
             {
                 db.Files.Add(fileObject);
                 db.SaveChanges();
 
-                db.Database.ExecuteSqlCommand($"UPDATE fileobjects SET User_UserGUID = \"{userGuid}\" WHERE fileId LIKE \"{fileObject.FileId}\"");
+                db.Database.ExecuteSqlCommand($"UPDATE fileobjects SET Printer_PrinterId = \"{printerId}\" WHERE fileId LIKE \"{fileObject.FileId}\"");
             }
         }
         public override List<FileObject> GetAll(string parentId)
         {
-            string parentObjectId = $"USR_{parentId}";
+            string parentObjectId = $"PRT_{parentId}";
             using (var db = new InventoryTIASPXContext())
             {
                 List<FileObject> list = new List<FileObject>();
@@ -86,7 +85,7 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-                string parentFixed = $"USR_{parentId}";
+                string parentFixed = $"PRT_{parentId}";
                 return db.Files.Any(x => x.ParentObjectId == parentFixed);
             }
         }

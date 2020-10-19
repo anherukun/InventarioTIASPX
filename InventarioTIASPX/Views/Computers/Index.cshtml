@@ -7,6 +7,7 @@
 @{ 
     List<InventarioTIASPX.Models.Computer> computers = ViewData["computers"] as List<InventarioTIASPX.Models.Computer>;
     List<string> departments = ViewData["departments"] as List<string>;
+    List<string> locations = ViewData["locations"] as List<string>;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -15,6 +16,17 @@
     <li role="presentation"><a href="@Url.Action("", "")">Ir al menu</a></li>
     <li role="presentation"><a href="@Url.Action("NewComputer", "Computers")">Agregar computadora</a></li>
 </ul>
+
+<div class="row" style="text-align:right;">
+    <div class="col-md-10" style="text-align:right;">
+        <label>Total de elementos</label>
+        <p>@computers.Count Registro(s)</p>
+    </div>
+    <div class="col-md-2" style="text-align:right;">
+        <label>Elementos filtrados</label>
+        <p id="regcount">0 Registro(s)</p>
+    </div>
+</div>
 
 <table class="table" id="computersTable">
     <thead>
@@ -31,10 +43,17 @@
                 </select>
             </th>
 
-            <th scope="col">
+            <th scope="col" style="width:280px;">
                 Ubicacion
                 <br />
-                <input class="form-control" placeholder="Filtrar..." type="text" id="filter-2" onkeyup="this.value = this.value.toUpperCase();" />
+                <input class="form-control" placeholder="Filtrar..." type="text" list="locationslist" id="filter-2" onkeyup="this.value = this.value.toUpperCase();" />
+                <datalist id="locationslist">
+                    <option value="" selected></option>
+                    @foreach (var item in locations)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </datalist>
             </th>
 
             <th scope="col">
@@ -102,7 +121,10 @@
     }
 </table>
 
+<script src="~/Scripts/MyScripts/JSFilter.js"></script>
 <script type="text/javascript">
+    Filter = new JSFilter(document.getElementById("computersTable"), document.getElementById("regcount"));
+
     function ClearFilters() {
         document.getElementById("filter-1").value = "";
         document.getElementById("filter-2").value = "";
@@ -113,51 +135,60 @@
         RemoveFilters();
     }
     function RemoveFilters() {
-        FilterBy("", 0);
-        FilterBy("", 1);
-        FilterBy("", 2);
-        FilterBy("", 3);
+        //let Filter = new JSFilter(document.getElementById("computersTable"), document.getElementById("regcount"));
+        
+        Filter.FilterBy("", 0);
+        Filter.FilterBy("", 1);
+        Filter.FilterBy("", 2);
+        Filter.FilterBy("", 3);
+        Filter.FilterBy("", 4);
     }
     function ApplyFilters() {
+        //let Filter = new JSFilter(document.getElementById("computersTable"), document.getElementById("regcount"));
+
         RemoveFilters();
         // col-0
         if (document.getElementById("filter-1").value.trim() != "") {
-            FilterBy(document.getElementById("filter-1").value, 0);
+            Filter.FilterBy(document.getElementById("filter-1").value, 0);
         }
         // col-1
         if (document.getElementById("filter-2").value.trim() != "") {
-            FilterBy(document.getElementById("filter-2").value, 1);
+            Filter.FilterBy(document.getElementById("filter-2").value, 1);
         }
         // col-2
         if (document.getElementById("filter-3").value.trim() != "") {
-            FilterBy(document.getElementById("filter-3").value, 2);
+            Filter.FilterBy(document.getElementById("filter-3").value, 2);
         }
         // col-3
         if (document.getElementById("filter-4").value.trim() != "") {
-            FilterBy(document.getElementById("filter-4").value, 3);
+            Filter.FilterBy(document.getElementById("filter-4").value, 3);
         }
         // col-4
         if (document.getElementById("filter-5").value.trim() != "") {
-            FilterBy(document.getElementById("filter-5").value, 4);
+            Filter.FilterBy(document.getElementById("filter-5").value, 4);
         }
     }
-    function FilterBy(str, col) {
-        var table = document.getElementById("computersTable");
-        var rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-        for (var i = 0; i < rows.length; i++) {
-            var cell = rows[i].getElementsByTagName("td")[col];
-
-            if (str != "") {
-                if (rows[i].style.display == "") {
-                    if (cell.textContent.includes(str.trim().toUpperCase())) {
-                        rows[i].style.display = "";
-                    } else {
-                        rows[i].style.display = "none";
-                    }
-                }
-            } else {
-                rows[i].style.display = "";
-            }
-        }
-    }
+    // function FilterBy(str, col) {
+    //     var table = document.getElementById("computersTable");
+    //     var rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+    //     var count = 0;
+    //     for (var i = 0; i < rows.length; i++) {
+    //         var cell = rows[i].getElementsByTagName("td")[col];
+    // 
+    //         if (str != "") {
+    //             if (rows[i].style.display == "") {
+    //                 if (cell.textContent.includes(str.trim().toUpperCase())) {
+    //                     rows[i].style.display = "";
+    //                     count += 1;
+    //                 } else {
+    //                     rows[i].style.display = "none";
+    //                 }
+    //             }
+    //         } else {
+    //             rows[i].style.display = "";
+    //         }
+    //     }
+    // 
+    //     document.getElementById("regcount").innerHTML = count + " Registro(s)"
+    // }
 </script>

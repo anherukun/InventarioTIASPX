@@ -39,6 +39,7 @@ namespace InventarioTIASPX.Services
 
                 db.Database.ExecuteSqlCommand($"UPDATE fileobjects SET Computer_ComputerId = NULL WHERE fileId LIKE \"{file.FileId}\"");
                 db.Database.ExecuteSqlCommand($"UPDATE fileobjects SET User_UserGUID = NULL WHERE fileId LIKE \"{file.FileId}\"");
+                db.Database.ExecuteSqlCommand($"UPDATE fileobjects SET Printer_PrinterId = NULL WHERE fileId LIKE \"{file.FileId}\"");
             }
         }
         public override void Delete(string fileId)

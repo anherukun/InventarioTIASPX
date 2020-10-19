@@ -18,6 +18,8 @@ namespace InventarioTIASPX.Models
         // ENTIDAD PRINCIPAL
         public List<User> Users { get; set; }
         // ENTIDAD SECUNDARIA DEPENDIENTE
+        public List<Printer> Printers { get; set; }
+        // ENTIDAD SECUNDARIA DEPENDIENTE
         public List<Computer> Computers { get; set; }
         // ENTIDAD SECUNDARIA DEPENDIENTE
         public List<Note> Notes { get; set; }
@@ -43,10 +45,11 @@ namespace InventarioTIASPX.Models
         /// <param name="computers">Objeto lista de computadoras</param>
         /// <param name="notes">Objeto lista de notas</param>
         /// <param name="files">Objeto lista de archivos</param>
-        public Backup(List<Device> devices, List<User> users, List<Computer> computers, List<Note> notes, List<FileObject> files, List<UserMemberOf> memberOfs)
+        public Backup(List<Device> devices, List<User> users, List<Printer> printers, List<Computer> computers, List<Note> notes, List<FileObject> files, List<UserMemberOf> memberOfs)
         {
             Devices = devices;
             Users = users;
+            Printers = printers;
             Computers = computers;
             Notes = notes;
             Files = files;

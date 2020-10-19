@@ -61,6 +61,29 @@ namespace InventarioTIASPX.Controllers
 
             return Redirect(Url.Action("", controller, new { userId = parentId, msgType = "error", msgString = Application.ApplicationManager.Base64Encode("No se puede registrar la nota") }));
         }
+        [HttpPost]
+        public ActionResult AddPrinterNote(string body, string parentId, string path, string controller)
+        {
+            Printer p = RepositoryPrinter.Get(parentId);
+
+            if (p != null)
+            {
+                if (body.Trim().Length > 0)
+                {
+                    new RepositoryPrinterNotes().Add(new Note()
+                    {
+                        NoteId = Application.ApplicationManager.GenerateGUID,
+                        Body = body.Trim().ToUpper(),
+                        Ticks = DateTime.Now.Ticks,
+                        ParentObjectId = parentId
+                    });
+
+                    return Redirect(Url.Action(path, controller, new { printerId = p.PrinterId, msgType = "success", msgString = Application.ApplicationManager.Base64Encode("Nota guardada correctamente") }));
+                }
+            }
+
+            return Redirect(Url.Action("", controller, new { printerId = parentId, msgType = "error", msgString = Application.ApplicationManager.Base64Encode("No se puede registrar la nota") }));
+        }
 
         public ActionResult DeleteFromComputersNotes(string noteId, string redirect)
         {

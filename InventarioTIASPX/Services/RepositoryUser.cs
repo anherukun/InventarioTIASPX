@@ -69,12 +69,22 @@ namespace InventarioTIASPX.Services
             }
         }
 
+        public static List<string> GetAllEmployeNames()
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Users.Select(x => x.Employe).Distinct().OrderBy(x => x).ToList();
+            }
+        }
+
         public static void Delete(long userId)
         {
             // SE MANTIENE UNA REFERENCIA DEL OBJETO EN MEMORIA
             User u = RepositoryUser.Get(userId);
             // SE QUITAN TODAS LAS RELACIONES CON LAS ENTIDADES DE COMPUTADORA
             RepositoryComputer.RemoveUserFromAll(u.UserGUID);
+            // SE QUITAN TODAS LA RELACIONES CON IMPRESORAS
+            RepositoryPrinter.RemoveUserFromAll(u.UserGUID);
             // SE QUITAN TODAS LAS RELACIONES CON MEMBEROFS
             RepositoryUserMemberOf.RemoveAllUserReference(u.UserGUID);
             // SI EXISTEN FILEOBJECTS RELACIONADOS

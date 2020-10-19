@@ -16,6 +16,7 @@ namespace InventarioTIASPX.Controllers
         public ActionResult Index()
         {
             ViewData["users"] = RepositoryUser.GetAllUsers();
+            ViewData["employenames"] = RepositoryUser.GetAllEmployeNames();
             return View();
         }
 
