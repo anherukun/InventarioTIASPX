@@ -62,14 +62,14 @@ namespace InventarioTIASPX.Services
         {
             using (var db = new InventoryTIASPXContext())
             {
-                return db.Printers.Select(x => x.Model).OrderBy(x => x).ToList();
+                return db.Printers.Select(x => x.Model).Distinct().OrderBy(x => x).ToList();
             }
         }
         public static List<string> GetAllBrands()
         {
             using (var db = new InventoryTIASPXContext())
             {
-                return db.Printers.Select(x => x.Brand).OrderBy(x => x).ToList();
+                return db.Printers.Select(x => x.Brand).Distinct().OrderBy(x => x).ToList();
             }
         }
 
