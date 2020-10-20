@@ -15,6 +15,7 @@ namespace InventarioTIASPX.Controllers
         {
             ViewData["printers"] = RepositoryPrinter.GetAll();
             ViewData["departments"] = RepositoryPrinter.GetAllDepartments();
+            ViewData["locations"] = RepositoryPrinter.GetAllLocations();
             ViewData["brands"] = RepositoryPrinter.GetAllBrands();
             ViewData["models"] = RepositoryPrinter.GetAllModels();
 
@@ -52,6 +53,7 @@ namespace InventarioTIASPX.Controllers
             }
 
             ViewData["departments"] = RepositoryPrinter.GetAllDepartments();
+            ViewData["locations"] = RepositoryPrinter.GetAllLocations();
             ViewData["brands"] = RepositoryPrinter.GetAllBrands();
             ViewData["models"] = RepositoryPrinter.GetAllModels();
             ViewData["users"] = RepositoryUser.GetAllUsers();
@@ -72,6 +74,7 @@ namespace InventarioTIASPX.Controllers
 
                 ViewData["printer"] = RepositoryPrinter.Get(printerId);
                 ViewData["departments"] = RepositoryPrinter.GetAllDepartments();
+                ViewData["locations"] = RepositoryPrinter.GetAllLocations();
                 ViewData["brands"] = RepositoryPrinter.GetAllBrands();
                 ViewData["models"] = RepositoryPrinter.GetAllModels();
                 ViewData["users"] = RepositoryUser.GetAllUsers();
@@ -138,6 +141,7 @@ namespace InventarioTIASPX.Controllers
                 originalEntity.Model = printer.Model;
                 originalEntity.Brand = printer.Brand;
                 originalEntity.Department = printer.Department;
+                originalEntity.Location = printer.Location;
                 originalEntity.UserGUID = printer.UserGUID;
 
                 // REGISTRA LOS CAMBIOS EN EL REPOSITORIO

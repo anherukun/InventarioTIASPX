@@ -7,6 +7,7 @@
     List<string> brands = ViewData["brands"] as List<string>;
     List<string> models = ViewData["models"] as List<string>;
     List<string> departments = ViewData["departments"] as List<string>;
+    List<string> locations = ViewData["locations"] as List<string>;
     List<InventarioTIASPX.Models.User> users = ViewData["users"] as List<InventarioTIASPX.Models.User>;
 }
 
@@ -155,6 +156,19 @@
                                 }
                             </select>
                             <input class="form-control" type="text" name="Department" onkeyup="this.value = this.value.toUpperCase();" required style="width:225px; display:none;" />
+                        </div>
+                        <br />
+
+                        <!--Locations-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Ubicacion fisica</label>
+                            <input class="form-control" type="text" name="Location" list="locationslist" autocomplete="off" onkeyup="this.value = this.value.toUpperCase();" required style="width:225px;" />
+                            <datalist id="locationslist">
+                                @foreach (var item in locations)
+                                {
+                                    <option value="@item">@item</option>
+                                }
+                            </datalist>
                         </div>
                         <br />
 
