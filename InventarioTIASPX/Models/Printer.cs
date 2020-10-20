@@ -16,6 +16,7 @@ namespace InventarioTIASPX.Models
         [Required] public string Model { get; set; }
         [Required] public string ConnectionType { get; set; }
         [Required] public string Department { get; set; }
+        [Required] public string Location { get; set; }
         public string UserGUID { get; set; }
         public User User { get; set; }
         public List<FileObject> Files { get; set; }

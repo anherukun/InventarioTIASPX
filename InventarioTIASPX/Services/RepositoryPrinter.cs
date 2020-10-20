@@ -58,6 +58,13 @@ namespace InventarioTIASPX.Services
                 return db.Printers.Select(x => x.Department).Distinct().OrderBy(x => x).ToList();
             }
         }
+        public static List<string> GetAllLocations()
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Printers.Select(x => x.Location).Distinct().OrderBy(x => x).ToList();
+            }
+        }
         public static List<string> GetAllModels()
         {
             using (var db = new InventoryTIASPXContext())
