@@ -204,7 +204,7 @@
                         <!--Locations-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Ubicacion fisica</label>
-                            <input class="form-control" type="text" name="Location" list="locationslist" autocomplete="off" onkeyup="this.value = this.value.toUpperCase();" required style="width:225px;" />
+                            <input class="form-control" type="text" name="Location" list="locationslist" autocomplete="off" onkeyup="this.value = this.value.toUpperCase();" required style="width:225px;" value="@printer.Location"/>
                             <datalist id="locationslist">
                                 @foreach (var item in locations)
                                 {
