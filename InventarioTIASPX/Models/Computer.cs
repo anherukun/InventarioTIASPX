@@ -16,6 +16,7 @@ namespace InventarioTIASPX.Models
         [Required] public string Department { get; set; }
         [Required] public string Location { get; set; }
         [Required] public int Architecture { get; set; }
+        public string JobCategory { get; set; }
         public string UserGUID { get; set; }
         public List<Device> Devices { get; set; }
         public List<FileObject> Files { get; set; }

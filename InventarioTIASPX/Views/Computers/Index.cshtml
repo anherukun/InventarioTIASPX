@@ -8,6 +8,7 @@
     List<InventarioTIASPX.Models.Computer> computers = ViewData["computers"] as List<InventarioTIASPX.Models.Computer>;
     List<string> departments = ViewData["departments"] as List<string>;
     List<string> locations = ViewData["locations"] as List<string>;
+    List<string> jobscategories = ViewData["jobscategories"] as List<string>;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -50,6 +51,19 @@
                 <datalist id="locationslist">
                     <option value="" selected></option>
                     @foreach (var item in locations)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </datalist>
+            </th>
+
+            <th scope="col" style="width:190px;">
+                Puesto
+                <br />
+                <input class="form-control" placeholder="Filtrar..." type="text" list="jobscategories" id="filter-jobs" onkeyup="this.value = this.value.toUpperCase();" />
+                <datalist id="jobscategories">
+                    <option value="" selected></option>
+                    @foreach (var item in jobscategories)
                     {
                         <option value="@item">@item</option>
                     }
@@ -106,6 +120,7 @@
                     <tr>
                         <td scope="row">@item.Department</td>
                         <td>@item.Location</td>
+                        <td>@item.JobCategory</td>
                         <td>@item.Hostname</td>
                         <td>@item.Processor.DeviceId</td>
                         <td>@item.Processor.Brand - @item.Processor.Model</td>
@@ -128,6 +143,7 @@
     function ClearFilters() {
         document.getElementById("filter-1").value = "";
         document.getElementById("filter-2").value = "";
+        document.getElementById("filter-jobs").value = "";
         document.getElementById("filter-3").value = "";
         document.getElementById("filter-4").value = "";
         document.getElementById("filter-5").value = "";
@@ -142,6 +158,7 @@
         Filter.FilterBy("", 2);
         Filter.FilterBy("", 3);
         Filter.FilterBy("", 4);
+        Filter.FilterBy("", 5);
     }
     function ApplyFilters() {
         //let Filter = new JSFilter(document.getElementById("computersTable"), document.getElementById("regcount"));
@@ -155,40 +172,21 @@
         if (document.getElementById("filter-2").value.trim() != "") {
             Filter.FilterBy(document.getElementById("filter-2").value, 1);
         }
+        // col-job
+        if (document.getElementById("filter-jobs").value.trim() != "") {
+            Filter.FilterBy(document.getElementById("filter-jobs").value, 2);
+        }
         // col-2
         if (document.getElementById("filter-3").value.trim() != "") {
-            Filter.FilterBy(document.getElementById("filter-3").value, 2);
+            Filter.FilterBy(document.getElementById("filter-3").value, 3);
         }
         // col-3
         if (document.getElementById("filter-4").value.trim() != "") {
-            Filter.FilterBy(document.getElementById("filter-4").value, 3);
+            Filter.FilterBy(document.getElementById("filter-4").value, 4);
         }
         // col-4
         if (document.getElementById("filter-5").value.trim() != "") {
-            Filter.FilterBy(document.getElementById("filter-5").value, 4);
+            Filter.FilterBy(document.getElementById("filter-5").value, 5);
         }
     }
-    // function FilterBy(str, col) {
-    //     var table = document.getElementById("computersTable");
-    //     var rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-    //     var count = 0;
-    //     for (var i = 0; i < rows.length; i++) {
-    //         var cell = rows[i].getElementsByTagName("td")[col];
-    // 
-    //         if (str != "") {
-    //             if (rows[i].style.display == "") {
-    //                 if (cell.textContent.includes(str.trim().toUpperCase())) {
-    //                     rows[i].style.display = "";
-    //                     count += 1;
-    //                 } else {
-    //                     rows[i].style.display = "none";
-    //                 }
-    //             }
-    //         } else {
-    //             rows[i].style.display = "";
-    //         }
-    //     }
-    // 
-    //     document.getElementById("regcount").innerHTML = count + " Registro(s)"
-    // }
 </script>

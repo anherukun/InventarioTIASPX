@@ -20,6 +20,8 @@ namespace InventarioTIASPX.Controllers
             ViewData["computers"] = RepositoryComputer.GetAllComputers();
             ViewData["departments"] = RepositoryComputer.GetAllDepartments();
             ViewData["locations"] = RepositoryComputer.GetAllLocations();
+            ViewData["jobscategories"] = RepositoryComputer.GetAllJobsCategories();
+
             return View();
         }
 
@@ -55,6 +57,7 @@ namespace InventarioTIASPX.Controllers
             ViewData["users"] = RepositoryUser.GetAllUsers();
             ViewData["accesories"] = RepositoryDevice.GetAllAccesories(false);
             ViewData["locations"] = RepositoryComputer.GetAllLocations();
+            ViewData["jobscategories"] = RepositoryComputer.GetAllJobsCategories();
 
             return View();
         }
@@ -87,7 +90,7 @@ namespace InventarioTIASPX.Controllers
                     ViewData["users"] = RepositoryUser.GetAllUsers();
                     ViewData["accesories"] = RepositoryDevice.GetAllAccesories();
                     ViewData["locations"] = RepositoryComputer.GetAllLocations();
-
+                    ViewData["jobscategories"] = RepositoryComputer.GetAllJobsCategories();
 
                     return View();
                 }
@@ -134,9 +137,10 @@ namespace InventarioTIASPX.Controllers
                 List<Device> fromEditAccesories = JsonConvert.DeserializeObject<List<Device>>(jsonDevices);
                 List<Device> fromPrevAccesories = RepositoryComputer.Get(originalEntity.ComputerId).Devices;
 
-                originalEntity.Hostname = computer.Hostname;
-                originalEntity.Department = computer.Department;
-                originalEntity.Location = computer.Location;
+                originalEntity.Hostname = computer.Hostname.Trim();
+                originalEntity.Department = computer.Department.Trim();
+                originalEntity.Location = computer.Location.Trim();
+                originalEntity.JobCategory = computer.JobCategory.Trim();
                 originalEntity.Architecture = computer.Architecture;
                 originalEntity.UserGUID = computer.UserGUID;
 
