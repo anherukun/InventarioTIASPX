@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "EditComputer";
+    ViewBag.Title = "Editar equipo";
 }
 
 @{
@@ -24,7 +24,11 @@
     //var selectedAccesories = new Array();
 </script>
 
-<h2>Editar computadora</h2>
+<h2>@ViewBag.Title</h2>
+
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="#" onclick="goBack()">Regresar</a></li>
+</ul>
 
 <div class="row" style="margin-top: 0px">
     <div class="row">

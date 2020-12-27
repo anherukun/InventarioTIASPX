@@ -101,6 +101,21 @@ namespace InventarioTIASPX.Controllers
             else
                 return Redirect(Url.Action("", "Computers"));
         }
+        [HttpGet]
+        public ActionResult DeleteComputer(string computerId)
+        {
+            if (computerId != null)
+            {
+                if (RepositoryComputer.Exist(computerId))
+                {
+                    ViewData["computer"] = RepositoryComputer.Get(computerId);
+                    return View();
+                }
+                return Redirect(Url.Action("", "Computers"));
+            }
+            else
+                return Redirect(Url.Action("", "Computers"));
+        }
 
         [HttpPost]
         public ActionResult Add(Computer computer, string jsonDevices)
@@ -164,7 +179,7 @@ namespace InventarioTIASPX.Controllers
                 return (Redirect(Url.Action("EditComupter", "Computers", new { computerId = computer.ComputerId, msgType = "error", msgString = Application.ApplicationManager.Base64Encode(ex.Message) })));
             }
         }
-        [HttpGet]
+        [HttpPost]
         public ActionResult Delete(string computerId)
         {
             RepositoryComputer.Delete(computerId);
