@@ -1,10 +1,11 @@
 ﻿
 @{
-    ViewBag.Title = "Eliminar usuario";
+    ViewBag.Title = "Eliminar equipo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @{
-    InventarioTIASPX.Models.User user = ViewData["user"] as InventarioTIASPX.Models.User;
+    InventarioTIASPX.Models.Computer computer = ViewData["computer"] as InventarioTIASPX.Models.Computer;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -15,19 +16,19 @@
 
 <div class="panel-body">
     <p>
-        Estas apunto de eliminar el usuario. Al hacer esto se eliminaran todas las relaciones con esta entidad<br />
-        <b>PARA CONFIRMAR ESTA ACCION ESCRIBE LO SIGUENTE EN EL CAMPO: @user.UserId</b>
+        Estas apunto de eliminar el dispsitivo. Al hacer esto se eliminaran todas las relaciones con esta entidad<br />
+        <b>PARA CONFIRMAR ESTA ACCION ESCRIBE LO SIGUENTE EN EL CAMPO: @computer.ComputerId</b>
     </p>
 
-    @using (Html.BeginForm("Delete", "Users", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "return validateSubmition()" }))
+    @using (Html.BeginForm("Delete", "Computers", FormMethod.Post, new { @class = "form-inline", id = "form", onsubmit = "return validateSubmition()" }))
     {
         <script type="text/javascript">
             function validateSubmition() {
-                //var user = Html.Raw(Json.Encode(user));
+                var computer = @Html.Raw(Json.Encode(computer));
                 var form = document.forms["form"];
-                var input1 = form["deviceId"];
+                var input1 = form["computerid"];
 
-                if (input1.value == @user.UserId) {
+                if (input1.value == computer.ComputerId) {
                     return true;
                 } else {
                     showErrorMessage(5, "El valor es incorrecto")
@@ -36,14 +37,14 @@
             }
         </script>
 
-        <!--UserId-->
+        <!--DeviceId-->
         <div class="form-group">
             <label>Confirmacion</label>
-            <input class="form-control" type="text" name="userId" required/>
+            <input class="form-control" type="text" name="computerid" required/>
         </div>
 
         <div class="form-group" style="margin-left:16px;">
-            <a class="btn btn-default" href="@Url.Action("User", "Users", new { userId = user.UserId })">Cancelar</a>
+            <a class="btn btn-default" href="@Url.Action("Computer", "Computers", new { deviceId = computer.ComputerId })">Cancelar</a>
             <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> ELIMINAR</button>
         </div>
 

@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "EditComputer";
+    ViewBag.Title = "Editar equipo";
 }
 
 @{
@@ -9,6 +9,7 @@
     List<InventarioTIASPX.Models.User> users = ViewData["users"] as List<InventarioTIASPX.Models.User>;
     List<string> departments = ViewData["departments"] as List<string>;
     List<string> locations = ViewData["locations"] as List<string>;
+    List<string> jobscategories = ViewData["jobscategories"] as List<string>;
 
     InventarioTIASPX.Models.Device processor = ViewData["processor"] as InventarioTIASPX.Models.Device;
     InventarioTIASPX.Models.Computer computer = ViewData["computer"] as InventarioTIASPX.Models.Computer;
@@ -23,7 +24,11 @@
     //var selectedAccesories = new Array();
 </script>
 
-<h2>Editar computadora</h2>
+<h2>@ViewBag.Title</h2>
+
+<ul class="nav nav-pills">
+    <li role="presentation"><a href="#" onclick="goBack()">Regresar</a></li>
+</ul>
 
 <div class="row" style="margin-top: 0px">
     <div class="row">
@@ -179,6 +184,20 @@
                             <datalist id="locationslist">
                                 <option value="" selected></option>
                                 @foreach (var item in locations)
+                                {
+                                    <option value="@item">@item</option>
+                                }
+                            </datalist>
+                        </div>
+                        <br />
+
+                        <!--JobCategory-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Categoria</label>
+                            <input class="form-control" type="text" name="JobCategory" list="jobslist" id="JobCategory" autocomplete="off" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" required value="@computer.JobCategory" />
+                            <datalist id="jobslist">
+                                <option value="" selected></option>
+                                @foreach (var item in jobscategories)
                                 {
                                     <option value="@item">@item</option>
                                 }

@@ -10,6 +10,7 @@
     List<InventarioTIASPX.Models.User> users = ViewData["users"] as List<InventarioTIASPX.Models.User>;
     List<string> departments = ViewData["departments"] as List<string>;
     List<string> locations = ViewData["locations"] as List<string>;
+    List<string> jobscategories = ViewData["jobscategories"] as List<string>;
 }
 
 <script type="text/javascript">
@@ -21,7 +22,7 @@
 <h2>@ViewBag.Title</h2>
 
 <ul class="nav nav-pills">
-    <li role="presentation"><a href="@Url.Action("", "Computers")">Regresar</a></li>
+    <li role="presentation"><a href="#" onclick="goBack()">Regresar</a></li>
 </ul>
 
 <div class="row" style="margin-top: 0px">
@@ -116,20 +117,7 @@
                         <!--ComputerId-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Serie del procesador</label>
-
-                            <!--
-            <input class="form-control" type="text" list="computerlist" name="ComputerId"/>
-            <datalist id="computerlist">
-                @{
-                    //foreach (var item in processors)
-                    //{
-                    //    <option value="@item.DeviceId">@item.DeviceId</option>
-                    //}
-                }
-            </datalist>
-                -->
-
-                            <select class="form-control" name="ComputerId" onchange="toggleComputer()" style="width:225px;">
+                            <select class="form-control" name="ComputerId" onchange="toggleComputer()" style="width:225px;" required>
                                 <option value="">SELECCIONA DISPOSITIVO...</option>
                                 @{
                                     foreach (var item in processors)
@@ -161,14 +149,14 @@
                         <!--Hostname-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Nombre de equipo</label>
-                            <input class="form-control" type="text" name="Hostname" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" />
+                            <input class="form-control" type="text" name="Hostname" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" required/>
                         </div>
                         <br />
 
                         <!--Department-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Departamento</label>
-                            <select class="form-control" name="SelectedDepartment" onchange="toggleDepartment()" style="width:225px;">
+                            <select class="form-control" name="SelectedDepartment" onchange="toggleDepartment()" style="width:225px;" required>
                                 <option value="">SELECCIONAR DEPARTAMENTO...</option>
                                 <option value="-1">(AGREGAR NUEVO...)</option>
                                 @{
@@ -188,7 +176,7 @@
                         <!--Location-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Ubicacion fisica</label>
-                            <input class="form-control" type="text" name="Location" list="locationslist" id="Type" autocomplete="off" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" />
+                            <input class="form-control" type="text" name="Location" list="locationslist" id="Type" autocomplete="off" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" required />
                             <datalist id="locationslist">
                                 <option value="" selected></option>
                                 @foreach (var item in locations)
@@ -199,10 +187,24 @@
                         </div>
                         <br />
 
+                        <!--JobCategory-->
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <label style="width:160px;">Categoria</label>
+                            <input class="form-control" type="text" name="JobCategory" list="jobslist" id="JobCategory" autocomplete="off" onkeyup="this.value = this.value.toUpperCase();" style="width:225px;" required />
+                            <datalist id="jobslist">
+                                <option value="" selected></option>
+                                @foreach (var item in jobscategories)
+                                {
+                                    <option value="@item">@item</option>
+                                }
+                            </datalist>
+                        </div>
+                        <br/>
+
                         <!--Architecture-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Arquitectura del sistema</label>
-                            <select class="form-control" name="Architecture" onchange="" style="width:225px;">
+                            <select class="form-control" name="Architecture" onchange="" style="width:225px;" required>
                                 <option value="">SELECCIONAR ARQUITECTURA...</option>
                                 <option value="32">32 BITS</option>
                                 <option value="64">64 BITS</option>

@@ -79,7 +79,6 @@ namespace InventarioTIASPX.Services
                 return db.Computers.Include(x => x.Processor).OrderBy(x => x.Department).ToList();
             }
         }
-
         public static List<string> GetAllDepartments()
         {
             using (var db = new InventoryTIASPXContext())
@@ -92,6 +91,13 @@ namespace InventarioTIASPX.Services
             using (var db = new InventoryTIASPXContext())
             {
                 return db.Computers.Select(x => x.Location).Distinct().OrderBy(x => x).ToList();
+            }
+        }
+        public static List<string> GetAllJobsCategories()
+        {
+            using (var db = new InventoryTIASPXContext())
+            {
+                return db.Computers.Select(x => x.JobCategory).Distinct().OrderBy(x => x).ToList();
             }
         }
 

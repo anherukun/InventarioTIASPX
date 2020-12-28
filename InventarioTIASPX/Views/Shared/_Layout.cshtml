@@ -9,76 +9,86 @@
     @Scripts.Render("~/bundles/modernizr")
 
 <script type="text/javascript">
-        function playsound(select) {
-            // 0: Error     1: Success      default: none
-            var sound = document.getElementById("audio-source");
-            switch (select) {
-                case 0:
-                    sound.src = "/App_Sounds/alarm.ogg";
-                    break;
+    function goBack() {
+        window.history.back();
+    }
+    function playsound(select) {
+        // 0: Error     1: Success      default: none
+        var sound = document.getElementById("audio-source");
+        switch (select) {
+            case 0:
+                sound.src = "/App_Sounds/alarm.ogg";
+                break;
 
-                case 1:
-                    sound.src = "/App_Sounds/MENU%20A_Select.wav";
-                    break;
+            case 1:
+                sound.src = "/App_Sounds/MENU%20A_Select.wav";
+                break;
 
-                default:
-                    sound.src = "";
-                    break;
-            }
-            sound.play();
+            default:
+                sound.src = "";
+                break;
         }
+        sound.play();
+    }
 
-        function retriveMessage() {
-            var msg = @Html.Raw(Json.Encode(ViewData["message"]));
+    function retriveMessage() {
+        var msg = @Html.Raw(Json.Encode(ViewData["message"]));
 
-            switch (msg.msgType) {
-                case "error":
-                    showErrorMessage(8, msg.msgString);
-                    break;
+        switch (msg.msgType) {
+            case "error":
+                showErrorMessage(8, msg.msgString);
+                break;
 
-                case "success":
-                    showSuccessMessage(8, msg.msgString);
-                    break;
-                default:
-            }
+            case "success":
+                showSuccessMessage(8, msg.msgString);
+                break;
+            default:
         }
+    }
 
-        function showErrorMessage(time, message) {
-            playsound(0);
+    function showErrorMessage(time, message) {
+        playsound(0);
 
-            document.getElementById("error-alert-snack").style.display = "block";
+        document.getElementById("error-alert-snack").style.display = "block";
+        document.getElementById("error-alert-snack").innerHTML = message;
+        if (time == null) {
+            document.getElementById("error-alert-snack").style.display = "none";
             document.getElementById("error-alert-snack").innerHTML = message;
-            if (time == null) {
+        } else {
+            setTimeout(() => {
                 document.getElementById("error-alert-snack").style.display = "none";
                 document.getElementById("error-alert-snack").innerHTML = message;
-            } else {
-                setTimeout(() => {
-                    document.getElementById("error-alert-snack").style.display = "none";
-                    document.getElementById("error-alert-snack").innerHTML = message;
-                }, time * 1000);
-            }
+            }, time * 1000);
         }
-        function showSuccessMessage(time, message) {
-            playsound(1);
+    }
+    function showSuccessMessage(time, message) {
+        playsound(1);
 
-            document.getElementById("success-alert-snack").style.display = "block";
+        document.getElementById("success-alert-snack").style.display = "block";
+        document.getElementById("success-alert-snack").innerHTML = message;
+        if (time == null) {
+            document.getElementById("success-alert-snack").style.display = "none";
             document.getElementById("success-alert-snack").innerHTML = message;
-            if (time == null) {
+        } else {
+            setTimeout(() => {
                 document.getElementById("success-alert-snack").style.display = "none";
                 document.getElementById("success-alert-snack").innerHTML = message;
-            } else {
-                setTimeout(() => {
-                    document.getElementById("success-alert-snack").style.display = "none";
-                    document.getElementById("success-alert-snack").innerHTML = message;
-                }, time * 1000);
-            }
+            }, time * 1000);
         }
+    }
 </script>
+<style>
+    @@media(min-width: 1200px) {
+        .container {
+            width: 75% !important;
+        }
+    }
+</style>
 </head>
 <body>
     <audio id="audio-source"></audio>
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+        <div class="container" style="">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" style="display:none;">
                     <span class="icon-bar"></span>
@@ -98,7 +108,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Checador (Snapshot d934b2eb), Desarrollado por Angel Jimenez Reyes</p>
+            <p>&copy; @DateTime.Now.Year - Inventario (Snapshot d934b2eb), Desarrollado por Angel Jimenez Reyes</p>
         </footer>
     </div>
 

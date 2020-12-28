@@ -68,6 +68,8 @@
                     </div>
 
                     @Html.ActionLink("Editar", "EditUser", "Users", new { userId = user.UserId }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Eliminar", "DeleteUser", "Users", new { userId = user.UserId }, new { @class = "btn btn-danger btn-sm hidden-print" })
+
                 </div>
             </div>
 
