@@ -44,7 +44,7 @@
                 </select>
             </th>
 
-            <th scope="col" style="width:280px;">
+            <th scope="col" style="width:180px;">
                 Ubicacion
                 <br />
                 <input class="form-control" placeholder="Filtrar..." type="text" list="locationslist" id="filter-2" onkeyup="this.value = this.value.toUpperCase();" />
@@ -57,7 +57,7 @@
                 </datalist>
             </th>
 
-            <th scope="col" style="width:190px;">
+            <th scope="col" style="width:180px;">
                 Puesto
                 <br />
                 <input class="form-control" placeholder="Filtrar..." type="text" list="jobscategories" id="filter-jobs" onkeyup="this.value = this.value.toUpperCase();" />
@@ -102,11 +102,11 @@
                 <input class="form-control" placeholder="Filtrar..." type="text" id="filter-5" onkeyup="this.value = this.value.toUpperCase();" />
             </th>
 
-            <th scope="col" style="width:275px;">
+            <th class="hidden-print" scope="col" style="width:275px;">
                 Acciones
                 <br />
-                <button class="btn btn-default hidden-print" onclick="ClearFilters()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Quitar filtros</button>
-                <button class="btn btn-default hidden-print" onclick="ApplyFilters()"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Aplicar filtros</button>
+                <button class="btn btn-default" onclick="ClearFilters()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Quitar filtros</button>
+                <button class="btn btn-default" onclick="ApplyFilters()"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Aplicar filtros</button>
             </th>
 
         </tr>
@@ -124,10 +124,10 @@
                         <td>@item.Hostname</td>
                         <td>@item.Processor.DeviceId</td>
                         <td>@item.Processor.Brand - @item.Processor.Model</td>
-                        <td style="text-align:right;">
-                            @Html.ActionLink("Ver mas...", "Computer", "Computers", new { computerId = item.ComputerId }, new { @class = "btn btn-default btn-sm hidden-print" })
-                            @Html.ActionLink("Modificar", "EditComputer", "Computers", new { computerId = item.ComputerId }, new { @class = "btn btn-default btn-sm hidden-print" })
-                            @Html.ActionLink("Eliminar", "DeleteComputer", "Computers", new { computerId = item.ComputerId }, new { @class = "btn btn-danger btn-sm hidden-print" })
+                        <td class="hidden-print" style="text-align:right;">
+                            @Html.ActionLink("Ver mas...", "Computer", "Computers", new { computerId = item.ComputerId }, new { @class = "btn btn-default btn-sm" })
+                            @Html.ActionLink("Modificar", "EditComputer", "Computers", new { computerId = item.ComputerId }, new { @class = "btn btn-default btn-sm" })
+                            @Html.ActionLink("Eliminar", "DeleteComputer", "Computers", new { computerId = item.ComputerId }, new { @class = "btn btn-danger btn-sm" })
                         </td>
                     </tr>
                 }
