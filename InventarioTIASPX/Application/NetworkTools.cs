@@ -66,19 +66,21 @@ namespace InventarioTIASPX.Application
             p.StartInfo.Arguments = "-a";
             p.Start();
 
-            string result = p.StandardOutput.ReadToEnd().Trim();
+            string result = p.StandardOutput.ReadToEnd();
+            result = result.Replace("\r", "").Trim();
+            result = result.Replace("\n ", "\n").Trim();
             string newstring = Regex.Replace(result, " {2,}", ",");
 
             p.WaitForExit();
 
             if (newstring.Trim().Split('\n').Length >= 3)
             {
-                newstring = result.Split('\n')[3];
+                newstring = newstring.Split('\n')[3];
 
                 Dictionary<string, string> values = new Dictionary<string, string>();
-                values.Add("ipaddress", result.Split('\t')[0]);
-                values.Add("macaddress", result.Split('\t')[1]);
-                values.Add("type", result.Split('\t')[2]);
+                values.Add("ipaddress", newstring.Split(',')[0].Trim());
+                values.Add("macaddress", newstring.Split(',')[1].Trim());
+                values.Add("type", newstring.Split(',')[2].Trim());
 
                 return values;
             } else
