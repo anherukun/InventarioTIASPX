@@ -56,6 +56,50 @@
                         </div>
                     </div>
 
+                    <!--INFORMACION DE RED-->
+                    <h3 style="margin-top:0px;">Informacion de red</h3>
+                    <div class="row" style="margin-left:16px;">
+                        <div class="col-md-4">
+                            <label>Direccion IP</label>
+                            <p style="margin-left:8px;">@InventarioTIASPX.Application.NetworkTools.ResolveIPAddress(computer.Hostname)</p>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Ping</label>
+                            @{
+                                if (InventarioTIASPX.Application.NetworkTools.ResolveIPAddress(computer.Hostname) != "HOST NO DISPONIBLE")
+                                {
+                                    var reply = InventarioTIASPX.Application.NetworkTools.MakePing(computer.Hostname);
+                                    <p style="margin-left:8px;">@reply.Status (@reply.RoundtripTime ms)</p>
+                                }
+                                else
+                                {
+                                    <p style="margin-left:8px;">HOST NO DISPONIBLE</p>
+                                }
+                            }
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Direccion MAC</label>
+                            @{
+                                if (InventarioTIASPX.Application.NetworkTools.ResolveIPAddress(computer.Hostname) != "HOST NO DISPONIBLE")
+                                {
+                                    Dictionary<string, string> values = InventarioTIASPX.Application.NetworkTools.LegacyGetMacAddress(InventarioTIASPX.Application.NetworkTools.ResolveIPAddress(computer.Hostname));
+                                    if (values != null)
+                                    {
+                                        <p style="margin-left:8px;">@values["macaddress"]</p>
+                                    }
+                                    else
+                                    {
+                                        <p style="margin-left:8px;">HOST NO DISPONIBLE</p>
+                                    }
+                                }
+                            }
+
+                        </div>
+                    </div>
+
                     <!--OTROS DATOS-->
                     <h3 style="margin-top:0px;">Otros datos</h3>
                     <div class="row" style="margin-left:16px;">
@@ -93,7 +137,7 @@
                                         <br />
                                     </th>
 
-                                    <th scope="col" style="width:100px">
+                                    <th scope="col">
                                         Modelo
                                         <br />
                                     </th>
