@@ -91,9 +91,13 @@
                                 if (ipaddress != null)
                                 {
                                     Dictionary<string, List<string>> values = InventarioTIASPX.Application.NetworkTools.LegacyGetMacAddress(ipaddress);
-                                    if (values != null)
+                                    if (values != null && values.ContainsKey($"{ipaddress}"))
                                     {
                                         <p style="margin-left:8px;">@values[$"{ipaddress}"][0]</p>
+                                    }
+                                    else
+                                    {
+                                        <p style="margin-left:8px;">DIRECCION FUERA DEL SEGMENTO O NO DISPONIBLE</p>
                                     }
                                 }
                                 else
