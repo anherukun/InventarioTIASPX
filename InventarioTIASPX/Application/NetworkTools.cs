@@ -32,11 +32,11 @@ namespace InventarioTIASPX.Application
             }
             catch (Exception ex)
             {
-                return "HOST NO DISPONIBLE";
+                return null;
             }
         }
 
-        public static PingReply MakePing(string hostname)
+        public static PingReply MakePing(string hostnameOrIpaddress)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace InventarioTIASPX.Application
 
                 int timeout = 120;
                 
-                return sender.Send(hostname, timeout, buffer, options);
+                return sender.Send(hostnameOrIpaddress, timeout, buffer, options);
             }
             catch (Exception ex)
             {
@@ -57,7 +57,7 @@ namespace InventarioTIASPX.Application
             }
         }
 
-        public static Dictionary<string, string> LegacyGetMacAddress(string ipaddress)
+        public static Dictionary<string, List<string>> LegacyGetMacAddress(string ipaddress)
         {
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
@@ -75,12 +75,22 @@ namespace InventarioTIASPX.Application
 
             if (newstring.Trim().Split('\n').Length >= 3)
             {
-                newstring = newstring.Split('\n')[3];
+                // newstring = newstring.Split('\n')[3];
 
-                Dictionary<string, string> values = new Dictionary<string, string>();
-                values.Add("ipaddress", newstring.Split(',')[0].Trim());
-                values.Add("macaddress", newstring.Split(',')[1].Trim());
-                values.Add("type", newstring.Split(',')[2].Trim());
+                Dictionary<string, List<string>> values = new Dictionary<string, List<string>>();
+                // values.Add("ipaddress", newstring.Split(',')[0].Trim());
+                // values.Add("macaddress", newstring.Split(',')[1].Trim());
+                // values.Add("type", newstring.Split(',')[2].Trim());
+
+                for (int i = 2; i < newstring.Split('\n').Length; i++)
+                {
+                    // IPADDRESS , MACADDRESS , TYPE
+                    List<string> s = new List<string>();
+                    s.Add(newstring.Split('\n')[i].Split(',')[1].Trim());
+                    s.Add(newstring.Split('\n')[i].Split(',')[2].Trim());
+
+                    values.Add(newstring.Split('\n')[i].Split(',')[0].Trim(), s);
+                }
 
                 return values;
             } else

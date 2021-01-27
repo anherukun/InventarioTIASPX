@@ -98,7 +98,7 @@
                         </div>
                     }
 
-                    @Html.ActionLink("Editar", "EditPrinter", "Printers", new { printerId = printer.PrinterId }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Editar", "EditPrinter", "Printers", new { printerId = printer.PrinterId }, new { @class = "btn btn-primary btn-sm hidden-print" })
                     @Html.ActionLink("Eliminar", "DeletePrinter", "Printers", new { printerId = printer.PrinterId }, new { @class = "btn btn-danger btn-sm hidden-print" })
 
                 </div>
