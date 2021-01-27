@@ -21,6 +21,12 @@ namespace InventarioTIASPX.Controllers
         }
 
         [HttpGet]
+        public FileResult GetComputersReport()
+        {
+            return null;
+        }
+
+        [HttpGet]
         public ActionResult ImportData(string msgType, string msgString)
         {
             if (msgType != null && msgString != null)
