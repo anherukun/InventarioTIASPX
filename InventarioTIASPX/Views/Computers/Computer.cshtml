@@ -76,7 +76,7 @@
                                 if (ipaddress != null)
                                 {
                                     var reply = InventarioTIASPX.Application.NetworkTools.MakePing(ipaddress);
-                                    <p style="margin-left:8px;">@reply.Status (@reply.RoundtripTime ms)</p>
+                                    <p style="margin-left:8px;">@reply.Status.ToString().ToUpper() (@reply.RoundtripTime ms)</p>
                                 }
                                 else
                                 {
@@ -93,7 +93,7 @@
                                     Dictionary<string, List<string>> values = InventarioTIASPX.Application.NetworkTools.LegacyGetMacAddress(ipaddress);
                                     if (values != null && values.ContainsKey($"{ipaddress}"))
                                     {
-                                        <p style="margin-left:8px;">@values[$"{ipaddress}"][0]</p>
+                                        <p style="margin-left:8px;">@values[$"{ipaddress}"][0].ToUpper()</p>
                                     }
                                     else
                                     {

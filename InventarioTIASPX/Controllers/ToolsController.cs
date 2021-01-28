@@ -23,6 +23,8 @@ namespace InventarioTIASPX.Controllers
         [HttpGet]
         public FileResult GetComputersReport()
         {
+            ReporterService.GetComputersReport(RepositoryComputer.GetAllComputers(), ';');
+
             return null;
         }
 
