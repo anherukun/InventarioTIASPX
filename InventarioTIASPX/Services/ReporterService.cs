@@ -36,7 +36,7 @@ namespace InventarioTIASPX.Services
                     line = line.Replace("IP_ADDRESS", ipaddress);
                     
                     if (values != null && values.ContainsKey($"{ipaddress}"))
-                        line = line.Replace("MAC_ADDRESS", ipaddress);
+                        line = line.Replace("MAC_ADDRESS", values[ipaddress][0]);
                     else
                         line = line.Replace("MAC_ADDRESS", "----");
                 }
