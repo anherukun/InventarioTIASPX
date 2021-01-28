@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace InventarioTIASPX.Application
@@ -65,6 +66,7 @@ namespace InventarioTIASPX.Application
             else
                 throw new NullReferenceException("No se puede comprimir un objeto nulo");
         }
+        public static byte[] ToBytes(string s) => Encoding.Unicode.GetBytes(s);
 
         public static string GenerateGUID => Guid.NewGuid().ToString().ToUpper();
     }

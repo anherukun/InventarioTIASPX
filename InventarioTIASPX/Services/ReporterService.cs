@@ -18,13 +18,13 @@ namespace InventarioTIASPX.Services
         {
             string result = "";
             // DEPARTMENT , LOCATION , COMPUTER_TYPE , COMPUTERID , HOSTNAME , SYSTEM_ARC , JOBCATEGORY , IP_ADDRESS , MAC_ADDRESS , AD_ACCOUNT , ACCOUNT_NAME , ACCOUNT_OWNER , ACCOUNT_EMAIL , ATTACHED_DEVICES 
-            result = $"DEPARMENT{s}LOCATION{s}COMPUTER_TYPE{s}COMPUTER_MODEL{s}COMPUTERID{s}HOSTNAME{s}SYSTEM_ARC{s}JOBCATEGORY{s}IP_ADDRESS{s}MAC_ADDRESS{s}AD_ACCOUNT{s}ACCOUNT_NAME{s}ACCOUNT_OWNER{s}ACCOUNT_EMAIL{s}ATTACHED_DEVICES_1{s}ATTACHED_DEVICES_2{s}ATTACHED_DEVICES_3{s}ATTACHED_DEVICES_4{s}ATTACHED_DEVICES_5\n";
+            result = $"DEPARTMENT{s}LOCATION{s}COMPUTER_TYPE{s}COMPUTER_MODEL{s}COMPUTERID{s}HOSTNAME{s}SYSTEM_ARC{s}JOBCATEGORY{s}IP_ADDRESS{s}MAC_ADDRESS{s}AD_ACCOUNT{s}ACCOUNT_NAME{s}ACCOUNT_OWNER{s}ACCOUNT_EMAIL{s}ATTACHED_DEVICE_1{s}ATTACHED_DEVICE_2{s}ATTACHED_DEVICE_3{s}ATTACHED_DEVICE_4{s}ATTACHED_DEVICE_5\n";
             foreach (var c in computers)
             {
                 User u = c.UserGUID != null ? RepositoryUser.Get(c.UserGUID) : null;
                 List<Device> devices = RepositoryComputer.Get(c.ComputerId).Devices;
-                string ipaddress = Application.NetworkTools.ResolveIPAddress(c.Hostname) != null ? Application.NetworkTools.ResolveIPAddress(c.Hostname) : null;
-                //string ipaddress = null;
+                //string ipaddress = Application.NetworkTools.ResolveIPAddress(c.Hostname) != null ? Application.NetworkTools.ResolveIPAddress(c.Hostname) : null;
+                string ipaddress = null;
 
                 string line = $"{c.Department}{s}{c.Location.Replace(",", "")}{s}{c.Processor.Type.Replace("PROCESADOR","DESKTOP")}{s}{c.Processor.Brand} - {c.Processor.Model}{s}{c.ComputerId}{s}{c.Hostname}{s}{c.Architecture} BITS{s}" +
                     $"{c.JobCategory}{s}IP_ADDRESS{s}MAC_ADDRESS{s}AD_ACCOUNT{s}ACCOUNT_NAME{s}ACCOUNT_OWNER{s}ACCOUNT_EMAIL ATTACHED_DEVICES \n";
