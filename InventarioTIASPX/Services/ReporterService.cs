@@ -33,12 +33,12 @@ namespace InventarioTIASPX.Services
                 {
                     Dictionary<string, List<string>> values = Application.NetworkTools.LegacyGetMacAddress(ipaddress);
                     
-                    line.Replace("IP_ADDRESS", ipaddress);
+                    line = line.Replace("IP_ADDRESS", ipaddress);
                     
                     if (values != null && values.ContainsKey($"{ipaddress}"))
-                        line.Replace("MAC_ADDRESS", ipaddress);
+                        line = line.Replace("MAC_ADDRESS", ipaddress);
                     else
-                        line.Replace("MAC_ADDRESS", "----");
+                        line = line.Replace("MAC_ADDRESS", "----");
                 }
                 else
                 {
