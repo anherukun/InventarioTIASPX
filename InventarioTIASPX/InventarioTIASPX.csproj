@@ -168,6 +168,7 @@
     <Compile Include="Services\Abstracts\RepositoryFiles.cs" />
     <Compile Include="Services\Abstracts\RepositoryNotes.cs" />
     <Compile Include="Services\BackupService.cs" />
+    <Compile Include="Services\ReporterService.cs" />
     <Compile Include="Services\RepositoryComputer.cs" />
     <Compile Include="Services\RepositoryComputerFiles.cs" />
     <Compile Include="Services\RepositoryComputerNotes.cs" />

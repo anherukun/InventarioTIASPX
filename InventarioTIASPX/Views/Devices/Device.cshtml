@@ -69,7 +69,7 @@
                         </div>
                     }
 
-                    @Html.ActionLink("Editar", "EditDevice", "Devices", new { deviceId = device.DeviceId }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Editar", "EditDevice", "Devices", new { deviceId = device.DeviceId }, new { @class = "btn btn-primary btn-sm hidden-print" })
                     @Html.ActionLink("Eliminar", "DeleteDevice", "Devices", new { deviceId = device.DeviceId }, new { @class = "btn btn-danger btn-sm hidden-print" })
 
                 </div>

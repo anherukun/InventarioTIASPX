@@ -21,6 +21,17 @@ namespace InventarioTIASPX.Controllers
         }
 
         [HttpGet]
+        public FileResult GetComputersReportComma()
+        {
+            return File(Application.ApplicationManager.ToBytes(ReporterService.GetComputersReport(RepositoryComputer.GetAllComputers(), ',')), "application/x-msexcel", "Computers_Export.csv");
+        }
+        [HttpGet]
+        public FileResult GetComputersReportSemicolon()
+        {
+            return File(Application.ApplicationManager.ToBytes(ReporterService.GetComputersReport(RepositoryComputer.GetAllComputers(), ';')), "application/x-msexcel", "Computers_Export.csv");
+        }
+
+        [HttpGet]
         public ActionResult ImportData(string msgType, string msgString)
         {
             if (msgType != null && msgString != null)

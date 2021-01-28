@@ -52,13 +52,72 @@
                                 <label>Hostname</label>
                                 <p style="margin-left:8px;">@printer.Hostname</p>
                             </div>
-
-                            <div class="col-md-4">
-                                <label>Direccion IP</label>
-                                <p style="margin-left:8px;">@InventarioTIASPX.Application.NetworkTools.ResolveIPAddress(printer.Hostname)</p>
-                            </div>
                         }
                     </div>
+
+
+                    @{
+                        if (printer.ConnectionType == "RED")
+                        {
+                            <!--INFORMACION DE RED-->
+                            <h3 style="margin-top:0px;">Informacion de red</h3>
+                            <div class="row" style="margin-left:16px;">
+                                @{ string ipaddress = InventarioTIASPX.Application.NetworkTools.ResolveIPAddress(printer.Hostname); }
+
+                                <div class="col-md-4">
+                                    <label>Direccion IP</label>
+                                    @{
+                                        if (ipaddress != null)
+                                        {
+                                            <p style="margin-left:8px;">@ipaddress</p>
+                                        }
+                                        else
+                                        {
+                                            <p style="margin-left:8px;">HOST NO DISPONIBLE</p>
+                                        }
+                                    }
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label>Ping</label>
+                                    @{
+                                        if (ipaddress != null)
+                                        {
+                                            var reply = InventarioTIASPX.Application.NetworkTools.MakePing(ipaddress);
+                                            <p style="margin-left:8px;">@reply.Status.ToString().ToUpper() (@reply.RoundtripTime ms)</p>
+                                        }
+                                        else
+                                        {
+                                            <p style="margin-left:8px;">HOST NO DISPONIBLE</p>
+                                        }
+                                    }
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label>Direccion MAC</label>
+                                    @{
+                                        if (ipaddress != null)
+                                        {
+                                            Dictionary<string, List<string>> values = InventarioTIASPX.Application.NetworkTools.LegacyGetMacAddress(ipaddress);
+                                            if (values != null && values.ContainsKey($"{ipaddress}"))
+                                            {
+                                                <p style="margin-left:8px;">@values[$"{ipaddress}"][0].ToUpper()</p>
+                                            }
+                                            else
+                                            {
+                                                <p style="margin-left:8px;">DIRECCION FUERA DEL SEGMENTO O NO DISPONIBLE</p>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <p style="margin-left:8px;">HOST NO DISPONIBLE</p>
+                                        }
+                                    }
+
+                                </div>
+                            </div>
+                        }
+                    }
 
                     <!--OTROS DATOS-->
                     <h3 style="margin-top:0px;">Otros datos</h3>
@@ -98,7 +157,7 @@
                         </div>
                     }
 
-                    @Html.ActionLink("Editar", "EditPrinter", "Printers", new { printerId = printer.PrinterId }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Editar", "EditPrinter", "Printers", new { printerId = printer.PrinterId }, new { @class = "btn btn-primary btn-sm hidden-print" })
                     @Html.ActionLink("Eliminar", "DeletePrinter", "Printers", new { printerId = printer.PrinterId }, new { @class = "btn btn-danger btn-sm hidden-print" })
 
                 </div>
