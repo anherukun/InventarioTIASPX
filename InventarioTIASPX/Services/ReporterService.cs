@@ -23,8 +23,8 @@ namespace InventarioTIASPX.Services
             {
                 User u = c.UserGUID != null ? RepositoryUser.Get(c.UserGUID) : null;
                 List<Device> devices = RepositoryComputer.Get(c.ComputerId).Devices;
-                //string ipaddress = Application.NetworkTools.ResolveIPAddress(c.Hostname) != null ? Application.NetworkTools.ResolveIPAddress(c.Hostname) : null;
-                string ipaddress = null;
+                string ipaddress = Application.NetworkTools.ResolveIPAddress(c.Hostname) != null ? Application.NetworkTools.ResolveIPAddress(c.Hostname) : null;
+                //string ipaddress = null;
 
                 string line = $"{c.Department}{s}{c.Location.Replace(",", "")}{s}{c.Processor.Type.Replace("PROCESADOR","DESKTOP")}{s}{c.Processor.Brand} - {c.Processor.Model}{s}{c.ComputerId}{s}{c.Hostname}{s}{c.Architecture} BITS{s}" +
                     $"{c.JobCategory}{s}IP_ADDRESS{s}MAC_ADDRESS{s}AD_ACCOUNT{s}ACCOUNT_NAME{s}ACCOUNT_OWNER{s}ACCOUNT_EMAIL ATTACHED_DEVICES \n";
