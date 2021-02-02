@@ -90,14 +90,21 @@
                             @{
                                 if (ipaddress != null)
                                 {
-                                    Dictionary<string, List<string>> values = InventarioTIASPX.Application.NetworkTools.LegacyGetMacAddress(ipaddress);
-                                    if (values != null && values.ContainsKey($"{ipaddress}"))
+                                    if (!HttpContext.Current.User.Identity.IsAuthenticated)
                                     {
-                                        <p style="margin-left:8px;">@values[$"{ipaddress}"][0].ToUpper()</p>
+                                        Dictionary<string, List<string>> values = InventarioTIASPX.Application.NetworkTools.LegacyGetMacAddress(ipaddress);
+                                        if (values != null && values.ContainsKey($"{ipaddress}"))
+                                        {
+                                            <p style="margin-left:8px;">@values[$"{ipaddress}"][0].ToUpper()</p>
+                                        }
+                                        else
+                                        {
+                                            <p style="margin-left:8px;">DIRECCION FUERA DEL SEGMENTO O NO DISPONIBLE</p>
+                                        }
                                     }
                                     else
                                     {
-                                        <p style="margin-left:8px;">DIRECCION FUERA DEL SEGMENTO O NO DISPONIBLE</p>
+                                        <p style="margin-left:8px;">@InventarioTIASPX.Application.NetworkTools.GetMacAddressWithRPC(ipaddress)</p>
                                     }
                                 }
                                 else

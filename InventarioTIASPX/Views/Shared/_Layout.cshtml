@@ -8,7 +8,11 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
-<script type="text/javascript">
+    @{        
+        string username = HttpContext.Current.User.Identity.Name;
+    }
+
+    <script type="text/javascript">
     function goBack() {
         window.history.back();
     }
@@ -76,14 +80,14 @@
             }, time * 1000);
         }
     }
-</script>
-<style>
-    @@media(min-width: 1200px) {
-        .container {
-            width: 75% !important;
+    </script>
+    <style>
+        @@media(min-width: 1200px) {
+            .container {
+                width: 75% !important;
+            }
         }
-    }
-</style>
+    </style>
 </head>
 <body>
     <audio id="audio-source"></audio>
@@ -108,7 +112,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Inventario (Snapshot e5925161), Desarrollado por Angel Jimenez Reyes</p>
+            <p>&copy; @DateTime.Now.Year - Inventario (Snapshot e5925161), Desarrollado por Angel Jimenez Reyes | Loguedin with @username (@HttpContext.Current.User.Identity.IsAuthenticated, @HttpContext.Current.User.Identity.AuthenticationType)</p>
         </footer>
     </div>
 
