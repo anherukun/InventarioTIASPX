@@ -98,28 +98,5 @@ namespace InventarioTIASPX.Application
                 return null;
             }
         }
-
-        public static string GetMacAddressWithRPC(string ipaddressorhostname)
-        {
-            Process p = new Process();
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.FileName = "getmac.exe";
-            p.StartInfo.Arguments = $"/s {ipaddressorhostname}";
-            p.Start();
-
-            string presult = p.StandardOutput.ReadToEnd();
-            string result = "";
-
-            foreach (var item in presult.Split('\n'))
-            {
-                if (!item.Split(',')[2].Contains("N/A"))
-                {
-                    result += $"{item.Split(',')[2]} ({item.Split(',')[0]})\n";
-                }
-            }
-
-            return result.Trim().ToUpper();
-        }
     }
 }
