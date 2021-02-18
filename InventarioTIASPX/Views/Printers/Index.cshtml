@@ -17,6 +17,19 @@
 <ul class="nav nav-pills">
     <li role="presentation"><a href="@Url.Action("", "")">Ir al menu</a></li>
     <li role="presentation"><a href="@Url.Action("NewPrinter", "Printers")">Agregar impresora</a></li>
+    <li role="presentation" class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            Descargar reporte <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="@Url.Action("GetPrintersReport", "Tools", new { option = "comma" })">Separado por Comma (,)</a>
+            </li>
+            <li>
+                <a href="@Url.Action("GetPrintersReport", "Tools", new { option = "semicolon" })">Separado por Semicolon (;)</a>
+            </li>
+        </ul>
+    </li>
 </ul>
 
 <div class="row" style="text-align:right;">

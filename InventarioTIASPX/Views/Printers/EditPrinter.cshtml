@@ -95,6 +95,7 @@
                             <label style="width:160px;">Serie de la impresora</label>
                             <input class="form-control" type="text" placeholder="#####-#####-#####" name="PrinterId" id="PrinterId" onkeyup="this.value = this.value.toUpperCase();" required style="width:225px;" readonly value="@printer.PrinterId" />
                         </div>
+                        <br />
 
                         <!--Brand-->
                         <div class="form-group" style="margin-bottom:10px;">
@@ -116,6 +117,7 @@
                             </select>
                             <input class="form-control" type="text" placeholder="LEXMARK COMPANY" name="Brand" id="Brand" onkeyup="this.value = this.value.toUpperCase();" required style="width:225px; display:none;" value="@printer.Brand" />
                         </div>
+                        <br />
 
                         <!--Model-->
                         <div class="form-group" style="margin-bottom:10px;">
@@ -137,6 +139,7 @@
                             </select>
                             <input class="form-control" type="text" placeholder="610XL SERIES" name="Model" id="Model" onkeyup="this.value = this.value.toUpperCase();" required style="width:225px; display:none;" value="@printer.Model" />
                         </div>
+                        <br />
 
                         <!--ConnectionType-->
                         <div class="form-group" style="margin-bottom:10px;">
@@ -173,6 +176,7 @@
                             }
 
                         </div>
+                        <br />
 
                         <!--Department-->
                         <div class="form-group" style="margin-bottom:10px;">
@@ -204,7 +208,7 @@
                         <!--Locations-->
                         <div class="form-group" style="margin-bottom:10px;">
                             <label style="width:160px;">Ubicacion fisica</label>
-                            <input class="form-control" type="text" name="Location" list="locationslist" autocomplete="off" onkeyup="this.value = this.value.toUpperCase();" required style="width:225px;" value="@printer.Location"/>
+                            <input class="form-control" type="text" name="Location" list="locationslist" autocomplete="off" onkeyup="this.value = this.value.toUpperCase();" required style="width:225px;" value="@printer.Location" />
                             <datalist id="locationslist">
                                 @foreach (var item in locations)
                                 {

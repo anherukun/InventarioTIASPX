@@ -22,10 +22,10 @@
         </a>
         <ul class="dropdown-menu">
             <li>
-                <a href="@Url.Action("GetComputersReportComma", "Tools")">Separado por Comma (,)</a>
+                <a href="@Url.Action("GetComputersReport", "Tools", new { option = "comma" })">Separado por Comma (,)</a>
             </li>
             <li>
-                <a href="@Url.Action("GetComputersReportSemicolon", "Tools")">Separado por Semicolon (;)</a>
+                <a href="@Url.Action("GetComputersReport", "Tools", new { option = "semicolon" })">Separado por Semicolon (;)</a>
             </li>
         </ul>
     </li>

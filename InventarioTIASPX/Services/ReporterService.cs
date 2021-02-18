@@ -36,7 +36,7 @@ namespace InventarioTIASPX.Services
                     line = line.Replace("IP_ADDRESS", ipaddress);
                     
                     if (values != null && values.ContainsKey($"{ipaddress}"))
-                        line = line.Replace("MAC_ADDRESS", values[ipaddress][0]);
+                        line = line.Replace("MAC_ADDRESS", values[ipaddress][0].ToUpper());
                     else
                         line = line.Replace("MAC_ADDRESS", "----");
                 }
@@ -67,13 +67,96 @@ namespace InventarioTIASPX.Services
                     line = line.Replace("ACCOUNT_NAME", u.Name);
                     line = line.Replace("ACCOUNT_OWNER", u.Employe);
                     line = line.Replace("ACCOUNT_EMAIL", u.Email);
-                } else
+                } 
+                else
                 {
                     line = line.Replace("AD_ACCOUNT", "----");
                     line = line.Replace("ACCOUNT_NAME", "----");
                     line = line.Replace("ACCOUNT_OWNER", "----");
                     line = line.Replace("ACCOUNT_EMAIL", "----");
                 }
+
+                result += line;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Crea un reporte a partir de una <see cref="List{T}"/> y lo devielve en valores separados por comas
+        /// </summary>
+        /// <param name="printers">Lista de impresoras</param>
+        /// <param name="s">Simbolo delimitador</param>
+        /// <returns></returns>
+        public static string GetPrintersReport(List<Printer> printers, char s)
+        {
+            string result = "";
+            // DEPARTMENT , LOCATION , PRINTERID , PRINTER_MODEL , CONNECTION_TYPE , HOSTNAME , IP_ADDRESS , MAC_ADDRESS , OWNER_ID , OWNER_NAME , OWNER_MAIL 
+            result = $"DEPARTMENT{s}LOCATION{s}PRINTERID{s}PRINTER_MODEL{s}CONNECTION_TYPE{s}HOSTNAME{s}IP_ADDRESS{s}MAC_ADDRESS{s}OWNER_ID{s}OWNER_NAME{s}OWNER_MAIL\n";
+            foreach (var p in printers)
+            {
+                User u = p.UserGUID != null ? RepositoryUser.Get(p.UserGUID) : null;
+                string ipaddress = "----";
+                if (p.ConnectionType == "RED")
+                    ipaddress = Application.NetworkTools.ResolveIPAddress(p.Hostname) != null ? Application.NetworkTools.ResolveIPAddress(p.Hostname) : null;
+
+                string line = $"{p.Department}{s}{p.Location.Replace(",", "")}{s}{p.PrinterId}{s}{p.Brand} - {p.Model}{s}{p.ConnectionType}{s}{p.Hostname}{s}IP_ADDRESS{s}MAC_ADDRESS{s}OWNER_ID{s}OWNER_NAME{s}OWNER_MAIL\n";
+
+                if (ipaddress != "----")
+                {
+                    Dictionary<string, List<string>> values = Application.NetworkTools.LegacyGetMacAddress(ipaddress);
+
+                    line = line.Replace("IP_ADDRESS", ipaddress);
+
+                    if (values != null && values.ContainsKey($"{ipaddress}"))
+                        line = line.Replace("MAC_ADDRESS", values[ipaddress][0].ToUpper());
+                    else
+                        line = line.Replace("MAC_ADDRESS", "----");
+                }
+                else
+                {
+                    line = line.Replace("IP_ADDRESS", "----");
+                    line = line.Replace("MAC_ADDRESS", "----");
+                }
+
+                if (u != null)
+                {
+                    line = line.Replace("OWNER_ID", u.EmployeId.ToString());
+                    line = line.Replace("OWNER_NAME", u.Employe);
+                    line = line.Replace("OWNER_MAIL", u.Email);
+                }
+                else
+                {
+                    line = line.Replace("OWNER_ID", "----");
+                    line = line.Replace("OWNER_NAME", "----");
+                    line = line.Replace("OWNER_MAIL", "----");
+                }
+
+                result += line;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Crea un reporte a partir de una <see cref="List{T}"/> y lo devuelve en valores separados por comas
+        /// </summary>
+        /// <param name="users">Lista de <see cref="User"/></param>
+        /// <param name="s">Caracter delimitador</param>
+        /// <returns></returns>
+        public static string GetUsersReport(List<User> users, char s)
+        {
+            string result = "";
+            // ACTIVEDIRECTORY_ID , ACCOUNT_NAME , ACCOUNT_EMAIL , EMPLOYE_ID , EMPLOYE_NAME , OFFICE365_MIGRATED 
+            result = $"ACTIVEDIRECTORY_ID{s}ACCOUNT_NAME{s}ACCOUNT_EMAIL{s}EMPLOYE_ID{s}EMPLOYE_NAME{s}OFFICE365_MIGRATED\n";
+            foreach (var u in users)
+            {
+                string line = $"{u.UserId}{s}{u.Name}{s}{u.Email}{s}{u.EmployeId}{s}{u.Employe}{s}OFFICE365_MIGRATED\n";
+
+                if (u.Migrated)
+                    line = line.Replace("OFFICE365_MIGRATED", "SI");
+                else
+                    line = line.Replace("OFFICE365_MIGRATED", "NO");
 
                 result += line;
             }
