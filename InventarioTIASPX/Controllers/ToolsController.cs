@@ -21,14 +21,51 @@ namespace InventarioTIASPX.Controllers
         }
 
         [HttpGet]
-        public FileResult GetComputersReportComma()
+        public FileResult GetComputersReport(string option)
         {
-            return File(Application.ApplicationManager.ToBytes(ReporterService.GetComputersReport(RepositoryComputer.GetAllComputers(), ',')), "application/x-msexcel", "Computers_Export.csv");
+            switch (option)
+            {
+                case "comma":
+                    return File(Application.ApplicationManager.ToBytes(ReporterService.GetComputersReport(RepositoryComputer.GetAllComputers(), ',')), "application/x-msexcel", "Computers_Export.csv");
+
+                case "semicolon":
+                    return File(Application.ApplicationManager.ToBytes(ReporterService.GetComputersReport(RepositoryComputer.GetAllComputers(), ';')), "application/x-msexcel", "Computers_Export.csv");
+
+                default:
+                    return File(Application.ApplicationManager.ToBytes("Nothing found!!!"), "application/x-msexcel", "Computers_Export.csv");
+            }
         }
+
         [HttpGet]
-        public FileResult GetComputersReportSemicolon()
+        public FileResult GetPrintersReport(string option)
         {
-            return File(Application.ApplicationManager.ToBytes(ReporterService.GetComputersReport(RepositoryComputer.GetAllComputers(), ';')), "application/x-msexcel", "Computers_Export.csv");
+            switch (option)
+            {
+                case "comma":
+                    return File(Application.ApplicationManager.ToBytes(ReporterService.GetPrintersReport(RepositoryPrinter.GetAll(), ',')), "application/x-msexcel", "Printers_Export.csv");
+
+                case "semicolon":
+                    return File(Application.ApplicationManager.ToBytes(ReporterService.GetPrintersReport(RepositoryPrinter.GetAll(), ';')), "application/x-msexcel", "Printers_Export.csv");
+
+                default:
+                    return File(Application.ApplicationManager.ToBytes("Nothing found!!!"), "application/x-msexcel", "No-data-found_Export.csv");
+            }
+        }
+
+        [HttpGet]
+        public FileResult GetUsersReport(string option)
+        {
+            switch (option)
+            {
+                case "comma":
+                    return File(Application.ApplicationManager.ToBytes(ReporterService.GetUsersReport(RepositoryUser.GetAllUsers(), ',')), "application/x-msexcel", "Users_Export.csv");
+
+                case "semicolon":
+                    return File(Application.ApplicationManager.ToBytes(ReporterService.GetUsersReport(RepositoryUser.GetAllUsers(), ';')), "application/x-msexcel", "Users_Export.csv");
+
+                default:
+                    return File(Application.ApplicationManager.ToBytes("Nothing found!!!"), "application/x-msexcel", "No-data-found_Export.csv");
+            }
         }
 
         [HttpGet]
